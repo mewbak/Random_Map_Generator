@@ -18,23 +18,10 @@
     paul.wortmann@gmail.com
 */
 
-#ifndef MAP_GENERATOR_H
-#define MAP_GENERATOR_H
+#include "MapGenerator.h"
 
-#include <iostream>
-
-struct map_type
+void MapGenerator(map_type* map_pointer)
 {
-	std::string filename;
-	std::string tileset;
-	int  dimension_x;
-	int  dimension_y;
-    int  no_of_tiles;
-    int* layer_background;
-    int* layer_object;
-    int* layer_collision;
-};
 
-void MapGenerator(map_type* map_pointer);
+}
 
-#endif // MAP_GENERATOR_H
