@@ -4,4 +4,4 @@
 /bin
 /obj
 /main.cpp
-
+/ValgrindOut.xml

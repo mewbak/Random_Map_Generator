@@ -23,32 +23,35 @@
 
 #include <iostream>
 
-#define TILESET_NONE      0
-#define TILESET_CAVE      1
-#define TILESET_DUNGEON   2
-#define TILESET_GRASSLAND 3
+#define GEN_ALGORITHM_C1  0
+#define GEN_ALGORITHM_D1  1
+#define GEN_ALGORITHM_D2  2
+#define GEN_ALGORITHM_D3  3
+#define GEN_ALGORITHM_M1  4
+#define GEN_ALGORITHM_T1  5
 
-struct map_type
+class MapType
 {
-	std::string filename;
-	std::string tileset;
-	int  dimension_x;
-	int  dimension_y;
-    int  no_of_tiles;
-    int  tileset_type;
-    int* layer_background;
-    int* layer_object;
-    int* layer_collision;
+    public:
+        int  dimension_x;
+        int  dimension_y;
+        int  no_of_tiles;
+        int  algorithm;
+        int* layer_background;
+        int* layer_object;
+        int* layer_collision;
+        MapType(void);
+        ~MapType(void);
 };
 
 class MapGenerator
 {
-    private:
-        void Initialize (map_type* map_pointer);
     public:
-        virtual void Generate (map_type* map_pointer);
+        virtual ~MapGenerator(void) {};
+        virtual void Initialize (MapType* map_pointer);
+        virtual void Generate (MapType* map_pointer) = 0;
 };
 
-void MapGenerate(map_type* map_pointer);
+void MapGenerate(MapType* map_pointer);
 
 #endif // MAP_GENERATOR_H

@@ -21,26 +21,39 @@
 #include "MapGenerator.h"
 #include "MapGenerator_C1.h"
 
-void MapGenerator::Initialize(map_type* map_pointer)
+MapType::MapType(void)
 {
-
+    MapType::dimension_x = 100;
+    MapType::dimension_y = 100;
+    MapType::algorithm = GEN_ALGORITHM_C1;
 }
 
-void MapGenerate(map_type* map_pointer)
+MapType::~MapType(void)
 {
-    switch (map_pointer->tileset_type)
+    delete[] MapType::layer_background;
+    delete[] MapType::layer_collision;
+    delete[] MapType::layer_object;
+}
+
+void MapGenerator::Initialize(MapType* map_pointer)
+{
+    map_pointer->no_of_tiles = map_pointer->dimension_x * map_pointer->dimension_y;
+    map_pointer->layer_background = new int[map_pointer->no_of_tiles];
+    map_pointer->layer_collision = new int[map_pointer->no_of_tiles];
+    map_pointer->layer_object = new int[map_pointer->no_of_tiles];
+    for (int i = 0; i < map_pointer->no_of_tiles; i++)
     {
-        case TILESET_NONE:
-        break;
-        case TILESET_CAVE:
-            //MapGenerator_C1(map_pointer);
-        break;
-        case TILESET_DUNGEON:
-        break;
-        case TILESET_GRASSLAND:
-        break;
-        default:
-        break;
+        map_pointer->layer_background[i] = 0;
+        map_pointer->layer_collision[i] = 3;
+        map_pointer->layer_object[i] = 0;
     }
 }
 
+void MapGenerate(MapType* map_pointer)
+{
+    MapGenerator* generator = NULL;
+    if (map_pointer->algorithm == GEN_ALGORITHM_C1) generator = new MapGenerator_C1();
+    //else if (map_pointer->algorithm == GEN_ALGORITHM_D1) generator = new MapGenerator_D1();
+    generator->Generate(map_pointer);
+    delete generator;
+}

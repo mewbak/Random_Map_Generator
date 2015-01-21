@@ -21,8 +21,9 @@
 #include "MapGenerator.h"
 #include "MapGenerator_C1.h"
 
-void MapGenerator_C1(map_type* map_pointer)
+void MapGenerator_C1::Generate (MapType* map_pointer)
 {
-
+    MapGenerator_C1::Initialize(map_pointer);
+    // generate in map_pointer
 }
 

@@ -25,10 +25,8 @@
 
 class MapGenerator_C1 : public MapGenerator
 {
-    private:
-        void Initialize (map_type* map_pointer);
     public:
-        virtual void Generate (map_type* map_pointer);
+        void Generate (MapType* map_pointer);
 };
 
 #endif // MAP_GENERATOR_C1_H
