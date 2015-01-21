@@ -23,6 +23,11 @@
 
 #include <iostream>
 
+#define TILESET_NONE      0
+#define TILESET_CAVE      1
+#define TILESET_DUNGEON   2
+#define TILESET_GRASSLAND 3
+
 struct map_type
 {
 	std::string filename;
@@ -30,11 +35,20 @@ struct map_type
 	int  dimension_x;
 	int  dimension_y;
     int  no_of_tiles;
+    int  tileset_type;
     int* layer_background;
     int* layer_object;
     int* layer_collision;
 };
 
-void MapGenerator(map_type* map_pointer);
+class MapGenerator
+{
+    private:
+        void Initialize (map_type* map_pointer);
+    public:
+        virtual void Generate (map_type* map_pointer);
+};
+
+void MapGenerate(map_type* map_pointer);
 
 #endif // MAP_GENERATOR_H

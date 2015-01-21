@@ -18,29 +18,17 @@
     paul.wortmann@gmail.com
 */
 
+#ifndef MAP_GENERATOR_C1_H
+#define MAP_GENERATOR_C1_H
+
 #include "MapGenerator.h"
-#include "MapGenerator_C1.h"
 
-void MapGenerator::Initialize(map_type* map_pointer)
+class MapGenerator_C1 : public MapGenerator
 {
+    private:
+        void Initialize (map_type* map_pointer);
+    public:
+        virtual void Generate (map_type* map_pointer);
+};
 
-}
-
-void MapGenerate(map_type* map_pointer)
-{
-    switch (map_pointer->tileset_type)
-    {
-        case TILESET_NONE:
-        break;
-        case TILESET_CAVE:
-            //MapGenerator_C1(map_pointer);
-        break;
-        case TILESET_DUNGEON:
-        break;
-        case TILESET_GRASSLAND:
-        break;
-        default:
-        break;
-    }
-}
-
+#endif // MAP_GENERATOR_C1_H
