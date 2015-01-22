@@ -26,37 +26,44 @@
 
 MapType::MapType(void)
 {
-    /*
-    MapType::dimension_x = 100;
-    MapType::dimension_y = 100;
-    MapType::map_name    = "default";
-    MapType::algorithm   = GEN_ALGORITHM_C1;
-    */
+    // this constructor will need to be edited when integrated, will use Map class
+    MapType::title          = "Randomly generated map";
+    MapType::filename       = "default.txt";
+    MapType::music_filename = "default";
+    MapType::tileset        = "dungeon";
+    MapType::spawn_x        = 0.0f; // Fpoint
+    MapType::spawn_y        = 0.0f; // Fpoint
+    MapType::w              = 100;
+    MapType::h              = 100;
+    MapType::spawn_dir      = 0; // check this
+    MapType::layernames.push_back("background");
+    maprow* background_layer = new maprow[w];
+    layers.push_back(background_layer);
+    MapType::layernames.push_back("object");
+    maprow* object_layer = new maprow[w];
+    layers.push_back(object_layer);
+    MapType::layernames.push_back("collision");
+    maprow* collision_layer = new maprow[w];
+    layers.push_back(collision_layer);
 }
 
 MapType::~MapType(void)
 {
-    /*
-    delete[] MapType::layer_background;
-    delete[] MapType::layer_collision;
-    delete[] MapType::layer_object;
-    */
+    // this destructor will need to be edited when integrated, will use Map class
+	for (unsigned i = 0; i < layers.size(); ++i)
+		delete[] layers[i];
+	layers.clear();
+	layernames.clear();
 }
 
 void MapGenerator::Initialize(MapType* map_pointer)
 {
-    /*
-    map_pointer->no_of_tiles = map_pointer->dimension_x * map_pointer->dimension_y;
-    map_pointer->layer_background = new int[map_pointer->no_of_tiles];
-    map_pointer->layer_collision = new int[map_pointer->no_of_tiles];
-    map_pointer->layer_object = new int[map_pointer->no_of_tiles];
-    for (int i = 0; i < map_pointer->no_of_tiles; i++)
-    {
-        map_pointer->layer_background[i] = 0;
-        map_pointer->layer_collision[i] = 3;
-        map_pointer->layer_object[i] = 0;
-    }
-    */
+    // use Map class members
+/*
+void Map::clearLayers()
+void Map::clearQueues()
+void Map::clearEvents()
+*/
 }
 
 void MapGenerate(MapType* map_pointer, int generation_algorithm)
