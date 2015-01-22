@@ -26,21 +26,26 @@
 
 MapType::MapType(void)
 {
+    /*
     MapType::dimension_x = 100;
     MapType::dimension_y = 100;
     MapType::map_name    = "default";
     MapType::algorithm   = GEN_ALGORITHM_C1;
+    */
 }
 
 MapType::~MapType(void)
 {
+    /*
     delete[] MapType::layer_background;
     delete[] MapType::layer_collision;
     delete[] MapType::layer_object;
+    */
 }
 
 void MapGenerator::Initialize(MapType* map_pointer)
 {
+    /*
     map_pointer->no_of_tiles = map_pointer->dimension_x * map_pointer->dimension_y;
     map_pointer->layer_background = new int[map_pointer->no_of_tiles];
     map_pointer->layer_collision = new int[map_pointer->no_of_tiles];
@@ -51,22 +56,22 @@ void MapGenerator::Initialize(MapType* map_pointer)
         map_pointer->layer_collision[i] = 3;
         map_pointer->layer_object[i] = 0;
     }
+    */
 }
 
-void MapGenerate(MapType* map_pointer)
+void MapGenerate(MapType* map_pointer, int generation_algorithm)
 {
     MapGenerator* generator = NULL;
-    if (map_pointer->algorithm == GEN_ALGORITHM_C1) generator = new MapGenerator_C1();
-    else if (map_pointer->algorithm == GEN_ALGORITHM_D1) generator = new MapGenerator_D1();
-    generator->Generate(map_pointer);
+    if (generation_algorithm == GEN_ALGORITHM_C1) generator = new MapGenerator_C1();
+    else if (generation_algorithm == GEN_ALGORITHM_D1) generator = new MapGenerator_D1();
+    generator->Generate(map_pointer,generation_algorithm);
     delete generator;
 }
 
 void MapGenerator::Export(MapType* map_pointer)
 {
     std::ofstream output_file;
-    std::string file_name = map_pointer->map_name+".txt";
-    output_file.open (file_name.c_str(), std::ios::out | std::ios::trunc);
+    output_file.open (map_pointer->filename.c_str(), std::ios::out | std::ios::trunc);
     output_file << "test.\n";
     output_file.close();
 }

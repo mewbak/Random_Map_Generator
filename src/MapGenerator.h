@@ -22,6 +22,8 @@
 #define MAP_GENERATOR_H
 
 #include <iostream>
+#include <vector>
+#include <queue>
 
 #define GEN_ALGORITHM_C1  0
 #define GEN_ALGORITHM_D1  1
@@ -34,21 +36,34 @@
  * class MapType
  *
  * The MapType class holds map data for use by the various
- * generation algorithms.
+ * generation algorithms, at a later stage in development
+ * when integrating, use Map class from Map.h.
  *
  */
+
+typedef unsigned short maprow[256];
 
 class MapType
 {
     public:
-        int  dimension_x;
-        int  dimension_y;
-        int  no_of_tiles;
-        int  algorithm;
-        int* layer_background;
-        int* layer_object;
-        int* layer_collision;
-        std::string map_name;
+        std::string filename;
+        std::string tileset;
+        std::string music_filename;
+        std::vector<std::string> layernames;
+        std::string title;
+        short w;
+        short h;
+        int spawn_dir;
+
+        //FPoint spawn;
+        float spawn_x; // use FPoint once integrated
+        float spawn_y; // use FPoint once integrated
+
+        std::vector<maprow*> layers; // visible layers in maprenderer
+        //std::queue<Map_Enemy> enemies;
+        //std::queue<Map_NPC> npcs;
+        //std::vector<Event> events;
+
         MapType(void);
         ~MapType(void);
 };
@@ -66,10 +81,11 @@ class MapGenerator
     public:
         virtual ~MapGenerator(void) {};
         virtual void Initialize (MapType* map_pointer);
-        virtual void Generate (MapType* map_pointer) = 0;
+        virtual void Generate (MapType* map_pointer, int generation_algorithm) = 0;
         virtual void Export (MapType* map_pointer);
 };
 
-void MapGenerate(MapType* map_pointer);
+void MapGenerate(MapType* map_pointer, int generation_algorithm);
 
 #endif // MAP_GENERATOR_H
+
