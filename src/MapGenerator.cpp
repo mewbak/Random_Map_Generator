@@ -20,12 +20,14 @@
 
 #include "MapGenerator.h"
 #include "MapGenerator_C1.h"
+#include "MapGenerator_D1.h"
 
 MapType::MapType(void)
 {
     MapType::dimension_x = 100;
     MapType::dimension_y = 100;
-    MapType::algorithm = GEN_ALGORITHM_C1;
+    MapType::map_name    = "default";
+    MapType::algorithm   = GEN_ALGORITHM_C1;
 }
 
 MapType::~MapType(void)
@@ -53,7 +55,12 @@ void MapGenerate(MapType* map_pointer)
 {
     MapGenerator* generator = NULL;
     if (map_pointer->algorithm == GEN_ALGORITHM_C1) generator = new MapGenerator_C1();
-    //else if (map_pointer->algorithm == GEN_ALGORITHM_D1) generator = new MapGenerator_D1();
+    else if (map_pointer->algorithm == GEN_ALGORITHM_D1) generator = new MapGenerator_D1();
     generator->Generate(map_pointer);
     delete generator;
+}
+
+void MapGenerator::Export(MapType* map_pointer)
+{
+    (void)map_pointer;
 }

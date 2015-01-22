@@ -40,6 +40,7 @@ class MapType
         int* layer_background;
         int* layer_object;
         int* layer_collision;
+        std::string map_name;
         MapType(void);
         ~MapType(void);
 };
@@ -50,6 +51,7 @@ class MapGenerator
         virtual ~MapGenerator(void) {};
         virtual void Initialize (MapType* map_pointer);
         virtual void Generate (MapType* map_pointer) = 0;
+        virtual void Export (MapType* map_pointer);
 };
 
 void MapGenerate(MapType* map_pointer);
