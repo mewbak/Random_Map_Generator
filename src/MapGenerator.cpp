@@ -18,6 +18,8 @@
     paul.wortmann@gmail.com
 */
 
+#include <iostream>
+#include <fstream>
 #include "MapGenerator.h"
 #include "MapGenerator_C1.h"
 #include "MapGenerator_D1.h"
@@ -62,5 +64,12 @@ void MapGenerate(MapType* map_pointer)
 
 void MapGenerator::Export(MapType* map_pointer)
 {
-    (void)map_pointer;
+    std::ofstream output_file;
+    std::string file_name = map_pointer->map_name+".txt";
+    output_file.open (file_name.c_str(), std::ios::out | std::ios::trunc);
+    output_file << "test.\n";
+    output_file.close();
 }
+
+
+

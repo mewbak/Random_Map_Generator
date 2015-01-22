@@ -23,6 +23,15 @@
 
 #include "MapGenerator.h"
 
+/**
+ * class MapGenerator_D1
+ *
+ * The MapGenerator_D1 generates dungeon maps with various
+ * rooms by recursively subdividing the map and generating 3
+ * rooms in the end nodes when a base case is reached (minimum room size).
+ *
+ */
+
 class MapGenerator_D1 : public MapGenerator
 {
     public:

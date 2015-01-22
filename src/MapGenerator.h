@@ -30,6 +30,14 @@
 #define GEN_ALGORITHM_M1  4
 #define GEN_ALGORITHM_T1  5
 
+/**
+ * class MapType
+ *
+ * The MapType class holds map data for use by the various
+ * generation algorithms.
+ *
+ */
+
 class MapType
 {
     public:
@@ -44,6 +52,14 @@ class MapType
         MapType(void);
         ~MapType(void);
 };
+
+/**
+ * class MapGenerator
+ *
+ * The MapGenerator class is and abstract class which the
+ * various map generation algorithm classes derive from.
+ *
+ */
 
 class MapGenerator
 {

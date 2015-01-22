@@ -23,6 +23,13 @@
 
 #include "MapGenerator.h"
 
+/**
+ * class MapGenerator_C1
+ *
+ * The MapGenerator_C1 uses "cellular automata" to generate cave like maps.
+ *
+ */
+
 class MapGenerator_C1 : public MapGenerator
 {
     public:
