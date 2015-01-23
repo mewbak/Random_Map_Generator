@@ -21,6 +21,7 @@
 #ifndef MAP_GENERATOR_H
 #define MAP_GENERATOR_H
 
+#include "flare/Map.h"
 #include <iostream>
 #include <vector>
 #include <queue>

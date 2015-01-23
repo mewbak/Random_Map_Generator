@@ -1,4 +1,14 @@
 # Random_Map_Generator
 Random Map Generator.
 
-All content copyright Paul Wortmann. GPL v3
+Copyright Paul Wortmann. GNU GPL v3
+
+
+
+The files under the flare folder are part of the Flare engine.
+Most of Flare is Copyright © 2010-2013 Clint Bellanger. 
+Contributors retain copyrights to their original contributions.
+See below links:
+https://github.com/clintbellanger/flare-engine
+http://www.flarerpg.org/
+
