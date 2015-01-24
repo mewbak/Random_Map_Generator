@@ -22,7 +22,7 @@
 #define MAP_GENERATOR_H
 
 //#include "flare/Map.h"
-#include "MapType.h"
+#include "MapType.h" // still required until Map.h is usable.... SDL dependency....
 
 #define GEN_ALGORITHM_C1  0
 #define GEN_ALGORITHM_D1  1
@@ -45,7 +45,8 @@ class MapGenerator
         virtual ~MapGenerator(void) {};
         virtual void Initialize (MapType* map_pointer);
         virtual void Generate (MapType* map_pointer) = 0;
-        virtual void Export (MapType* map_pointer);
+        virtual void ApplyTileset (MapType* map_pointer);
+        virtual void Export (MapType* map_pointer); // possibly redundant if engine handles map exports.
 };
 
 void MapGenerate(MapType* map_pointer, int generation_algorithm);

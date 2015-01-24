@@ -44,6 +44,11 @@ void MapGenerate(MapType* map_pointer, int generation_algorithm)
     delete generator;
 }
 
+void MapGenerator::ApplyTileset (MapType* map_pointer)
+{
+    (void)map_pointer;
+}
+
 void MapGenerator::Export(MapType* map_pointer)
 {
     std::ofstream output_file;
