@@ -20,41 +20,10 @@
 
 #include <iostream>
 #include <fstream>
+
 #include "MapGenerator.h"
 #include "MapGenerator_C1.h"
 #include "MapGenerator_D1.h"
-
-MapType::MapType(void)
-{
-    // this constructor will need to be edited when integrated, will use Map class
-    MapType::title          = "Randomly generated map";
-    MapType::filename       = "default.txt";
-    MapType::music_filename = "default";
-    MapType::tileset        = "dungeon";
-    MapType::spawn_x        = 0.0f; // Fpoint
-    MapType::spawn_y        = 0.0f; // Fpoint
-    MapType::w              = 100;
-    MapType::h              = 100;
-    MapType::spawn_dir      = 0; // check this
-    MapType::layernames.push_back("background");
-    maprow* background_layer = new maprow[w];
-    layers.push_back(background_layer);
-    MapType::layernames.push_back("object");
-    maprow* object_layer = new maprow[w];
-    layers.push_back(object_layer);
-    MapType::layernames.push_back("collision");
-    maprow* collision_layer = new maprow[w];
-    layers.push_back(collision_layer);
-}
-
-MapType::~MapType(void)
-{
-    // this destructor will need to be edited when integrated, will use Map class
-	for (unsigned i = 0; i < layers.size(); ++i)
-		delete[] layers[i];
-	layers.clear();
-	layernames.clear();
-}
 
 void MapGenerator::Initialize(MapType* map_pointer)
 {

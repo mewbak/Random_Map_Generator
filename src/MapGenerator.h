@@ -22,9 +22,7 @@
 #define MAP_GENERATOR_H
 
 //#include "flare/Map.h"
-#include <iostream>
-#include <vector>
-#include <queue>
+#include "MapType.h"
 
 #define GEN_ALGORITHM_C1  0
 #define GEN_ALGORITHM_D1  1
@@ -32,42 +30,6 @@
 #define GEN_ALGORITHM_D3  3
 #define GEN_ALGORITHM_M1  4
 #define GEN_ALGORITHM_T1  5
-
-/**
- * class MapType
- *
- * The MapType class holds map data for use by the various
- * generation algorithms, at a later stage in development
- * when integrating, use Map class from Map.h.
- *
- */
-
-typedef unsigned short maprow[256];
-
-class MapType
-{
-    public:
-        std::string filename;
-        std::string tileset;
-        std::string music_filename;
-        std::vector<std::string> layernames;
-        std::string title;
-        short w;
-        short h;
-        int spawn_dir;
-
-        //FPoint spawn;
-        float spawn_x; // use FPoint once integrated
-        float spawn_y; // use FPoint once integrated
-
-        std::vector<maprow*> layers; // visible layers in maprenderer
-        //std::queue<Map_Enemy> enemies;
-        //std::queue<Map_NPC> npcs;
-        //std::vector<Event> events;
-
-        MapType(void);
-        ~MapType(void);
-};
 
 /**
  * class MapGenerator
