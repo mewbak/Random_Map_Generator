@@ -35,7 +35,7 @@
 class MapGenerator_D1 : public MapGenerator
 {
     public:
-        void Generate (MapType* map_pointer, int generation_algorithm);
+        void Generate (MapType* map_pointer);
 };
 
 #endif // MAP_GENERATOR_D1_H

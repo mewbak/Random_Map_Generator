@@ -71,7 +71,7 @@ void MapGenerate(MapType* map_pointer, int generation_algorithm)
     MapGenerator* generator = NULL;
     if (generation_algorithm == GEN_ALGORITHM_C1) generator = new MapGenerator_C1();
     else if (generation_algorithm == GEN_ALGORITHM_D1) generator = new MapGenerator_D1();
-    generator->Generate(map_pointer,generation_algorithm);
+    generator->Generate(map_pointer);
     delete generator;
 }
 

@@ -21,7 +21,7 @@
 #ifndef MAP_GENERATOR_H
 #define MAP_GENERATOR_H
 
-#include "flare/Map.h"
+//#include "flare/Map.h"
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -82,7 +82,7 @@ class MapGenerator
     public:
         virtual ~MapGenerator(void) {};
         virtual void Initialize (MapType* map_pointer);
-        virtual void Generate (MapType* map_pointer, int generation_algorithm) = 0;
+        virtual void Generate (MapType* map_pointer) = 0;
         virtual void Export (MapType* map_pointer);
 };
 
