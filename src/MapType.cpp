@@ -32,6 +32,9 @@ MapType::MapType(void)
     w              = 100;
     h              = 100;
     spawn_dir      = 0; // check this
+    /*
+    // build this during generation.
+
     layernames.push_back("background");
     maprow* background_layer = new maprow[w];
     layers.push_back(background_layer);
@@ -41,6 +44,7 @@ MapType::MapType(void)
     layernames.push_back("collision");
     maprow* collision_layer = new maprow[w];
     layers.push_back(collision_layer);
+    */
 }
 
 MapType::~MapType(void)

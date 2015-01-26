@@ -23,7 +23,7 @@
 
 void MapGenerator_D1::Generate (MapType* map_pointer)
 {
-    MapGenerator_D1::Initialize(map_pointer);
+    Initialize(map_pointer);
     // generate in map_pointer
 }
 

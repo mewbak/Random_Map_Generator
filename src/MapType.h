@@ -44,8 +44,8 @@ class MapType
         std::string music_filename;
         std::vector<std::string> layernames;
         std::string title;
-        short w;
-        short h;
+        short unsigned int w;
+        short unsigned int h;
         int spawn_dir;
 
         //FPoint spawn;

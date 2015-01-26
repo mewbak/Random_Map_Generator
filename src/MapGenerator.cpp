@@ -27,12 +27,10 @@
 
 void MapGenerator::Initialize(MapType* map_pointer)
 {
-    // use Map class members
-/*
-void Map::clearLayers()
-void Map::clearQueues()
-void Map::clearEvents()
-*/
+	for (unsigned i = 0; i < map_pointer->layers.size(); ++i)
+		delete[] map_pointer->layers[i];
+	map_pointer->layers.clear();
+	map_pointer->layernames.clear();
 }
 
 void MapGenerate(MapType* map_pointer, int generation_algorithm)
@@ -53,9 +51,17 @@ void MapGenerator::Export(MapType* map_pointer)
 {
     std::ofstream output_file;
     output_file.open (map_pointer->filename.c_str(), std::ios::out | std::ios::trunc);
-    output_file << "test.\n";
+    output_file << "[data]" << std::endl;
+
+    std::vector<short unsigned int (*)[256]>::iterator current_layer = map_pointer->layers.begin();
+    for (int j = 0; j < map_pointer->h; j++)
+    {
+        for (int i = 0; i < map_pointer->w; i++)
+        {
+            output_file << (*current_layer)[i][j];
+            if (((i*map_pointer->w)+j) < (map_pointer->w*map_pointer->h)-1) output_file << ",";
+        }
+        output_file << std::endl;
+    }
     output_file.close();
 }
-
-
-

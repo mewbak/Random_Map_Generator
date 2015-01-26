@@ -23,12 +23,18 @@
 
 void MapGenerator_C1::Generate (MapType* map_pointer)
 {
-    MapGenerator_C1::Initialize(map_pointer);
+    Initialize(map_pointer);
     // generate in map_pointer
-    int no_of_tiles = map_pointer->w * map_pointer->h;
-    for (int i = 0; i < no_of_tiles; i++)
+    maprow *current_layer = new maprow[map_pointer->w];
+    map_pointer->layers.push_back(current_layer);
+    map_pointer->layernames.push_back("background");
+    for (int j = 0; j < map_pointer->h; j++)
     {
-
+        for (int i = 0; i < map_pointer->w; i++)
+        {
+            (current_layer)[i][j] = 9; // just checking we are generating a correctly formed background layer...
+        }
     }
+    Export(map_pointer);
 }
 
