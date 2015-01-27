@@ -45,6 +45,7 @@ class MapGenerator
         virtual ~MapGenerator(void) {};
         virtual void Initialize (MapType* map_pointer);
         virtual void Generate (MapType* map_pointer) = 0;
+        virtual void Generate (MapType* map_pointer, int seed);
         virtual void ApplyTileset (MapType* map_pointer);
         virtual void Export (MapType* map_pointer); // possibly redundant if engine handles map exports.
 };

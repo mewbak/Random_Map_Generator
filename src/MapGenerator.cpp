@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 
 #include "MapGenerator.h"
 #include "MapGenerator_C1.h"
@@ -31,6 +32,12 @@ void MapGenerator::Initialize(MapType* map_pointer)
 		delete[] map_pointer->layers[i];
 	map_pointer->layers.clear();
 	map_pointer->layernames.clear();
+}
+
+void MapGenerator::Generate (MapType* map_pointer, int seed)
+{
+    srand(seed);
+    Generate (map_pointer);
 }
 
 void MapGenerate(MapType* map_pointer, int generation_algorithm)
