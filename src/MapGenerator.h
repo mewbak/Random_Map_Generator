@@ -45,8 +45,6 @@ class MapGenerator
         // this should not be needed in future
         static void map_to_flare_map (Map* map_pointer, flare_map_type* flare_map_pointer, int tile_set);
 
-        // instead of file_export_flare should be used Export function
-        static void file_export_flare (flare_map_type* flare_map_pointer, std::string file_name);
 };
 
 #endif // MAP_GENERATOR_H
