@@ -22,7 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_SAVER
 #define MAP_SAVER
 
-#include "Map.h"
+#include "flare/Map.h"
 
 class MapSaver {
 public:
@@ -40,7 +40,7 @@ private:
     void writeNPCs(std::ofstream& map_file);
     void writeEvents(std::ofstream& map_file);
     void writeEventComponents(std::ofstream& map_file, int eventID);
-	
+
     Map* map;
     std::string dest_file;
 };

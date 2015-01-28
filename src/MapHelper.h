@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include "Map.h"
-
-#include <QString>
+#include "flare/Map.h"
 
 #define TILESET_CAVE      0
 #define TILESET_DUNGEON   1
@@ -95,8 +93,8 @@ struct AppData
     bool    gen_exits;
     bool    gen_enemies;
     bool    gen_chests;
-    QString file_name;
-    QString status;
+    std::string file_name;
+    std::string status;
 };
 
 void map_check                   (Map* map_pointer);

@@ -2,7 +2,7 @@
 #ifndef ASTAR
 #define ASTAR
 
-#include "Map.h"
+#include "flare/Map.h"
 
 struct path_type
 {

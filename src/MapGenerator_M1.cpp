@@ -1,37 +1,6 @@
 
 #include "MapGenerator_M1.h"
 
-void MapGenerator_M1::Generate (Map* map_pointer, int dimension_x, int dimension_y)
-{
-    Initialize(map_pointer, dimension_x, dimension_y);
-
-    // generate in map_pointer
-    GenerateMap(map_pointer);
-
-    // export is called from outside
-    //Export(map_pointer);
-}
-
-void MapGenerator_M1::GenerateMap(Map* map_pointer)
-{
-    for (int i = 0; i < map_pointer->size(); i++)
-    {
-        map_pointer->tile[i].data      = TILE_WALL;
-        map_pointer->tile[i].attribute = TILE_ATTRIBUTE_NONE;
-    }
-    Room room_data;
-    room_data.position.x  = 0;
-    room_data.position.y  = 0;
-    room_data.w = 0;
-    room_data.h = 0;
-    map_gen_room(map_pointer,room_data);
-    map_gen_room(map_pointer,room_data);
-    map_gen_room(map_pointer,room_data);
-    map_gen_room(map_pointer,room_data);
-    map_gen_maze(map_pointer,map_pointer->w/2,map_pointer->h/2,DIRECTION_BIAS_NORTH);
-    map_gen_room_exits(map_pointer);
-}
-
 bool map_gen_maze_check_tile(Map* map_pointer, int tile_count, int direction_bias)
 {
     bool return_value = true;
@@ -172,6 +141,37 @@ void map_gen_maze(Map* map_pointer, int tile_count, int direction_bias)
 void map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias)
 {
     map_gen_maze(map_pointer, ((tile_y * map_pointer->w) + tile_x),direction_bias);
+}
+
+void MapGenerator_M1::Generate (Map* map_pointer, int dimension_x, int dimension_y)
+{
+    Initialize(map_pointer, dimension_x, dimension_y);
+
+    // generate in map_pointer
+    GenerateMap(map_pointer);
+
+    // export is called from outside
+    //Export(map_pointer);
+}
+
+void MapGenerator_M1::GenerateMap(Map* map_pointer)
+{
+    for (int i = 0; i < map_pointer->size(); i++)
+    {
+        map_pointer->tile[i].data      = TILE_WALL;
+        map_pointer->tile[i].attribute = TILE_ATTRIBUTE_NONE;
+    }
+    Room room_data;
+    room_data.position.x  = 0;
+    room_data.position.y  = 0;
+    room_data.w = 0;
+    room_data.h = 0;
+    map_gen_room(map_pointer,room_data);
+    map_gen_room(map_pointer,room_data);
+    map_gen_room(map_pointer,room_data);
+    map_gen_room(map_pointer,room_data);
+    map_gen_maze(map_pointer,map_pointer->w/2,map_pointer->h/2,DIRECTION_BIAS_NORTH);
+    map_gen_room_exits(map_pointer);
 }
 
 void MapGenerator_M1::GenerateMap(Map* map_pointer, int seed)

@@ -2,29 +2,6 @@
 #include "MapGenerator_D2.h"
 #include "MapHelper.h"
 
-void MapGenerator_D2::Generate (Map* map_pointer, int dimension_x, int dimension_y)
-{
-    Initialize(map_pointer, dimension_x, dimension_y);
-
-    // generate in map_pointer
-    GenerateMap(map_pointer);
-
-    // export is called from outside
-    //Export(map_pointer);
-}
-
-void MapGenerator_D2::GenerateMap(Map* map_pointer)
-{
-    for (int i = 0; i < map_pointer->size(); i++)
-    {
-        map_pointer->tile[i].data      = Tile_Type::TILE_WALL;
-        map_pointer->tile[i].attribute = TILE_ATTRIBUTE_NONE;
-    }
-    map_gen_RC_internal(map_pointer);
-    if (!map_gen_room_flood_fill(map_pointer)) map_gen_RC_internal(map_pointer);
-    map_check(map_pointer);
-}
-
 bool  RC_circle_collision(float x1, float y1, float r1, float x2, float y2, float r2)
 {
     if (((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2)) < ((r1+r2)*(r1+r2))) return(true);
@@ -68,7 +45,30 @@ void map_gen_RC_internal (Map* map_pointer)
         }
     }
     map_gen_room_connect(map_pointer);
-};
+}
+
+void MapGenerator_D2::Generate (Map* map_pointer, int dimension_x, int dimension_y)
+{
+    Initialize(map_pointer, dimension_x, dimension_y);
+
+    // generate in map_pointer
+    GenerateMap(map_pointer);
+
+    // export is called from outside
+    //Export(map_pointer);
+}
+
+void MapGenerator_D2::GenerateMap(Map* map_pointer)
+{
+    for (int i = 0; i < map_pointer->size(); i++)
+    {
+        map_pointer->tile[i].data      = Tile_Type::TILE_WALL;
+        map_pointer->tile[i].attribute = TILE_ATTRIBUTE_NONE;
+    }
+    map_gen_RC_internal(map_pointer);
+    if (!map_gen_room_flood_fill(map_pointer)) map_gen_RC_internal(map_pointer);
+    map_check(map_pointer);
+}
 
 void MapGenerator_D2::GenerateMap(Map* map_pointer, int seed)
 {

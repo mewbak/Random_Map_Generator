@@ -22,14 +22,14 @@
 #include <fstream>
 #include "MapGenerator.h"
 #include "MapHelper.h"
-#include "MapSaver.h"
+#include "export/MapSaver.h"
 
 
 void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y)
 {
     map_pointer->clearEvents();
-    map_pointer->clearQueues();
-    map_pointer->clearLayers();
+    //map_pointer->clearQueues(); // cant use protected
+    //map_pointer->clearLayers(); // cant use protected
 }
 
 void MapGenerator::Export(Map* map_pointer, std::string file_name)
@@ -39,6 +39,7 @@ void MapGenerator::Export(Map* map_pointer, std::string file_name)
     delete mapSaver;
 }
 
+/*
 void MapGenerator::map_to_flare_map (Map* map_pointer, flare_map_type* flare_map_pointer, int tile_set)
 {
     map_gen_redundant_tile_check (map_pointer);
@@ -529,4 +530,5 @@ void MapGenerator::map_to_flare_map (Map* map_pointer, flare_map_type* flare_map
         break;
     }
 }
+*/
 
