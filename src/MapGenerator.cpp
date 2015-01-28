@@ -24,41 +24,12 @@
 #include "MapHelper.h"
 #include "MapSaver.h"
 
-/*MapType::MapType(void)
-{
-    // this constructor will need to be edited when integrated, will use Map class
-    MapType::title          = "Randomly generated map";
-    MapType::filename       = "default.txt";
-    MapType::music_filename = "default";
-    MapType::tileset        = "dungeon";
-    MapType::spawn_x        = 0.0f; // Fpoint
-    MapType::spawn_y        = 0.0f; // Fpoint
-    MapType::w              = 100;
-    MapType::h              = 100;
-    MapType::spawn_dir      = 0; // check this
-    MapType::layernames.push_back("background");
-    maprow* background_layer = new maprow[w];
-    layers.push_back(background_layer);
-    MapType::layernames.push_back("object");
-    maprow* object_layer = new maprow[w];
-    layers.push_back(object_layer);
-    MapType::layernames.push_back("collision");
-    maprow* collision_layer = new maprow[w];
-    layers.push_back(collision_layer);
-}
 
-MapType::~MapType(void)
-{
-    // this destructor will need to be edited when integrated, will use Map class
-	for (unsigned i = 0; i < layers.size(); ++i)
-		delete[] layers[i];
-	layers.clear();
-	layernames.clear();
-}
-*/
 void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y)
 {
-    // use Map class members
+    map_pointer->clearEvents();
+    map_pointer->clearQueues();
+    map_pointer->clearLayers();
 /*
 void Map::clearLayers()
 void Map::clearQueues()
@@ -116,15 +87,8 @@ void Map::clearEvents()
 void MapGenerator::Export(Map* map_pointer, std::string file_name)
 {
     MapSaver* mapSaver = new MapSaver(map_pointer);
-
     mapSaver->saveMap(file_name);
-
     delete mapSaver;
-
-    //std::ofstream output_file;
-    //output_file.open (map_pointer->getFilename().c_str(), std::ios::out | std::ios::trunc);
-    //output_file << "test.\n";
-    //output_file.close();
 }
 
 void MapGenerator::map_to_flare_map (Map* map_pointer, flare_map_type* flare_map_pointer, int tile_set)
