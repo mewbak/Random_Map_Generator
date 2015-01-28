@@ -1,15 +1,45 @@
+/*
+    Random Map Generator.
+    Copyright (C) 2014  Paul Wortmann
 
-#ifndef MAP_GEN_M1_HPP
-#define MAP_GEN_M1_HPP
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-#include "Map.h"
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    paul.wortmann@gmail.com
+*/
+
+#ifndef MAP_GENERATOR_M1_H
+#define MAP_GENERATOR_M1_H
+
+#include "MapGenerator.h"
 #include "MapHelper.h"
 
-bool map_gen_maze_check_tile (Map* map_pointer, int tile_number);
-void map_gen_maze            (Map* map_pointer, int tile_in);
-void map_gen_maze            (Map* map_pointer, int tile_x, int tile_y);
-void map_gen_M1              (Map* map_pointer, int seed);
-void map_gen_M1              (Map* map_pointer);
+/**
+ * class MapGenerator_M1
+ *
+ * The MapGenerator_M1 used to generate maze like maps.
+ *
+ */
 
-#endif //MAP_GEN_M1_HPP
+class MapGenerator_M1 : public MapGenerator
+{
+    public:
+        void Generate (Map* map_pointer, int dimension_x, int dimension_y);
+
+    private:
+        void GenerateMap(Map* map_pointer);
+        void GenerateMap(Map* map_pointer, int seed);
+};
+
+#endif // MAP_GENERATOR_M1_H
 
