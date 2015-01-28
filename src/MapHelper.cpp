@@ -5,24 +5,8 @@
 #include "MapGenerator.h"
 #include "MapGenerator_C1.h"
 #include "MapGenerator_D1.h"
-
-int get_A(Map* map_pointer)
-{
-    for (int i = map_pointer->w*4+2; i < map_pointer->size(); i+=1)
-    {
-        if ((i < map_pointer->size()) && (map_pointer->tile[i].data == Tile_Type::TILE_FLOOR)) return(i);
-    }
-    return map_pointer->w+2;
-}
-
-int get_B(Map* map_pointer)
-{
-    for (int i = map_pointer->size()-map_pointer->w*4-2; i > 0; i-=1)
-    {
-        if ((i > 0) && (map_pointer->tile[i].data == Tile_Type::TILE_FLOOR)) return(i);
-    }
-    return map_pointer->size()-map_pointer->w-2;
-}
+#include "MapGenerator_D2.h"
+#include "MapGenerator_M1.h"
 
 void MapGenerate(Map* map_pointer, int generation_algorithm, int dimension_x, int dimension_y)
 {
@@ -33,33 +17,14 @@ void MapGenerate(Map* map_pointer, int generation_algorithm, int dimension_x, in
     else if (generation_algorithm == GEN_ALGORITHM_D1) {
         generator = new MapGenerator_D1();
     }
+    else if (generation_algorithm == GEN_ALGORITHM_D2) {
+        generator = new MapGenerator_D2();
+    }
+    else if (generation_algorithm == GEN_ALGORITHM_M1) {
+        generator = new MapGenerator_M1();
+    }
     generator->Generate(map_pointer, dimension_x, dimension_y);
     delete generator;
-
-    /*int return_value = EXIT_SUCCESS;
-    switch (gen_type)
-    {
-        case Algorithm_Type::MAP_GEN_BSP:
-            map_gen_BSP(map_pointer);
-        break;
-        case Algorithm_Type::MAP_GEN_CA:
-            map_gen_CA(map_pointer);
-        break;
-        case Algorithm_Type::MAP_GEN_M1:
-            map_gen_M1(map_pointer);
-        break;
-        case Algorithm_Type::MAP_GEN_RC:
-            map_gen_RC(map_pointer);
-        break;
-        case Algorithm_Type::MAP_GEN_RR:
-            map_gen_RR(map_pointer);
-        break;
-        default:
-            return_value = EXIT_FAILURE;
-        break;
-    }
-
-    return return_value;*/
 }
 
 void map_check   (Map* map_pointer)
@@ -958,9 +923,4 @@ void map_gen_map_exits (Map* map_pointer)
     std::cout << "Stairs generated on tile " << fr1 << " and tile " << fr2 << std::endl;
     map_pointer->tile[fr1].data = Tile_Type::TILE_EXIT;
     map_pointer->tile[fr2].data = Tile_Type::TILE_EXIT;
-}
-
-void map_gen_room_doors (Map* map_pointer)
-{
-    (void)map_pointer;
 }

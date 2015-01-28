@@ -99,9 +99,6 @@ struct AppData
     QString status;
 };
 
-int get_A(Map* map_pointer);
-int get_B(Map* map_pointer);
-
 void map_check                   (Map* map_pointer);
 void map_display                 (Map* map_pointer);
 int  map_gen_flood_fill_tile     (Map* map_pointer, FloodFill* fill_data, int tile_number);
@@ -118,7 +115,6 @@ Room map_gen_room_find_stats(Map* map_pointer, FloodFill* fill_data, int tile_nu
 void map_gen_room_find           (Map* map_pointer);
 void map_gen_redundant_tile_check(Map* map_pointer);
 void map_gen_map_exits           (Map* map_pointer);
-void map_gen_room_doors          (Map* map_pointer);
 
 void MapGenerate(Map* map_pointer, int generation_algorithm, int dimension_x, int dimension_y);
 
