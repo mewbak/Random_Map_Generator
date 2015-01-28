@@ -19,10 +19,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     ../src/a-star.cpp \
     ../src/MapHelper.cpp \
-    ../src/map_gen_BSP.cpp \
-    ../src/map_gen_M1.cpp \
-    ../src/map_gen_RC.cpp \
-    ../src/map_gen_RR.cpp \
     ../src/flare/EventManager.cpp \
     ../src/flare/FileParser.cpp \
     ../src/flare/Map.cpp \
@@ -33,17 +29,17 @@ SOURCES += main.cpp\
     ../src/export/MapSaver.cpp \
     ../src/MapGenerator_C1.cpp \
     ../src/MapGenerator_D1.cpp \
+    ../src/MapGenerator_D2.cpp \
+    ../src/MapGenerator_M1.cpp \
     ../src/MapGenerator.cpp
 
 HEADERS  += mainwindow.h \
     ../src/a-star.h \
     ../src/MapHelper.h \
-    ../src/map_gen_BSP.h \
-    ../src/map_gen_M1.h \
-    ../src/map_gen_RC.h \
-    ../src/map_gen_RR.h \
     ../src/MapGenerator_C1.h \
     ../src/MapGenerator_D1.h \
+    ../src/MapGenerator_D2.h \
+    ../src/MapGenerator_M1.h \
     ../src/MapGenerator.h
 
 INCLUDEPATH += flare \
