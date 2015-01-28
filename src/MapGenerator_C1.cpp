@@ -33,6 +33,63 @@ void MapGenerator_C1::Generate (Map* map_pointer, int dimension_x, int dimension
 
 void MapGenerator_C1::GenerateMap(Map* map_pointer)
 {
+    /*
+    #define TILE_FLOOR 0
+    #define TILE_WALL  1
+    Initialize(map_pointer);
+    maprow *current_layer = new maprow[map_pointer->w];
+    map_pointer->layers.push_back(current_layer);
+    map_pointer->layernames.push_back("background");
+    // set all tiles to floor, except perimeter set to wall
+    for (int j = 0; j < map_pointer->h; j++)
+    {
+        for (int i = 0; i < map_pointer->w; i++)
+        {
+            if ((j == 0)||(j == map_pointer->h-1)||(i == 0)||(i == map_pointer->w-1))
+                (current_layer)[i][j] = TILE_WALL;
+            else
+                (current_layer)[i][j] = TILE_FLOOR;
+        }
+    }
+    // place random wall tiles
+    for (int i = 0; i < ((map_pointer->w * map_pointer->h) * 0.6); i++)
+    {
+        (current_layer)[rand() % map_pointer->w][rand() % map_pointer->h] = TILE_WALL;
+    }
+    for (int i = 0; i < 2; i++) // iterate over map and "smooth" it
+    {
+        for (int j = 1; j < map_pointer->h-1; j++)
+        {
+            for (int i = 1; i < map_pointer->w-1; i++)
+            {
+                int num_walls = 0;
+                if ((current_layer)[i][j-1] == TILE_WALL) num_walls++;
+                if ((current_layer)[i][j+1] == TILE_WALL) num_walls++;
+                if ((current_layer)[i-1][j] == TILE_WALL) num_walls++;
+                if ((current_layer)[i-1][j-1] == TILE_WALL) num_walls++;
+                if ((current_layer)[i-1][j+1] == TILE_WALL) num_walls++;
+                if ((current_layer)[i+1][j] == TILE_WALL) num_walls++;
+                if ((current_layer)[i+1][j-1] == TILE_WALL) num_walls++;
+                if ((current_layer)[i+1][j+1] == TILE_WALL) num_walls++;
+                if (((current_layer)[i][j] == TILE_WALL)&&(num_walls > 3)) (current_layer)[i][j] = TILE_WALL;
+                else if (((current_layer)[i][j] == TILE_FLOOR)&&(num_walls > 4)) (current_layer)[i][j] = TILE_WALL;
+                else (current_layer)[i][j] = TILE_FLOOR;
+            }
+        }
+    }
+*/
+/*
+
+a lot more work needed:
+clear center block after random wall placement.
+add a few random lines in the middle to prevent large open cave?
+fill all but main cave to prevent redundant rooms that are inaccessible.
+flood fill?
+
+*/
+
+
+    // old code below, refactoring done above.
     FloodFill* fill_data = new FloodFill[map_pointer->size()];
     bool ca_map_good               = false;
     int  ca_minimum_cave_dimension      = 60;
