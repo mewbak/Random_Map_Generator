@@ -57,7 +57,7 @@ void Map::clearLayers() {
 }
 
 void Map::clearQueues() {
-	enemies = std::queue<Map_Enemy>();
+    //enemies = std::queue<Map_Enemy>();
 	npcs = std::queue<Map_NPC>();
 }
 
@@ -341,12 +341,12 @@ void Map::loadNPC(FileParser &infile) {
 		// otherwise, it becomes possible for the player to stand "inside" the npc, which will trigger their event infinitely
 #ifndef MAP_GENERATOR
 		if (collision_layer != -1) {
-			unsigned tile_x = npcs.back().pos.x;
-			unsigned tile_y = npcs.back().pos.y;
-			if (tile_x < (unsigned)w && tile_y < (unsigned)h) {
-				short unsigned int& tile = layers[collision_layer][tile_x][tile_y];
+            unsigned tile_x = npcs.back().pos.x;
+            unsigned tile_y = npcs.back().pos.y;
+            if (tile_x < (unsigned)w && tile_y < (unsigned)h) {
+                short unsigned int& tile = layers[collision_layer][tile_x][tile_y];
 				if (tile == BLOCKS_NONE) {
-					logError("Map: NPC at (%d, %d) does not have a collision tile. Creating one now.", tile_x, tile_y);
+                    logError("Map: NPC at (%d, %d) does not have a collision tile. Creating one now.", tile_x, tile_y);
 					tile = BLOCKS_MOVEMENT_HIDDEN;
 				}
 			}

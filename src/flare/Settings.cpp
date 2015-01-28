@@ -424,10 +424,10 @@ void loadTilesetSettings() {
 	// reset defaults
 	UNITS_PER_PIXEL_X = 2;
 	UNITS_PER_PIXEL_Y = 4;
-	TILE_W = 64;
-	TILE_H = 32;
-	TILE_W_HALF = TILE_W/2;
-	TILE_H_HALF = TILE_H/2;
+    TILE_W = 64;
+    TILE_H = 32;
+    TILE_W_HALF = TILE_W/2;
+    TILE_H_HALF = TILE_H/2;
 	TILESET_ISOMETRIC = 0;
 	TILESET_ORTHOGONAL = 1;
 	TILESET_ORIENTATION = TILESET_ISOMETRIC;
@@ -437,12 +437,12 @@ void loadTilesetSettings() {
 	// @CLASS Settings: Tileset config|Description of engine/tileset_config.txt
 	if (infile.open("engine/tileset_config.txt", true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.")) {
 		while (infile.next()) {
-			if (infile.key == "tile_size") {
-				// @ATTR tile_size|w (integet), h (integer)|The width and height of a tile.
-				TILE_W = toInt(infile.nextValue());
-				TILE_H = toInt(infile.nextValue());
-				TILE_W_HALF = TILE_W /2;
-				TILE_H_HALF = TILE_H /2;
+			if (infile.key == "Tile_Type::TILE_size") {
+				// @ATTR Tile_Type::TILE_size|w (integet), h (integer)|The width and height of a tile.
+                TILE_W = toInt(infile.nextValue());
+                TILE_H = toInt(infile.nextValue());
+                TILE_W_HALF = TILE_W /2;
+                TILE_H_HALF = TILE_H /2;
 			}
 			else if (infile.key == "orientation") {
 				// @ATTR orientation|[isometric, orthogonal]|The perspective of tiles; isometric or orthogonal.
@@ -462,25 +462,25 @@ void loadTilesetSettings() {
 	VIEW_W_HALF = VIEW_W / 2;
 	VIEW_H_HALF = VIEW_H / 2;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		if (TILE_W > 0 && TILE_H > 0) {
-			UNITS_PER_PIXEL_X = 2.0f / TILE_W;
-			UNITS_PER_PIXEL_Y = 2.0f / TILE_H;
+        if (TILE_W > 0 && TILE_H > 0) {
+            UNITS_PER_PIXEL_X = 2.0f / TILE_W;
+            UNITS_PER_PIXEL_Y = 2.0f / TILE_H;
 		}
 		else {
 			logError("Settings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.");
-			TILE_W = 64;
-			TILE_H = 32;
+            TILE_W = 64;
+            TILE_H = 32;
 		}
 	}
 	else { // TILESET_ORTHOGONAL
-		if (TILE_W > 0 && TILE_H > 0) {
-			UNITS_PER_PIXEL_X = 1.0f / TILE_W;
-			UNITS_PER_PIXEL_Y = 1.0f / TILE_H;
+        if (TILE_W > 0 && TILE_H > 0) {
+            UNITS_PER_PIXEL_X = 1.0f / TILE_W;
+            UNITS_PER_PIXEL_Y = 1.0f / TILE_H;
 		}
 		else {
 			logError("Settings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.");
-			TILE_W = 64;
-			TILE_H = 32;
+            TILE_W = 64;
+            TILE_H = 32;
 		}
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {

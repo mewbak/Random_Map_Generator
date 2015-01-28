@@ -61,7 +61,7 @@ public:
 		, numbermin(1)
 		, numbermax(1)
 		, chance(1.0f)
-		, direction(rand() % 8)
+        , direction(-1)
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
 		, requires_status()
@@ -115,6 +115,40 @@ public:
 	}
 };
 
+// should be removed from Map class and used as temp tings on generation stage
+struct GenTile
+{
+    Point position;
+    int     data;
+    int     attribute;
+    bool    closed_list;
+    bool    open_list;
+    int     H;
+    int     G;
+    int     F;
+    int     parent;
+};
+// should be removed from Map class and used as temp tings on generation stage
+struct ConnectedRoom
+{
+    bool connected;
+    int  room_no;
+    int  direction;
+};
+
+// should be removed from Map class and used as temp tings on generation stage
+#define ROOM_MAX_CONNECTIONS       4
+struct Room
+{
+    bool                active;
+    short               w;
+    short               h;
+    Point               position;
+    int                 no_of_connected_rooms;
+    bool                exit[ROOM_MAX_CONNECTIONS];
+    ConnectedRoom connected_room[ROOM_MAX_CONNECTIONS];
+};
+
 class Map {
 protected:
 	void loadHeader(FileParser &infile);
@@ -124,8 +158,6 @@ protected:
 
 	void clearLayers();
 	void clearQueues();
-
-	std::queue<Map_Group> enemy_groups;
 #ifndef MAP_GENERATOR
 	std::vector<StatBlock> statblocks;
 #endif
@@ -133,12 +165,16 @@ protected:
 	std::string filename;
 	std::string tileset;
 
-	int load(std::string filename);
+    //int load(std::string filename);
 
 	int collision_layer;
 public:
 	Map();
+
+    std::queue<Map_Group> enemy_groups;
+    int load(std::string filename);
 	std::string getFilename() { return filename; }
+    std::string getTileset() { return tileset; }
 
 	std::string music_filename;
 
@@ -148,7 +184,7 @@ public:
 	void clearEvents();
 
 	// enemy load handling
-	std::queue<Map_Enemy> enemies;
+    //std::queue<Map_Enemy> enemies;
 
 	// npc load handling
 	std::queue<Map_NPC> npcs;
@@ -162,6 +198,14 @@ public:
 	short h;
 	FPoint spawn;
 	int spawn_dir;
+
+    // should be added to Map calss later
+    int size() { return w*h; }
+
+    // should be removed from Map class and used as temp tings on generation stage
+    GenTile*   tile;
+    int        no_of_rooms;
+    Room*      room;
 
 };
 

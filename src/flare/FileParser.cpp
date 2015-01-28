@@ -43,6 +43,9 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	else {
 		filenames.push_back(_filename);
 	}
+#else
+    filenames.push_back(_filename);
+#endif
 	current_index = 0;
 	line_number = 0;
 	this->errormessage = _errormessage;
@@ -94,9 +97,6 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	}
 
 	return ret;
-#else
-    return true;
-#endif
 }
 
 void FileParser::close() {

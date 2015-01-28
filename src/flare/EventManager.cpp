@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Class: Event
  */
+std::map<std::string, std::vector<Event_Component> > EventManager::loot_tables;
+
 Event::Event()
 	: type("")
 	, components(std::vector<Event_Component>())
@@ -38,6 +40,162 @@ Event::Event()
 	, keep_after_trigger(true)
 	, center(FPoint(-1, -1))
 	, reachable_from(Rect()) {
+}
+
+void EventManager::loadLootTables() {
+    std::vector<std::string> filenames;
+    filenames.push_back("d:/media/Random_MAP_GENERATOR/export/leveled_mid.txt");
+    filenames.push_back("d:/media/Random_MAP_GENERATOR/export/leveled_high.txt");
+
+    for (unsigned i=0; i<filenames.size(); i++) {
+        FileParser infile;
+        if (!infile.open(filenames[i]))
+            continue;
+
+        std::vector<Event_Component> *ec_list = &loot_tables[filenames[i]];
+        Event_Component *ec = NULL;
+        bool skip_to_next = false;
+
+        while (infile.next()) {
+            if (infile.section == "") {
+                if (infile.key == "loot") {
+                    ec_list->push_back(Event_Component());
+                    ec = &ec_list->back();
+                    parseLoot(infile, ec, ec_list);
+                }
+            }
+            else if (infile.section == "loot") {
+                if (infile.new_section) {
+                    ec_list->push_back(Event_Component());
+                    ec = &ec_list->back();
+                    ec->type = "loot";
+                    skip_to_next = false;
+                }
+
+                if (skip_to_next || ec == NULL)
+                    continue;
+
+                if (infile.key == "id") {
+                    ec->s = infile.val;
+
+                    if (ec->s == "currency")
+                        ec->c = 10;
+                    else if (toInt(ec->s, -1) != -1)
+                        ec->c = toInt(ec->s);
+                    else {
+                        skip_to_next = true;
+                        infile.error("LootManager: Invalid item id for loot.");
+                    }
+                }
+                else if (infile.key == "chance") {
+                    if (infile.val == "fixed")
+                        ec->z = 0;
+                    else
+                        ec->z = toInt(infile.val);
+                }
+                else if (infile.key == "quantity") {
+                    ec->a = toInt(infile.nextValue());
+                    clampFloor(ec->a, 1);
+                    ec->b = toInt(infile.nextValue());
+                    clampFloor(ec->b, ec->a);
+                }
+            }
+        }
+
+        infile.close();
+    }
+}
+
+void EventManager::getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list) {
+    if (!ec_list)
+        return;
+
+    std::map<std::string, std::vector<Event_Component> >::iterator it;
+    for (it = loot_tables.begin(); it != loot_tables.end(); ++it) {
+        if (it->first == filename) {
+            std::vector<Event_Component> *loot_defs = &it->second;
+            for (unsigned i=0; i<loot_defs->size(); ++i) {
+                ec_list->push_back((*loot_defs)[i]);
+            }
+            break;
+        }
+    }
+}
+
+void EventManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list) {
+    if (e == NULL) return;
+
+    std::string chance;
+    bool first_is_filename = false;
+    e->s = infile.nextValue();
+
+    if (e->s == "currency")
+        e->c = 10;
+    else if (toInt(e->s, -1) != -1)
+        e->c = toInt(e->s);
+    else if (ec_list) {
+        // load entire loot table
+        std::string filename = e->s;
+
+        // remove the last event component, since getLootTable() will create a new one
+        if (e == &ec_list->back())
+            ec_list->pop_back();
+
+        getLootTable(filename, ec_list);
+        first_is_filename = true;
+    }
+
+    if (!first_is_filename) {
+        // make sure the type is "loot"
+        e->type = "loot";
+
+        // drop chance
+        chance = infile.nextValue();
+        if (chance == "fixed") e->z = 0;
+        else e->z = toInt(chance);
+
+        // quantity min/max
+        e->a = toInt(infile.nextValue());
+        clampFloor(e->a, 1);
+        e->b = toInt(infile.nextValue());
+        clampFloor(e->b, e->a);
+    }
+
+    // add repeating loot
+    if (ec_list) {
+        std::string repeat_val = infile.nextValue();
+        while (repeat_val != "") {
+            ec_list->push_back(Event_Component());
+            Event_Component *ec = &ec_list->back();
+            ec->type = infile.key;
+
+            ec->s = repeat_val;
+            if (ec->s == "currency")
+                ec->c = 10;
+            else if (toInt(ec->s, -1) != -1)
+                ec->c = toInt(ec->s);
+            else {
+                // remove the last event component, since getLootTable() will create a new one
+                ec_list->pop_back();
+
+                getLootTable(repeat_val, ec_list);
+
+                repeat_val = infile.nextValue();
+                continue;
+            }
+
+            chance = infile.nextValue();
+            if (chance == "fixed") ec->z = 0;
+            else ec->z = toInt(chance);
+
+            ec->a = toInt(infile.nextValue());
+            clampFloor(ec->a, 1);
+            ec->b = toInt(infile.nextValue());
+            clampFloor(ec->b, ec->a);
+
+            repeat_val = infile.nextValue();
+        }
+    }
 }
 
 Event::~Event() {
@@ -229,11 +387,11 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		if (s != "") e->y = toInt(s);
 
     }
-#ifndef MAP_GENERATOR
 	else if (infile.key == "loot") {
 		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event; either a filename or an inline definition.
-		loot->parseLoot(infile, e, &evnt->components);
+        parseLoot(infile, e, &evnt->components);
     }
+#ifndef MAP_GENERATOR
 	else if (infile.key == "msg") {
 		// @ATTR event.msg|string|Adds a message to be displayed for the event.
 		e->s = msg->get(infile.val);

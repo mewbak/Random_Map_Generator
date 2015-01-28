@@ -75,11 +75,11 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 
 Point center_tile(Point p) {
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
-		p.x += TILE_W_HALF;
-		p.y += TILE_H_HALF;
+        p.x += TILE_W_HALF;
+        p.y += TILE_H_HALF;
 	}
 	else //TILESET_ISOMETRIC
-		p.y += TILE_H_HALF;
+        p.y += TILE_H_HALF;
 	return p;
 }
 

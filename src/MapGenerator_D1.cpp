@@ -18,12 +18,14 @@
     paul.wortmann@gmail.com
 */
 
-#include "MapGenerator.h"
 #include "MapGenerator_D1.h"
 
-void MapGenerator_D1::Generate (MapType* map_pointer)
+void MapGenerator_D1::Generate (Map* map_pointer, int dimension_x, int dimension_y)
 {
-    Initialize(map_pointer);
+    Initialize(map_pointer, dimension_x, dimension_y);
     // generate in map_pointer
+
+    // export is called from outside
+    //Export(map_pointer);
 }
 

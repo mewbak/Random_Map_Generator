@@ -48,11 +48,19 @@ class EventManager {
 public:
 	EventManager();
 	~EventManager();
+
+    static void getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list);
+    static void parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list);
+
 	static void loadEvent(FileParser &infile, Event* evnt);
 	static void loadEventComponent(FileParser &infile, Event* evnt, Event_Component* ec);
 
 	static bool executeEvent(Event &e);
 	static bool isActive(const Event &e);
+
+    static std::map<std::string, std::vector<Event_Component> > loot_tables;
+
+    static void loadLootTables();
 };
 
 

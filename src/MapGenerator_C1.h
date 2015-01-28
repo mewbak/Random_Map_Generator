@@ -22,6 +22,7 @@
 #define MAP_GENERATOR_C1_H
 
 #include "MapGenerator.h"
+#include "MapHelper.h"
 
 /**
  * class MapGenerator_C1
@@ -33,7 +34,11 @@
 class MapGenerator_C1 : public MapGenerator
 {
     public:
-        void Generate (MapType* map_pointer);
+        void Generate (Map* map_pointer, int dimension_x, int dimension_y);
+
+    private:
+        void GenerateMap(Map* map_pointer);
+        void GenerateMap(Map* map_pointer, int seed);
 };
 
 #endif // MAP_GENERATOR_C1_H
