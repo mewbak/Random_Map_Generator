@@ -24,14 +24,6 @@
 #include "MapGenerator.h"
 #include "MapHelper.h"
 
-
-struct fill_data_type
-{
-    int  tile_data;
-    bool tile_done;
-    bool tile_join;
-};
-
 /**
  * class MapGenerator_C1
  *
@@ -45,7 +37,7 @@ class MapGenerator_C1 : public MapGenerator
         void Generate (Map* map_pointer, int dimension_x, int dimension_y);
 
     private:
-        void CheckJoiningTiles(Map* map_pointer, fill_data_type* fill_data, int tile_number);
+        void CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number);
         void GenerateMap(Map* map_pointer);
         void GenerateMap(Map* map_pointer, int seed);
 };

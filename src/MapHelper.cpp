@@ -105,13 +105,13 @@ void map_check   (Map* map_pointer)
     }
 }
 
-int map_gen_flood_fill_tile (Map* map_pointer, FloodFill* fill_data, int tile_number)
+int map_gen_flood_fill_tile (Map* map_pointer, FillData* fill_data, int tile_number)
 {
     int return_value = 0;
-    if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].processed))
+    if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
     {
-        fill_data[tile_number].processed = true;
-        fill_data[tile_number].adjoining_tile = true;
+        fill_data[tile_number].tile_done = true;
+        fill_data[tile_number].tile_join = true;
         return_value++;
         if ((tile_number+1) <= map_pointer->size()) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+1);
         if ((tile_number-1) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-1);
@@ -130,18 +130,17 @@ bool map_gen_room_flood_fill (Map* map_pointer)
     int  floor_count  = 0;
     int  first_floor  = -1;
     bool return_value = true;
-    FloodFill* fill_data = new FloodFill[map_pointer->size()];
+    FillData* fill_data = new FillData[map_pointer->size()];
     for(int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
     {
         if (map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) floor_count++;
         if ((floor_count == 1) && (first_floor < 0)) first_floor = tile_count;
-        fill_data[tile_count].tile_data       = map_pointer->tile[tile_count].data ;
-        fill_data[tile_count].processed       = false;
-        fill_data[tile_count].adjoining_tile  = false;
+        fill_data[tile_count].tile_data = map_pointer->tile[tile_count].data ;
+        fill_data[tile_count].tile_done = false;
+        fill_data[tile_count].tile_join = false;
     }
     int   number_found = map_gen_flood_fill_tile(map_pointer,fill_data,first_floor);
     if (number_found < floor_count) return_value = false;
-    //std::cout << "found - " << number_found << " of " << floor_count << std::endl;
     delete[] fill_data;
     return (return_value);
 }
@@ -766,7 +765,7 @@ void map_gen_room_connect_2 (Map* map_pointer)
     }
 }
 
-Room map_gen_room_find_stats (Map* map_pointer, FloodFill* fill_data, int tile_number)
+Room map_gen_room_find_stats (Map* map_pointer, FillData* fill_data, int tile_number)
 {
     Room return_data;
     return_data.w = 0;
@@ -795,17 +794,17 @@ Room map_gen_room_find_stats (Map* map_pointer, FloodFill* fill_data, int tile_n
 void map_gen_room_find (Map* map_pointer)
 {
     Room room_data;
-    FloodFill* fill_data = new FloodFill[map_pointer->size()];
+    FillData* fill_data = new FillData[map_pointer->size()];
     map_pointer->no_of_rooms = 0;
     for (int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
     {
-        fill_data[tile_count].tile_data       = map_pointer->tile[tile_count].data;
-        fill_data[tile_count].processed       = false;
-        fill_data[tile_count].adjoining_tile  = false;
+        fill_data[tile_count].tile_data = map_pointer->tile[tile_count].data;
+        fill_data[tile_count].tile_done = false;
+        fill_data[tile_count].tile_join = false;
     }
     for (int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
     {
-        if ((fill_data[tile_count].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_count].processed))
+        if ((fill_data[tile_count].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_count].tile_done))
         {
             room_data   = map_gen_room_find_stats (map_pointer,fill_data,tile_count);
             map_pointer->room[map_pointer->no_of_rooms].active                    = true;
@@ -815,7 +814,6 @@ void map_gen_room_find (Map* map_pointer)
             map_pointer->room[map_pointer->no_of_rooms].position.y                = room_data.position.y;
             map_pointer->room[map_pointer->no_of_rooms].no_of_connected_rooms     = 0;
             map_pointer->no_of_rooms++;
-            //std::cout << "Found room - " << map_pointer->no_of_rooms << " x - " << map_pointer->room[map_pointer->no_of_rooms].position.x <<" y - " << map_pointer->room[map_pointer->no_of_rooms].position.y << std::endl;
         }
     }
     delete[] fill_data;

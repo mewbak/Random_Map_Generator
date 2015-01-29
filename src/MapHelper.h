@@ -43,11 +43,11 @@ enum Algorithm_Type {GEN_ALGORITHM_C1 = 0,
 #define ROOM_MAX_Y                 9
 #define ROOM_MAX_R                 (int)(sqrt(pow((double)(ROOM_MAX_X/2), 2) + pow((double)(ROOM_MAX_Y/2), 2)) + ROOM_PATH)
 
-struct FloodFill
+struct FillData
 {
     int  tile_data;
-    bool processed;
-    bool adjoining_tile;
+    bool tile_done;
+    bool tile_join;
 };
 
 struct MapGen
@@ -83,7 +83,7 @@ struct AppData
 };
 
 void map_check                   (Map* map_pointer);
-int  map_gen_flood_fill_tile     (Map* map_pointer, FloodFill* fill_data, int tile_number);
+int  map_gen_flood_fill_tile     (Map* map_pointer, FillData* fill_data, int tile_number);
 bool map_gen_room_flood_fill     (Map* map_pointer);
 bool map_gen_room                (Map* map_pointer, Room room);
 void map_gen_room_add            (Map* map_pointer);
@@ -93,7 +93,7 @@ void map_gen_room_path           (Map* map_pointer, int room_1, int room_2, bool
 void map_gen_room_connect        (Map* map_pointer);
 void map_gen_room_connect_2      (Map* map_pointer);
 void map_gen_room_connect_path   (Map* map_pointer);
-Room map_gen_room_find_stats(Map* map_pointer, FloodFill* fill_data, int tile_number);
+Room map_gen_room_find_stats(Map* map_pointer, FillData* fill_data, int tile_number);
 void map_gen_room_find           (Map* map_pointer);
 void map_gen_redundant_tile_check(Map* map_pointer);
 void map_gen_map_exits           (Map* map_pointer);

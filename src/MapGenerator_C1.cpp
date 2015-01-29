@@ -26,7 +26,7 @@ void MapGenerator_C1::Generate (Map* map_pointer, int dimension_x, int dimension
     GenerateMap(map_pointer);
 }
 
-void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, fill_data_type* fill_data, int tile_number)
+void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number)
 {
     if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
     {
@@ -48,7 +48,7 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
     maprow *current_layer = new maprow[map_pointer->w];
     map_pointer->layers.push_back(current_layer);
     map_pointer->layernames.push_back("background");
-    fill_data_type *fill_data = new fill_data_type[map_pointer->size()];
+    FillData *fill_data = new FillData[map_pointer->size()];
     for (int i = 0; i < map_pointer->size(); i++)
     {
         fill_data[i].tile_join = false;
