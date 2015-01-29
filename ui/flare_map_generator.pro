@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     ../src/MapGenerator_D1.cpp \
     ../src/MapGenerator_D2.cpp \
     ../src/MapGenerator_M1.cpp \
-    ../src/MapGenerator.cpp
+    ../src/MapGenerator.cpp \
+    ../src/TilesetDef.cpp
 
 HEADERS  += mainwindow.h \
     ../src/a-star.h \
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h \
     ../src/MapGenerator_D1.h \
     ../src/MapGenerator_D2.h \
     ../src/MapGenerator_M1.h \
-    ../src/MapGenerator.h
+    ../src/MapGenerator.h \
+    ../src/TilesetDef.h
 
 INCLUDEPATH += flare \
                export

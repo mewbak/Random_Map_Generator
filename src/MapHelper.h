@@ -6,9 +6,7 @@
 #include <math.h>
 #include "flare/Map.h"
 
-#define TILESET_CAVE      0
-#define TILESET_DUNGEON   1
-#define TILESET_GRASSLAND 2
+enum TILESET {TILESET_CAVE = 0, TILESET_DUNGEON = 1, TILESET_GRASSLAND = 2};
 
 #define OUTPUT_FORMAT_FLARE           0
 #define OUTPUT_FORMAT_TILED           1
@@ -43,11 +41,11 @@ enum Algorithm_Type {GEN_ALGORITHM_C1 = 0,
 #define ROOM_MAX_Y                 9
 #define ROOM_MAX_R                 (int)(sqrt(pow((double)(ROOM_MAX_X/2), 2) + pow((double)(ROOM_MAX_Y/2), 2)) + ROOM_PATH)
 
-struct FillData
+struct FloodFill
 {
     int  tile_data;
-    bool tile_done;
-    bool tile_join;
+    bool processed;
+    bool adjoining_tile;
 };
 
 struct MapGen
@@ -83,7 +81,8 @@ struct AppData
 };
 
 void map_check                   (Map* map_pointer);
-int  map_gen_flood_fill_tile     (Map* map_pointer, FillData* fill_data, int tile_number);
+void map_display                 (Map* map_pointer);
+int  map_gen_flood_fill_tile     (Map* map_pointer, FloodFill* fill_data, int tile_number);
 bool map_gen_room_flood_fill     (Map* map_pointer);
 bool map_gen_room                (Map* map_pointer, Room room);
 void map_gen_room_add            (Map* map_pointer);
@@ -93,7 +92,7 @@ void map_gen_room_path           (Map* map_pointer, int room_1, int room_2, bool
 void map_gen_room_connect        (Map* map_pointer);
 void map_gen_room_connect_2      (Map* map_pointer);
 void map_gen_room_connect_path   (Map* map_pointer);
-Room map_gen_room_find_stats(Map* map_pointer, FillData* fill_data, int tile_number);
+Room map_gen_room_find_stats(Map* map_pointer, FloodFill* fill_data, int tile_number);
 void map_gen_room_find           (Map* map_pointer);
 void map_gen_redundant_tile_check(Map* map_pointer);
 void map_gen_map_exits           (Map* map_pointer);
