@@ -105,42 +105,6 @@ void map_check   (Map* map_pointer)
     }
 }
 
-void map_display (Map* map_pointer)
-{
-    for (int i = 0; i < map_pointer->h; i++)
-    {
-        for (int j = 0; j < map_pointer->w; j++)
-        {
-            switch (map_pointer->tile[(i*map_pointer->w)+j].data)
-            {
-                case Tile_Type::TILE_WALL:
-                    std::cout << "|";
-                break;
-                case Tile_Type::TILE_FLOOR:
-                    std::cout << " ";
-                break;
-                case Tile_Type::TILE_EXIT:
-                    std::cout << "E";
-                break;
-                case Tile_Type::TILE_DOOR:
-                    std::cout << "D";
-                break;
-                case Tile_Type::TILE_KEY:
-                    std::cout << "K";
-                break;
-                case Tile_Type::TILE_PATH:
-                    std::cout << ".";
-                break;
-                case Tile_Type::TILE_NONE:
-                default:
-                    std::cout << "?";
-                break;
-            }
-        }
-        std::cout << std::endl;
-    }
-}
-
 int map_gen_flood_fill_tile (Map* map_pointer, FloodFill* fill_data, int tile_number)
 {
     int return_value = 0;

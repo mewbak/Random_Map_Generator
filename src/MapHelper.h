@@ -83,7 +83,6 @@ struct AppData
 };
 
 void map_check                   (Map* map_pointer);
-void map_display                 (Map* map_pointer);
 int  map_gen_flood_fill_tile     (Map* map_pointer, FloodFill* fill_data, int tile_number);
 bool map_gen_room_flood_fill     (Map* map_pointer);
 bool map_gen_room                (Map* map_pointer, Room room);
