@@ -28,27 +28,12 @@ enum Tile_Type {TILE_NONE = 0, TILE_WALL = 1, TILE_FLOOR = 2, TILE_EXIT = 3, TIL
 #define DIRECTION_BIAS_SOUTH       3
 #define DIRECTION_BIAS_WEST        4
 
-// TODO Make only one enum with all types of algorithms
-enum Algorithm_Type {MAP_GEN_CA = 0,
-                     MAP_GEN_M1 = 1,
-                     MAP_GEN_BSP = 2,
-                     MAP_GEN_RC = 3,
-                     MAP_GEN_RR = 4,
-                     MAP_GEN_TWN = 5};
-
-enum Algorithm_Type2 {ALGORITHM_CAVE = 0,
-                      ALGORITHM_MAZE = 1,
-                      ALGORITHM_DUNGEON_1 = 2,
-                      ALGORITHM_DUNGEON_2 = 3,
-                      ALGORITHM_DUNGEON_3 = 4,
-                      ALGORITHM_TOWN_1 = 5};
-
-enum Algorithm_Type3 {GEN_ALGORITHM_C1 = 0,
-                      GEN_ALGORITHM_D1 = 1,
-                      GEN_ALGORITHM_D2 = 2,
-                      GEN_ALGORITHM_D3 = 3,
-                      GEN_ALGORITHM_M1 = 4,
-                      GEN_ALGORITHM_T1 = 5};
+enum Algorithm_Type {GEN_ALGORITHM_C1 = 0,
+                     GEN_ALGORITHM_M1 = 1,
+                     GEN_ALGORITHM_D1 = 2,
+                     GEN_ALGORITHM_D2 = 3,
+                     GEN_ALGORITHM_D3 = 4,
+                     GEN_ALGORITHM_T1 = 5};
 
 #define ROOM_MAX                   64
 #define ROOM_PATH                  2
@@ -114,7 +99,7 @@ void map_gen_room_find           (Map* map_pointer);
 void map_gen_redundant_tile_check(Map* map_pointer);
 void map_gen_map_exits           (Map* map_pointer);
 
-void MapGenerate(Map* map_pointer, int generation_algorithm, int dimension_x, int dimension_y);
+void MapGenerate(Map* map_pointer, Algorithm_Type generation_algorithm, int dimension_x, int dimension_y);
 
 #endif // MAP_HELPER
 

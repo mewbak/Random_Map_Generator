@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     map_pointer            = new Map;
     map_pointer->room      = new Room[ROOM_MAX];
     map_pointer->tile      = new GenTile[100*100];
-    app_data.algorithm     = ALGORITHM_CAVE;
+    app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_C1;
     app_data.file_name     = "default";
     app_data.gen_chests    = false;
     app_data.gen_enemies   = false;
@@ -79,17 +79,17 @@ void MainWindow::on_checkBox_genEnemies_stateChanged(int arg1)
 void MainWindow::on_pushButton_released()
 {
     std::stringstream temp_stream;
-    MainWindow::app_data.file_name = MainWindow::ui->lineEdit->text();
-    MainWindow::ui->progressBar->setValue(0);
-    MainWindow::ui->label_status->setText("Seeding random...");
+    app_data.file_name = MainWindow::ui->lineEdit->text().toStdString();
+    this->ui->progressBar->setValue(0);
+    this->ui->label_status->setText("Seeding random...");
     int seed = time(NULL);
     srand(seed);
-    MainWindow::ui->progressBar->setValue(1);
-    MainWindow::ui->label_status->setText("Initializing intermediate map...");
-    MainWindow::ui->progressBar->setValue(10);
-    MainWindow::ui->label_status->setText("Generating map...");
-    MapGenerate(MainWindow::map_pointer,MainWindow::app_data.algorithm, MainWindow::app_data.size_x, MainWindow::app_data.size_y);
-    MainWindow::ui->textEdit_mapview->clear();
+    this->ui->progressBar->setValue(1);
+    this->ui->label_status->setText("Initializing intermediate map...");
+    this->ui->progressBar->setValue(10);
+    this->ui->label_status->setText("Generating map...");
+    MapGenerate(map_pointer, static_cast<Algorithm_Type>(app_data.algorithm), app_data.size_x, app_data.size_y);
+    this->ui->textEdit_mapview->clear();
     for (int i = 0; i < map_pointer->size(); i++)
     {
         if (map_pointer->tile[i].data == Tile_Type::TILE_FLOOR) temp_stream << "<font color=#006600>";
@@ -98,8 +98,8 @@ void MainWindow::on_pushButton_released()
         temp_stream << "</font>";
         if ((i % map_pointer->w) == (map_pointer->w-1)) temp_stream << std::endl;
     }
-    MainWindow::ui->textEdit_mapview->insertHtml(temp_stream.str().c_str());
-    switch (MainWindow::app_data.output_format)
+    this->ui->textEdit_mapview->insertHtml(temp_stream.str().c_str());
+    switch (app_data.output_format)
     {
     case OUTPUT_FORMAT_FROST_AND_FLAME:
         //file_export_flare(map_pointer,file_name);
@@ -109,26 +109,19 @@ void MainWindow::on_pushButton_released()
     break;
     default:
     case OUTPUT_FORMAT_FLARE:
-        flare_map_type* flare_map_pointer = new flare_map_type;
-        MainWindow::ui->progressBar->setValue(80);
-        MainWindow::ui->label_status->setText("Applying tile set...");
-        MainWindow::ui->progressBar->setValue(90);
+        //flare_map_type* flare_map_pointer = new flare_map_type;
+        this->ui->progressBar->setValue(80);
+        this->ui->label_status->setText("Applying tile set...");
+        this->ui->progressBar->setValue(90);
         // should be removed
-        MapGenerator::map_to_flare_map(MainWindow::map_pointer,flare_map_pointer,MainWindow::app_data.tile_set);
+        //MapGenerator::map_to_flare_map(MainWindow::map_pointer,flare_map_pointer,MainWindow::app_data.tile_set);
 
-        MainWindow::ui->label_status->setText("Exporting to file...");
+        this->ui->label_status->setText("Exporting to file...");
 
-        // use MapGenerator::Export(Map* map_pointer, std::string file_name);
-        MapGenerator::file_export_flare(flare_map_pointer,MainWindow::app_data.file_name.toStdString());
-
-        delete[] flare_map_pointer->layer_background;
-        delete[] flare_map_pointer->layer_collision;
-        delete[] flare_map_pointer->layer_foreground;
-        delete[] flare_map_pointer->layer_fringe;
-        delete[] flare_map_pointer->layer_object;
-        delete   flare_map_pointer;
+        MapGenerator::Export(map_pointer, app_data.file_name);
+        //MapGenerator::file_export_flare(flare_map_pointer,MainWindow::app_data.file_name.toStdString());
     break;
     }
-    MainWindow::ui->progressBar->setValue(100);
-    MainWindow::ui->label_status->setText("Done.");
+    this->ui->progressBar->setValue(100);
+    this->ui->label_status->setText("Done.");
 }
