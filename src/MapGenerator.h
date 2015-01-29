@@ -25,6 +25,7 @@
 #include <vector>
 #include <queue>
 #include "flare/Map.h"
+#include "MapHelper.h"
 
 /**
  * class MapGenerator
@@ -43,8 +44,9 @@ class MapGenerator
         static void Export (Map* map_pointer, std::string file_name);
 
         // this should not be needed in future
-//        static void map_to_flare_map (Map* map_pointer, flare_map_type* flare_map_pointer, int tile_set);
+//        static void map_to_flare_map (Map* map_pointer, flare_map_type* flare_map_pointer, TILESET tile_set);
 
+//        static void finalizeMap(Map* map_pointer, flare_map_type* flare_map_pointer, TILESET tileset);
 };
 
 #endif // MAP_GENERATOR_H

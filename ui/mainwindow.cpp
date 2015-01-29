@@ -114,7 +114,7 @@ void MainWindow::on_pushButton_released()
         this->ui->label_status->setText("Applying tile set...");
         this->ui->progressBar->setValue(90);
         // should be removed
-        //MapGenerator::map_to_flare_map(MainWindow::map_pointer,flare_map_pointer,MainWindow::app_data.tile_set);
+        //MapGenerator::map_to_flare_map(MainWindow::map_pointer,flare_map_pointer,static_cast<TILESET>(MainWindow::app_data.tile_set));
 
         this->ui->label_status->setText("Exporting to file...");
 

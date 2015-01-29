@@ -227,8 +227,42 @@ void TilesetDef::init()
         grassland[244] = TILESET_TILE_TYPE::TILE_OBJECT;
         grassland[245] = TILESET_TILE_TYPE::TILE_OBJECT;
 
-        // TODO: add the rest tile types
+        grassland[51] = TILESET_TILE_TYPE::TILE_WALL_UP;
+
+        grassland[53] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        grassland[49] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+
+        grassland[50] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
+
+        grassland[52] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        grassland[48] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+
+        grassland[60] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        grassland[56] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+
+        grassland[68] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        grassland[64] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+
+        grassland[61] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
+        grassland[57] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
+
+        grassland[69] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
+        grassland[65] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
+
+        grassland[62] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
+        grassland[58] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
+
+        grassland[70] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
+        grassland[66] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
+
+        grassland[63] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
+        grassland[59] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
+
+        grassland[71] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
+        grassland[67] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
+
     }
+
 }
 
 int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
