@@ -23,24 +23,37 @@
 void MapGenerator_C1::Generate (Map* map_pointer, int dimension_x, int dimension_y)
 {
     Initialize(map_pointer, dimension_x, dimension_y);
-
-    // generate in map_pointer
     GenerateMap(map_pointer);
+}
 
-    // export is called from outside
-    //Export(map_pointer);
+void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, fill_data_type* fill_data, int tile_number)
+{
+    if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
+    {
+        fill_data[tile_number].tile_done = true;
+        fill_data[tile_number].tile_join = true;
+        if ((tile_number+1) <= map_pointer->size()) CheckJoiningTiles(map_pointer,fill_data,tile_number+1);
+        if ((tile_number-1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-1);
+        if ((tile_number+map_pointer->w) <= map_pointer->size()) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w);
+        if ((tile_number+map_pointer->w+1) <= map_pointer->size()) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w+1);
+        if ((tile_number+map_pointer->w-1) <= map_pointer->size()) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w-1);
+        if ((tile_number-map_pointer->w) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w);
+        if ((tile_number-map_pointer->w+1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w+1);
+        if ((tile_number-map_pointer->w-1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w-1);
+    }
 }
 
 void MapGenerator_C1::GenerateMap(Map* map_pointer)
 {
-    /*
-    #define TILE_FLOOR 0
-    #define TILE_WALL  1
-    Initialize(map_pointer);
     maprow *current_layer = new maprow[map_pointer->w];
     map_pointer->layers.push_back(current_layer);
     map_pointer->layernames.push_back("background");
-    // set all tiles to floor, except perimeter set to wall
+    fill_data_type *fill_data = new fill_data_type[map_pointer->size()];
+    for (int i = 0; i < map_pointer->size(); i++)
+    {
+        fill_data[i].tile_join = false;
+    }
+    fill_data[(map_pointer->w*(map_pointer->h/2))+(map_pointer->w/2)].tile_join = true;
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)
@@ -51,12 +64,18 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
                 (current_layer)[i][j] = TILE_FLOOR;
         }
     }
-    // place random wall tiles
-    for (int i = 0; i < ((map_pointer->w * map_pointer->h) * 0.6); i++)
+    for (int i = 0; i < ((map_pointer->size()) * 0.6); i++)
     {
         (current_layer)[rand() % map_pointer->w][rand() % map_pointer->h] = TILE_WALL;
     }
-    for (int i = 0; i < 2; i++) // iterate over map and "smooth" it
+    for(int j = -1; j < 2; j++)
+    {
+        for(int i = -1; i < 2; i++)
+        {
+            (current_layer)[(map_pointer->w/2)+i][(map_pointer->h/2)+j] = TILE_FLOOR;
+        }
+    }
+    for (int s = 0; s < 2; s++)
     {
         for (int j = 1; j < map_pointer->h-1; j++)
         {
@@ -77,200 +96,20 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
             }
         }
     }
-*/
-/*
-
-a lot more work needed:
-clear center block after random wall placement.
-add a few random lines in the middle to prevent large open cave?
-fill all but main cave to prevent redundant rooms that are inaccessible.
-flood fill?
-
-*/
-
-
-    // old code below, refactoring done above.
-    FloodFill* fill_data = new FloodFill[map_pointer->size()];
-    bool ca_map_good               = false;
-    int  ca_minimum_cave_dimension      = 60;
-    int  ca_wall_stay              = 4;
-    int  ca_wall_new               = 5;
-    int  ca_iterations             = 4;
-    int  ca_no_of_random_tiles     = ((map_pointer->w * map_pointer->h) * ca_minimum_cave_dimension) / 100;
-    Map temp_map;
-    temp_map.tile = new GenTile[map_pointer->size()];
-    //------------------------------------------------------------
-    while (!ca_map_good)
+    for (int i = 0; i < map_pointer->size(); i++)
     {
-        for (int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
-        {
-            map_pointer->tile[tile_count].data  = TILE_FLOOR;
-        }
-        for (int tile_count = 0; tile_count < ca_no_of_random_tiles; tile_count++)
-        {
-            map_pointer->tile[rand()%map_pointer->size()].data = TILE_WALL;
-        }
-        //add a 3x3 floored room to the middle of the map
-        //this is for use later when checking for disjointed parts.
-        {
-            int middle_tile_number = ((map_pointer->size()/2)+(map_pointer->w/2));
-            map_pointer->tile[middle_tile_number].data                       = TILE_FLOOR;
-            map_pointer->tile[middle_tile_number+1].data                     = TILE_FLOOR;
-            map_pointer->tile[middle_tile_number-1].data                     = TILE_FLOOR;
-            map_pointer->tile[middle_tile_number+map_pointer->w].data   = TILE_FLOOR;
-            map_pointer->tile[middle_tile_number+map_pointer->w+1].data = TILE_FLOOR;
-            map_pointer->tile[middle_tile_number+map_pointer->w-1].data = TILE_FLOOR;
-            map_pointer->tile[middle_tile_number-map_pointer->w].data   = TILE_FLOOR;
-            map_pointer->tile[middle_tile_number-map_pointer->w+1].data = TILE_FLOOR;
-            map_pointer->tile[middle_tile_number-map_pointer->w-1].data = TILE_FLOOR;
-        }
-        //fill perimeter with wall tiles
-        for (int tile_count = 0; tile_count < map_pointer->w; tile_count++)
-        {
-            map_pointer->tile[tile_count].data                          = TILE_WALL;
-            map_pointer->tile[map_pointer->size()-tile_count-1].data  = TILE_WALL;
-        }
-        for (int tile_count = 0; tile_count < map_pointer->h; tile_count++)
-        {
-            map_pointer->tile[tile_count*map_pointer->w].data                        = TILE_WALL;
-            map_pointer->tile[(tile_count*map_pointer->w)+map_pointer->w-1].data = TILE_WALL;
-        }
-        //smooth map, depending on neighboring tiles.
-        for (int refine_count = 0; refine_count < ca_iterations; refine_count++)
-        {
-            for(int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
-            {
-                int number_of_neighbors = 0;
-                temp_map.tile[tile_count].data = TILE_FLOOR; // new tile is initially a floor tile
-                int temp_tile_number = tile_count+1;
-                if ((temp_tile_number >= 0) && (temp_tile_number < map_pointer->size()) && (map_pointer->tile[temp_tile_number].data == TILE_WALL)) number_of_neighbors++;
-                temp_tile_number = tile_count-1;
-                if ((temp_tile_number >= 0) && (temp_tile_number < map_pointer->size()) && (map_pointer->tile[temp_tile_number].data == TILE_WALL)) number_of_neighbors++;
-                temp_tile_number = tile_count+map_pointer->w;
-                if ((temp_tile_number >= 0) && (temp_tile_number < map_pointer->size()) && (map_pointer->tile[temp_tile_number].data == TILE_WALL)) number_of_neighbors++;
-                temp_tile_number = tile_count+map_pointer->w+1;
-                if ((temp_tile_number >= 0) && (temp_tile_number < map_pointer->size()) && (map_pointer->tile[temp_tile_number].data == TILE_WALL)) number_of_neighbors++;
-                temp_tile_number = tile_count+map_pointer->w-1;
-                if ((temp_tile_number >= 0) && (temp_tile_number < map_pointer->size()) && (map_pointer->tile[temp_tile_number].data == TILE_WALL)) number_of_neighbors++;
-                temp_tile_number = tile_count-map_pointer->w;
-                if ((temp_tile_number >= 0) && (temp_tile_number < map_pointer->size()) && (map_pointer->tile[temp_tile_number].data == TILE_WALL)) number_of_neighbors++;
-                temp_tile_number = tile_count-map_pointer->w+1;
-                if ((temp_tile_number >= 0) && (temp_tile_number < map_pointer->size()) && (map_pointer->tile[temp_tile_number].data == TILE_WALL)) number_of_neighbors++;
-                temp_tile_number = tile_count-map_pointer->w-1;
-                if ((temp_tile_number >= 0) && (temp_tile_number < map_pointer->size()) && (map_pointer->tile[temp_tile_number].data == TILE_WALL)) number_of_neighbors++;
-                if ((map_pointer->tile[tile_count].data  == TILE_WALL)  && (number_of_neighbors >= ca_wall_stay)) temp_map.tile[tile_count].data = TILE_WALL; //Tile on temp map is a wall
-                if ((map_pointer->tile[tile_count].data  == TILE_FLOOR) && (number_of_neighbors >= ca_wall_new )) temp_map.tile[tile_count].data = TILE_WALL; //Tile on temp map is a wall
-            }
-            //copy tiles from temp map to the main map.
-            for(int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
-            {
-                map_pointer->tile[tile_count].data  = temp_map.tile[tile_count].data;
-            }
-            //fill perimeter with wall tiles
-            for (int tile_count = 0; tile_count < map_pointer->w; tile_count++)
-            {
-                map_pointer->tile[tile_count].data                            = TILE_WALL;
-                map_pointer->tile[map_pointer->size()-tile_count-1].data  = TILE_WALL;
-            }
-            for (int tile_count = 0; tile_count < map_pointer->h; tile_count++)
-            {
-                map_pointer->tile[tile_count*map_pointer->w].data                                     = TILE_WALL;
-                map_pointer->tile[(tile_count*map_pointer->w)+map_pointer->w-1].data = TILE_WALL;
-            }
-        }
-        // find out if cave from the center is the largest part, and discard disjointed parts
-        // if main cave is of adequate dimension, keep and return good, else regenerate.
-        for(int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
-        {
-            fill_data[tile_count].tile_data      = map_pointer->tile[tile_count].data ;
-            fill_data[tile_count].processed      = false;
-            fill_data[tile_count].adjoining_tile = false;
-        }
-        // we already know these are floor tiles, so mark as part of the fill.
-        int middle_tile_number = ((map_pointer->size()/2)+(map_pointer->w/2));
-        fill_data[middle_tile_number].processed                                        = true;
-        fill_data[middle_tile_number+1].processed                                      = true;
-        fill_data[middle_tile_number-1].processed                                      = true;
-        fill_data[middle_tile_number+map_pointer->w].processed        = true;
-        fill_data[middle_tile_number+map_pointer->w+1].processed      = true;
-        fill_data[middle_tile_number+map_pointer->w-1].processed      = true;
-        fill_data[middle_tile_number-map_pointer->w].processed        = true;
-        fill_data[middle_tile_number-map_pointer->w+1].processed      = true;
-        fill_data[middle_tile_number-map_pointer->w-1].processed      = true;
-        fill_data[middle_tile_number].adjoining_tile                                   = true;
-        fill_data[middle_tile_number+1].adjoining_tile                                 = true;
-        fill_data[middle_tile_number-1].adjoining_tile                                 = true;
-        fill_data[middle_tile_number+map_pointer->w].adjoining_tile   = true;
-        fill_data[middle_tile_number+map_pointer->w+1].adjoining_tile = true;
-        fill_data[middle_tile_number+map_pointer->w-1].adjoining_tile = true;
-        fill_data[middle_tile_number-map_pointer->w].adjoining_tile   = true;
-        fill_data[middle_tile_number-map_pointer->w+1].adjoining_tile = true;
-        fill_data[middle_tile_number-map_pointer->w-1].adjoining_tile = true;
-        int   number_found         = 0;
-        int   temp_tile            = 0;
-        bool  is_an_adjoining_tile = false;
-        //while((!fill_data[0].processed) && (!fill_data[map_pointer->size()-1].processed))
-        for(int repeat_count = 0; repeat_count < ((map_pointer->w+map_pointer->h)/2); repeat_count++)
-        {
-            for(int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
-            {
-                // we don't need to check if temp_tile is going passed the borders as the borders are always walls
-                is_an_adjoining_tile  = false;
-                temp_tile = tile_count+1;
-                if((temp_tile >= 0) && (temp_tile < map_pointer->size()))
-                {
-                    if (fill_data[temp_tile].adjoining_tile)
-                    {
-                        is_an_adjoining_tile = true;
-                        number_found++;
-                    }
-                }
-                temp_tile = tile_count-1;
-                if((temp_tile >= 0) && (temp_tile < map_pointer->size()))
-                {
-                    if (fill_data[temp_tile].adjoining_tile)
-                    {
-                        is_an_adjoining_tile = true;
-                        number_found++;
-                    }
-                }
-                temp_tile = tile_count+map_pointer->w;
-                if((temp_tile >= 0) && (temp_tile < map_pointer->size()))
-                {
-                    if (fill_data[temp_tile].adjoining_tile)
-                    {
-                        is_an_adjoining_tile = true;
-                        number_found++;
-                    }
-                }
-                temp_tile = tile_count-map_pointer->w;
-                if((temp_tile >= 0) && (temp_tile < map_pointer->size()))
-                {
-                    if (fill_data[temp_tile].adjoining_tile)
-                    {
-                        is_an_adjoining_tile = true;
-                        number_found++;
-                    }
-                }
-                fill_data[tile_count].processed = true;
-                if ((is_an_adjoining_tile) && (fill_data[tile_count].tile_data == TILE_FLOOR)) fill_data[tile_count].adjoining_tile = true;
-            }
-        }
-        ca_map_good = (number_found >= ((map_pointer->size()*ca_minimum_cave_dimension)/100.0f)) ? true : false;
+        fill_data[i].tile_data = (current_layer)[i%map_pointer->w][i/map_pointer->w];
+        fill_data[i].tile_join = false;
+        fill_data[i].tile_done = false;
     }
-    // write new values to array discarding disjointed tiles
-    for (int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
+    fill_data[(map_pointer->w*(map_pointer->h/2))+(map_pointer->w/2)].tile_join = true;
+    CheckJoiningTiles(map_pointer,fill_data,(map_pointer->w*(map_pointer->h/2))+(map_pointer->w/2));
+    for (int i = 0; i < map_pointer->size(); i++)
     {
-        if (fill_data[tile_count].adjoining_tile) fill_data[tile_count].tile_data = TILE_FLOOR;
-        else fill_data[tile_count].tile_data = TILE_WALL;
-    }
-    // Push data from fill struct back to map.
-    for(int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
-    {
-        map_pointer->tile[tile_count].data  = fill_data[tile_count].tile_data;
+        if (fill_data[i].tile_join) (current_layer)[i%map_pointer->w][i/map_pointer->w] = TILE_FLOOR;
+        else (current_layer)[i%map_pointer->w][i/map_pointer->w] = TILE_WALL;
     }
     map_check(map_pointer);
-    delete[] temp_map.tile;
     delete[] fill_data;
 }
 
