@@ -47,7 +47,7 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
 {
     maprow *current_layer = new maprow[map_pointer->w];
     map_pointer->layers.push_back(current_layer);
-    map_pointer->layernames.push_back("background");
+    map_pointer->layernames.push_back("intermediate");
     FillData *fill_data = new FillData[map_pointer->size()];
     for (int i = 0; i < map_pointer->size(); i++)
     {
@@ -111,6 +111,7 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
     }
     map_check(map_pointer);
     delete[] fill_data;
+    //generate object / collision layer? Done during applying tile set?
 }
 
 void MapGenerator_C1::GenerateMap(Map* map_pointer, int seed)
