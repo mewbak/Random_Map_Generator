@@ -199,7 +199,7 @@ public:
 	FPoint spawn;
 	int spawn_dir;
 
-    // should be added to Map calss later
+    // should be added to Map class later
     int size() { return w*h; }
 
     // should be removed from Map class and used as temp tings on generation stage
