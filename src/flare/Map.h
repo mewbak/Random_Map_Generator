@@ -175,6 +175,7 @@ public:
     int load(std::string filename);
 	std::string getFilename() { return filename; }
     std::string getTileset() { return tileset; }
+    void setTileset(const std::string& tset) { tileset = tset; }
 
 	std::string music_filename;
 
