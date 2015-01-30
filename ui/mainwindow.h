@@ -29,6 +29,8 @@ private slots:
 
     void on_pushButton_released();
 
+    void renderPreview(Map* map_pointer);
+
 private:
     Ui::MainWindow *ui;
 };

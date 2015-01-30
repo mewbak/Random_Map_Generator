@@ -78,7 +78,6 @@ void MainWindow::on_checkBox_genEnemies_stateChanged(int arg1)
 
 void MainWindow::on_pushButton_released()
 {
-    std::stringstream temp_stream;
     app_data.file_name = MainWindow::ui->lineEdit->text().toStdString();
     this->ui->progressBar->setValue(0);
     this->ui->label_status->setText("Seeding random...");
@@ -92,15 +91,9 @@ void MainWindow::on_pushButton_released()
                              static_cast<TILESET>(app_data.tile_set));
 
     this->ui->textEdit_mapview->clear();
-    for (int i = 0; i < map_pointer->size(); i++)
-    {
-        if (map_pointer->tile[i].data == Tile_Type::TILE_FLOOR) temp_stream << "<font color=#006600>";
-        if (map_pointer->tile[i].data == Tile_Type::TILE_WALL)  temp_stream << "<font color=#F8F8F8>";
-        temp_stream << "&#9632;";//map_pointer->tile[i].data;
-        temp_stream << "</font>";
-        if ((i % map_pointer->w) == (map_pointer->w-1)) temp_stream << std::endl;
-    }
-    this->ui->textEdit_mapview->insertHtml(temp_stream.str().c_str());
+
+    renderPreview(map_pointer);
+
     switch (app_data.output_format)
     {
     case OUTPUT_FORMAT_FROST_AND_FLAME:
@@ -122,4 +115,30 @@ void MainWindow::on_pushButton_released()
     }
     this->ui->progressBar->setValue(100);
     this->ui->label_status->setText("Done.");
+}
+
+void MainWindow::renderPreview(Map* map_pointer)
+{
+    std::stringstream temp_stream;
+    int intermediate = -1;
+
+    for (unsigned i = 0; i < map_pointer->layers.size(); ++i) {
+            if (map_pointer->layernames[i] == "intermediate") {
+                intermediate = i;
+            }
+    }
+    if (intermediate == -1) return;
+
+    for (int j = 0; j < map_pointer->h; j++)
+    {
+        for (int i = 0; i < map_pointer->w; i++)
+        {
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_FLOOR) temp_stream << "<font color=#006600>";
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_WALL)  temp_stream << "<font color=#F8F8F8>";
+            temp_stream << "&#9632;";//map_pointer->tile[i].data;
+            temp_stream << "</font>";
+            if ((i % map_pointer->w) == (map_pointer->w-1)) temp_stream << std::endl;
+        }
+    }
+    this->ui->textEdit_mapview->insertHtml(temp_stream.str().c_str());
 }

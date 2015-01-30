@@ -135,6 +135,7 @@ void MapGenerator::finalizeMap(Map* map_pointer, TILESET tileset)
     int background = -1;
     int object = -1;
     int collision = -1;
+    int intermediate = -1;
 
     for (unsigned i = 0; i < map_pointer->layers.size(); ++i) {
             if (map_pointer->layernames[i] == "collision") {
@@ -146,6 +147,9 @@ void MapGenerator::finalizeMap(Map* map_pointer, TILESET tileset)
             if (map_pointer->layernames[i] == "background") {
                 background = i;
             }
+            if (map_pointer->layernames[i] == "intermediate") {
+                intermediate = i;
+            }
     }
     //if (background == -1 || object == -1 || collision == -1)
     //    return;
@@ -156,179 +160,184 @@ void MapGenerator::finalizeMap(Map* map_pointer, TILESET tileset)
         maprow *current_layer = new maprow[map_pointer->w];
         map_pointer->layers.push_back(current_layer);
         map_pointer->layernames.push_back("background");
+        background = map_pointer->layernames.size() - 1;
     }
     if (object == -1)
     {
         maprow *current_layer = new maprow[map_pointer->w];
         map_pointer->layers.push_back(current_layer);
         map_pointer->layernames.push_back("object");
+        object = map_pointer->layernames.size() - 1;
     }
     if (collision == -1)
     {
         maprow *current_layer = new maprow[map_pointer->w];
         map_pointer->layers.push_back(current_layer);
         map_pointer->layernames.push_back("collision");
+        collision = map_pointer->layernames.size() - 1;
     }
 
     // FIXME: how to iterate through tiles
     // replace reading from 1d array "map_pointer->tile[i]" with 2d reading from "map_pointer->layers[intermediate]"
-    int j = 0;
 
-    for (int i = 0; i < map_pointer->size(); i++)
+    for (int j = 0; j < map_pointer->h; j++)
     {
-        int temp_tile[8];
-        int temp_tile_ok[8];
-        temp_tile[0] = i-1;
-        temp_tile[1] = i+1;
-        temp_tile[2] = i+map_pointer->w;
-        temp_tile[3] = i+map_pointer->w+1;
-        temp_tile[4] = i+map_pointer->w-1;
-        temp_tile[5] = i-map_pointer->w;
-        temp_tile[6] = i-map_pointer->w+1;
-        temp_tile[7] = i-map_pointer->w-1;
-        for (int k = 0; k < 8; k++) temp_tile_ok[k] = ((temp_tile[k] >= 0)&&(temp_tile[k] < map_pointer->size()));
-
-        switch (map_pointer->tile[i].data)
+        for (int i = 0; i < map_pointer->w; i++)
         {
-            case Tile_Type::TILE_FLOOR:
-                map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
-                map_pointer->layers[collision][i][j] = 0;
-                map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                               TILESET_TILE_TYPE::TILE_OBJECT);
-            break;
-            case Tile_Type::TILE_WALL:
-                map_pointer->layers[collision][i][j] = 1;
-                //wall up
-                if ((temp_tile_ok[0])&&(temp_tile_ok[1])&&(temp_tile_ok[5])&&
-                        (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_FLOOR))
-                {
+            int temp_tile[8];
+            int temp_tile_ok[8];
+            temp_tile[0] = i-1;
+            temp_tile[1] = i+1;
+            temp_tile[2] = i+map_pointer->w;
+            temp_tile[3] = i+map_pointer->w+1;
+            temp_tile[4] = i+map_pointer->w-1;
+            temp_tile[5] = i-map_pointer->w;
+            temp_tile[6] = i-map_pointer->w+1;
+            temp_tile[7] = i-map_pointer->w-1;
+            for (int k = 0; k < 8; k++) temp_tile_ok[k] = ((temp_tile[k] >= 0)&&(temp_tile[k] < map_pointer->size()));
+
+            switch (map_pointer->layers[intermediate][i][j])
+            {
+                case Tile_Type::TILE_FLOOR:
+                    map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::_TILE_FLOOR);
+                    map_pointer->layers[collision][i][j] = 0;
                     map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_UP);
-                }
-                //wall down
-                if ((temp_tile_ok[0])&&(temp_tile_ok[1])&&(temp_tile_ok[2])&&
-                        (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_DOWN);
-                    //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                    //                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
-                }
-                //wall left
-                if ((temp_tile_ok[2])&&(temp_tile_ok[5])&&(temp_tile_ok[0])&&
-                        (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_LEFT);
-                }
-                //wall right
-                if ((temp_tile_ok[2])&&(temp_tile_ok[5])&&(temp_tile_ok[1])&&
-                        (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_RIGHT);
-                    //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                    //                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
-                }
-                //wall convex down
-                if ((temp_tile_ok[1])&&(temp_tile_ok[2])&&(temp_tile_ok[3])&&
-                        (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[3]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_convex_down);
-                    //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                    //                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
-                }
-                //wall concave down
-                if ((temp_tile_ok[1])&&(temp_tile_ok[2])&&(temp_tile_ok[3])&&
-                        (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_FLOOR)&&
-                        (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_FLOOR)&&
-                        (map_pointer->tile[temp_tile[3]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_concave_down);
-                    //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                    //                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
-                }
-                //wall convex left
-                if ((temp_tile_ok[0])&&(temp_tile_ok[2])&&(temp_tile_ok[4])&&
-                        (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[4]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_convex_left);
-                }
-                //wall concave left
-                if ((temp_tile_ok[0])&&(temp_tile_ok[2])&&(temp_tile_ok[4])&&
-                        (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_FLOOR)&&
-                        (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_FLOOR)&&
-                        (map_pointer->tile[temp_tile[4]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_concave_left);
-                    //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                    //                                                                   TILESET_TILE_TYPE::TILE_FLOOR_LEFT_HALF);
-                }
-                //wall convex up
-                if ((temp_tile_ok[5])&&(temp_tile_ok[0])&&(temp_tile_ok[7])&&
-                        (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[7]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_convex_up);
-                }
-                //wall concave up
-                if ((temp_tile_ok[5])&&(temp_tile_ok[0])&&(temp_tile_ok[7])&&
-                        (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_FLOOR)&&
-                        (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_FLOOR)&&
-                        (map_pointer->tile[temp_tile[7]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_concave_up);
-                }
-                //wall convex right
-                if ((temp_tile_ok[1])&&(temp_tile_ok[5])&&(temp_tile_ok[6])&&
-                        (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_WALL)&&
-                        (map_pointer->tile[temp_tile[6]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_convex_right);
-                }
-                //wall concave right
-                if ((temp_tile_ok[1])&&(temp_tile_ok[5])&&(temp_tile_ok[6])&&
-                        (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_FLOOR)&&
-                        (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_FLOOR)&&
-                        (map_pointer->tile[temp_tile[6]].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                                                                                   TILESET_TILE_TYPE::TILE_WALL_concave_right);
-                    //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
-                    //                                                                   TILESET_TILE_TYPE::TILE_FLOOR_RIGHT_HALF);
-                }
-            break;
-            case Tile_Type::TILE_EXIT:
-            break;
-            case Tile_Type::TILE_PATH:
-            break;
-        case Tile_Type::TILE_NONE:
-            default:
-                map_pointer->layers[background][i][j] = 0;
-                map_pointer->layers[collision][i][j] = 3;
-            break;
+                                                                                   TILESET_TILE_TYPE::TILE_OBJECT);
+                break;
+                case Tile_Type::TILE_WALL:
+                    map_pointer->layers[collision][i][j] = 1;
+                    //wall up
+                    if ((temp_tile_ok[0])&&(temp_tile_ok[1])&&(temp_tile_ok[5])&&
+                            (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_UP);
+                    }
+                    //wall down
+                    if ((temp_tile_ok[0])&&(temp_tile_ok[1])&&(temp_tile_ok[2])&&
+                            (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_DOWN);
+                        //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        //                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
+                    }
+                    //wall left
+                    if ((temp_tile_ok[2])&&(temp_tile_ok[5])&&(temp_tile_ok[0])&&
+                            (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_LEFT);
+                    }
+                    //wall right
+                    if ((temp_tile_ok[2])&&(temp_tile_ok[5])&&(temp_tile_ok[1])&&
+                            (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_RIGHT);
+                        //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        //                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
+                    }
+                    //wall convex down
+                    if ((temp_tile_ok[1])&&(temp_tile_ok[2])&&(temp_tile_ok[3])&&
+                            (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[3]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_convex_down);
+                        //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        //                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
+                    }
+                    //wall concave down
+                    if ((temp_tile_ok[1])&&(temp_tile_ok[2])&&(temp_tile_ok[3])&&
+                            (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_FLOOR)&&
+                            (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_FLOOR)&&
+                            (map_pointer->tile[temp_tile[3]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_concave_down);
+                        //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        //                                                                   TILESET_TILE_TYPE::_TILE_FLOOR);
+                    }
+                    //wall convex left
+                    if ((temp_tile_ok[0])&&(temp_tile_ok[2])&&(temp_tile_ok[4])&&
+                            (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[4]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_convex_left);
+                    }
+                    //wall concave left
+                    if ((temp_tile_ok[0])&&(temp_tile_ok[2])&&(temp_tile_ok[4])&&
+                            (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_FLOOR)&&
+                            (map_pointer->tile[temp_tile[2]].data == Tile_Type::TILE_FLOOR)&&
+                            (map_pointer->tile[temp_tile[4]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_concave_left);
+                        //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        //                                                                   TILESET_TILE_TYPE::TILE_FLOOR_LEFT_HALF);
+                    }
+                    //wall convex up
+                    if ((temp_tile_ok[5])&&(temp_tile_ok[0])&&(temp_tile_ok[7])&&
+                            (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[7]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_convex_up);
+                    }
+                    //wall concave up
+                    if ((temp_tile_ok[5])&&(temp_tile_ok[0])&&(temp_tile_ok[7])&&
+                            (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_FLOOR)&&
+                            (map_pointer->tile[temp_tile[0]].data == Tile_Type::TILE_FLOOR)&&
+                            (map_pointer->tile[temp_tile[7]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_concave_up);
+                    }
+                    //wall convex right
+                    if ((temp_tile_ok[1])&&(temp_tile_ok[5])&&(temp_tile_ok[6])&&
+                            (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_WALL)&&
+                            (map_pointer->tile[temp_tile[6]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_convex_right);
+                    }
+                    //wall concave right
+                    if ((temp_tile_ok[1])&&(temp_tile_ok[5])&&(temp_tile_ok[6])&&
+                            (map_pointer->tile[temp_tile[1]].data == Tile_Type::TILE_FLOOR)&&
+                            (map_pointer->tile[temp_tile[5]].data == Tile_Type::TILE_FLOOR)&&
+                            (map_pointer->tile[temp_tile[6]].data == Tile_Type::TILE_FLOOR))
+                    {
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                                                                                       TILESET_TILE_TYPE::TILE_WALL_concave_right);
+                        //map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        //                                                                   TILESET_TILE_TYPE::TILE_FLOOR_RIGHT_HALF);
+                    }
+                break;
+                case Tile_Type::TILE_EXIT:
+                break;
+                case Tile_Type::TILE_PATH:
+                break;
+            case Tile_Type::TILE_NONE:
+                default:
+                    map_pointer->layers[background][i][j] = 0;
+                    map_pointer->layers[collision][i][j] = 3;
+                break;
+            }
         }
     }
 }
