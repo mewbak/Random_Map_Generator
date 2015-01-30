@@ -21,7 +21,7 @@
 #ifndef TILESETDEF_H
 #define TILESETDEF_H
 
-#include <QMap>
+#include <map>
 #include "MapHelper.h"
 
 enum TILESET_TILE_TYPE {
@@ -67,13 +67,13 @@ private:
     //supported tilesets
 
     // Cave
-    static QMap<int, int> cave;
+    static std::map<int, TILESET_TILE_TYPE> cave;
 
     // dungeon
-    static QMap<int, int> dungeon;
+    static std::map<int, TILESET_TILE_TYPE> dungeon;
 
     // grassland
-    static QMap<int, int> grassland;
+    static std::map<int, TILESET_TILE_TYPE> grassland;
 
     TilesetDef();
     ~TilesetDef();

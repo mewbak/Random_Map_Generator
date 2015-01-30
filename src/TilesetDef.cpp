@@ -20,9 +20,9 @@
 
 #include "TilesetDef.h"
 
-QMap<int, int> TilesetDef::cave;
-QMap<int, int> TilesetDef::dungeon;
-QMap<int, int> TilesetDef::grassland;
+std::map<int, TILESET_TILE_TYPE> TilesetDef::cave;
+std::map<int, TILESET_TILE_TYPE> TilesetDef::dungeon;
+std::map<int, TILESET_TILE_TYPE> TilesetDef::grassland;
 
 TilesetDef::TilesetDef()
 {
@@ -267,7 +267,7 @@ void TilesetDef::init()
 
 int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
 {
-    QMap<int, int> tileset;
+    std::map<int, TILESET_TILE_TYPE> tileset;
     init();
 
     switch(_tileset)
@@ -283,10 +283,10 @@ int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
         break;
     }
 
-    QMap<int, int>::iterator it = tileset.begin();
+    std::map<int, TILESET_TILE_TYPE>::iterator it = tileset.begin();
     while (it != tileset.end())
     {
-      if (it.value() != type)
+      if (it->second != type)
       {
         it = tileset.erase(it);
       }
@@ -304,7 +304,7 @@ int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
         {
             it = tileset.begin();
             std::advance(it, rand_value);
-            return it.key();
+            return it->first;
         }
         else
         {
@@ -315,5 +315,5 @@ int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
     rand_value = rand() % tileset.size();
     it = tileset.begin();
     std::advance(it, rand_value);
-    return it.key();
+    return it->first;
 }
