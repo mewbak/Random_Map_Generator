@@ -143,7 +143,7 @@ void map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias)
     map_gen_maze(map_pointer, ((tile_y * map_pointer->w) + tile_x),direction_bias);
 }
 
-void MapGenerator_M1::Generate (Map* map_pointer, int dimension_x, int dimension_y)
+void MapGenerator_M1::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset)
 {
     Initialize(map_pointer, dimension_x, dimension_y);
 

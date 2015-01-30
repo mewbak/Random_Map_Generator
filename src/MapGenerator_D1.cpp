@@ -316,7 +316,7 @@ void map_gen_BSP_internal(Map* map_pointer)
     map_gen_room_connect_2(map_pointer);
 };
 
-void MapGenerator_D1::Generate (Map* map_pointer, int dimension_x, int dimension_y)
+void MapGenerator_D1::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset)
 {
     Initialize(map_pointer, dimension_x, dimension_y);
 

@@ -8,7 +8,7 @@
 #include "MapGenerator_D2.h"
 #include "MapGenerator_M1.h"
 
-void MapGenerate(Map* map_pointer, Algorithm_Type generation_algorithm, int dimension_x, int dimension_y)
+void MapGenerate(Map* map_pointer, Algorithm_Type generation_algorithm, int dimension_x, int dimension_y, TILESET tileset)
 {
     MapGenerator* generator = NULL;
     if (generation_algorithm == Algorithm_Type::GEN_ALGORITHM_C1) {
@@ -23,7 +23,7 @@ void MapGenerate(Map* map_pointer, Algorithm_Type generation_algorithm, int dime
     else if (generation_algorithm == Algorithm_Type::GEN_ALGORITHM_M1) {
         generator = new MapGenerator_M1();
     }
-    generator->Generate(map_pointer, dimension_x, dimension_y);
+    generator->Generate(map_pointer, dimension_x, dimension_y, tileset);
     delete generator;
 }
 

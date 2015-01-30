@@ -34,7 +34,7 @@
 class MapGenerator_D2 : public MapGenerator
 {
     public:
-        void Generate (Map* map_pointer, int dimension_x, int dimension_y);
+        void Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset);
 
     private:
         void GenerateMap(Map* map_pointer);

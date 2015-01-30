@@ -88,7 +88,9 @@ void MainWindow::on_pushButton_released()
     this->ui->label_status->setText("Initializing intermediate map...");
     this->ui->progressBar->setValue(10);
     this->ui->label_status->setText("Generating map...");
-    MapGenerate(map_pointer, static_cast<Algorithm_Type>(app_data.algorithm), app_data.size_x, app_data.size_y);
+    MapGenerate(map_pointer, static_cast<Algorithm_Type>(app_data.algorithm), app_data.size_x, app_data.size_y,
+                             static_cast<TILESET>(app_data.tile_set));
+
     this->ui->textEdit_mapview->clear();
     for (int i = 0; i < map_pointer->size(); i++)
     {
@@ -109,17 +111,13 @@ void MainWindow::on_pushButton_released()
     break;
     default:
     case OUTPUT_FORMAT_FLARE:
-        //flare_map_type* flare_map_pointer = new flare_map_type;
         this->ui->progressBar->setValue(80);
         this->ui->label_status->setText("Applying tile set...");
         this->ui->progressBar->setValue(90);
-        // should be removed
-        //MapGenerator::map_to_flare_map(MainWindow::map_pointer,flare_map_pointer,static_cast<TILESET>(MainWindow::app_data.tile_set));
 
         this->ui->label_status->setText("Exporting to file...");
 
         MapGenerator::Export(map_pointer, app_data.file_name);
-        //MapGenerator::file_export_flare(flare_map_pointer,MainWindow::app_data.file_name.toStdString());
     break;
     }
     this->ui->progressBar->setValue(100);

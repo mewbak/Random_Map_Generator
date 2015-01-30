@@ -40,13 +40,10 @@ class MapGenerator
     public:
         virtual ~MapGenerator(void) {};
         void Initialize (Map* map_pointer, int dimension_x, int dimension_y);
-        virtual void Generate (Map* map_pointer, int dimension_x, int dimension_y) = 0;
+        virtual void Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset) = 0;
         static void Export (Map* map_pointer, std::string file_name);
 
-        // this should not be needed in future
-//        static void map_to_flare_map (Map* map_pointer, flare_map_type* flare_map_pointer, TILESET tile_set);
-
-//        static void finalizeMap(Map* map_pointer, flare_map_type* flare_map_pointer, TILESET tileset);
+        static void finalizeMap(Map* map_pointer, TILESET tileset);
 };
 
 #endif // MAP_GENERATOR_H

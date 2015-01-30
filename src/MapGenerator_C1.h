@@ -34,7 +34,7 @@
 class MapGenerator_C1 : public MapGenerator
 {
     public:
-        void Generate (Map* map_pointer, int dimension_x, int dimension_y);
+        void Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset);
 
     private:
         void CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number);
