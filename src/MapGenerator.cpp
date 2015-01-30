@@ -85,32 +85,8 @@ void MapGenerator::Export(Map* map_pointer, std::string file_name)
     delete mapSaver;
 }
 
-/*
-void MapGenerator::map_to_flare_map (Map* map_pointer, flare_map_type* flare_map_pointer, TILESET tile_set)
-{
-    map_gen_redundant_tile_check (map_pointer);
-    flare_map_pointer->width = map_pointer->w;
-    flare_map_pointer->height = map_pointer->h;
-    flare_map_pointer->no_of_tiles = map_pointer->size();
-    flare_map_pointer->layer_background = new int[flare_map_pointer->no_of_tiles];
-    flare_map_pointer->layer_fringe = new int[flare_map_pointer->no_of_tiles];
-    flare_map_pointer->layer_object = new int[flare_map_pointer->no_of_tiles];
-    flare_map_pointer->layer_foreground = new int[flare_map_pointer->no_of_tiles];
-    flare_map_pointer->layer_collision = new int[flare_map_pointer->no_of_tiles];
-    flare_map_pointer->tileset = tile_set;
-    for (int i = 0; i < map_pointer->size(); i++)
-    {
-        flare_map_pointer->layer_background[i] = 0;
-        flare_map_pointer->layer_fringe[i] = 0;
-        flare_map_pointer->layer_object[i] = 0;
-        flare_map_pointer->layer_foreground[i] = 0;
-        flare_map_pointer->layer_collision[i] = 0;
-    }
-    finalizeMap(map_pointer, flare_map_pointer, tile_set);
-}
-*/
 
-void MapGenerator::finalizeMap(Map* map_pointer, TILESET tileset)
+void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
 {
     switch (tileset)
     {
@@ -352,5 +328,3 @@ void MapGenerator::finalizeMap(Map* map_pointer, TILESET tileset)
         }
     }
 }
-
-

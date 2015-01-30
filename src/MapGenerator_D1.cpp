@@ -319,12 +319,8 @@ void map_gen_BSP_internal(Map* map_pointer)
 void MapGenerator_D1::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset)
 {
     Initialize(map_pointer, dimension_x, dimension_y);
-
-    // generate in map_pointer
     GenerateMap(map_pointer);
-
-    // export is called from outside
-    //Export(map_pointer);
+    applyTileset(map_pointer, tileset);
 }
 
 void MapGenerator_D1::GenerateMap(Map* map_pointer)

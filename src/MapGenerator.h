@@ -43,7 +43,7 @@ class MapGenerator
         virtual void Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset) = 0;
         static void Export (Map* map_pointer, std::string file_name);
 
-        static void finalizeMap(Map* map_pointer, TILESET tileset);
+        static void applyTileset(Map* map_pointer, TILESET tileset);
 };
 
 #endif // MAP_GENERATOR_H

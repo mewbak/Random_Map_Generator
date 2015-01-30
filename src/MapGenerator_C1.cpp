@@ -24,7 +24,7 @@ void MapGenerator_C1::Generate (Map* map_pointer, int dimension_x, int dimension
 {
     Initialize(map_pointer, dimension_x, dimension_y);
     GenerateMap(map_pointer);
-    finalizeMap(map_pointer, tileset);
+    applyTileset(map_pointer, tileset);
 }
 
 void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number)
