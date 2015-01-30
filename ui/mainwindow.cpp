@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     map_pointer->room      = new Room[ROOM_MAX];
     map_pointer->tile      = new GenTile[100*100];
     app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_C1;
-    app_data.file_name     = "default";
+    app_data.file_name     = "default.txt";
     app_data.gen_chests    = false;
     app_data.gen_enemies   = false;
     app_data.gen_exits     = false;
