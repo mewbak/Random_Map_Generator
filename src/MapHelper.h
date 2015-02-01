@@ -67,12 +67,15 @@ struct MapNode
 
 struct AppData
 {
+    // this is only used by QT front end.
     int     progress;
     int     algorithm;
     int     tile_set;
     int     output_format;
     int     size_x;
     int     size_y;
+    int     seed;
+    bool    seed_set;
     bool    gen_exits;
     bool    gen_enemies;
     bool    gen_chests;

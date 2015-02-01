@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     app_data.progress      = 0;
     app_data.size_x        = 100;
     app_data.size_y        = 100;
+    app_data.seed          = time(NULL);
+    app_data.seed_set      = false;
     app_data.status        = "Ready";
     app_data.tile_set      = TILESET_CAVE;
 }
@@ -76,13 +78,22 @@ void MainWindow::on_checkBox_genEnemies_stateChanged(int arg1)
     else MainWindow::app_data.gen_enemies = true;
 }
 
+void MainWindow::on_lineEdit_seed_textChanged(const QString &arg1)
+{
+    app_data.seed_set = true;
+    MainWindow::app_data.seed = arg1.toInt();
+    if (arg1.isEmpty())
+        app_data.seed_set = false;
+}
+
 void MainWindow::on_pushButton_released()
 {
     app_data.file_name = MainWindow::ui->lineEdit->text().toStdString();
     this->ui->progressBar->setValue(0);
     this->ui->label_status->setText("Seeding random...");
-    int seed = time(NULL);
-    srand(seed);
+    if (app_data.seed_set)
+        srand(app_data.seed);
+    else srand(time(NULL));
     this->ui->progressBar->setValue(1);
     this->ui->label_status->setText("Initializing intermediate map...");
     this->ui->progressBar->setValue(10);
@@ -97,10 +108,10 @@ void MainWindow::on_pushButton_released()
     switch (app_data.output_format)
     {
     case OUTPUT_FORMAT_FROST_AND_FLAME:
-        //file_export_flare(map_pointer,file_name);
+        //file_export_frost_and_flame(map_pointer,file_name);
     break;
     case OUTPUT_FORMAT_TILED:
-        //file_export_flare(map_pointer,file_name);
+        //file_export_tiled(map_pointer,file_name);
     break;
     default:
     case OUTPUT_FORMAT_FLARE:

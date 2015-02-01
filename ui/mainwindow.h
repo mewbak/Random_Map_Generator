@@ -31,6 +31,8 @@ private slots:
 
     void renderPreview(Map* map_pointer);
 
+    void on_lineEdit_seed_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
 };
