@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "map.h"
+#include "flare/Map.h"
 #include "MapGenerator.h"
 #include "ui_mainwindow.h"
 #include <sstream>
