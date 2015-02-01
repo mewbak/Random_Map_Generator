@@ -34,12 +34,12 @@
 class MapGenerator_C1 : public MapGenerator
 {
     public:
-        void Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset);
+    void Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset);
+    void Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset, int seed);
 
     private:
         void CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number);
         void GenerateMap(Map* map_pointer);
-        void GenerateMap(Map* map_pointer, int seed);
 };
 
 #endif // MAP_GENERATOR_C1_H

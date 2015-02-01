@@ -27,6 +27,12 @@ void MapGenerator_C1::Generate (Map* map_pointer, int dimension_x, int dimension
     applyTileset(map_pointer, tileset);
 }
 
+void MapGenerator_C1::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset, int seed)
+{
+    srand(seed);
+    Generate(map_pointer, dimension_x, dimension_y, tileset);
+}
+
 void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number)
 {
     if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
@@ -112,10 +118,4 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
         else (current_layer)[i%map_pointer->w][i/map_pointer->w] = TILE_WALL;
     }
     delete[] fill_data;
-}
-
-void MapGenerator_C1::GenerateMap(Map* map_pointer, int seed)
-{
-    srand(seed);
-    GenerateMap(map_pointer);
 }
