@@ -80,7 +80,7 @@ struct AppData
     std::string status;
 };
 
-void map_check                   (Map* map_pointer);
+void map_check                   (Map* map_pointer, maprow *layer);
 int  map_gen_flood_fill_tile     (Map* map_pointer, FillData* fill_data, int tile_number);
 bool map_gen_room_flood_fill     (Map* map_pointer);
 bool map_gen_room                (Map* map_pointer, Room room);

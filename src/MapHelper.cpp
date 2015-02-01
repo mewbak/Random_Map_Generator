@@ -27,78 +27,87 @@ void MapGenerate(Map* map_pointer, Algorithm_Type generation_algorithm, int dime
     delete generator;
 }
 
-void map_check   (Map* map_pointer)
+void map_check (Map* map_pointer, maprow *layer)
 {
     int iterations  = 2;
-    int mw          = map_pointer->w;
-    for (int iteration_count = 0; iteration_count < iterations; iteration_count++)
+    for (int k = 0; k < iterations; k++)
     {
-        for (int tile_count = mw; tile_count < (map_pointer->size()-map_pointer->w-1); tile_count++)
+        for (int i = 1; i < map_pointer->h-1; i++)
         {
-            if(map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL)
+            for (int j = 1; j < map_pointer->w-1; j++)
             {
-                // Remove single tiles
-                // OOO
-                // OXO
-                // OOO
-                //--------------------
-                if(  (map_pointer->tile[tile_count+1].data    == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count-1].data    == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count+mw].data   == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count+mw+1].data == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count+mw-1].data == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count-mw].data   == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count-mw+1].data == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count-mw-1].data == Tile_Type::TILE_FLOOR))
+                if ((layer)[i][j] == TILE_WALL)
                 {
-                    map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
-                }
-                // Remove single horizontal tiles
-                // ???
-                // OXO
-                // ???
-                //--------------------
-                if(  (map_pointer->tile[tile_count+1].data    == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count-1].data    == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
-                }
-                // Remove single vertical tiles
-                // ?O?
-                // ?X?
-                // ?O?
-                //--------------------
-                if(  (map_pointer->tile[tile_count+mw].data   == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count-mw].data   == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
-                }
-                // Remove cross right tiles
-                // O?X
-                // ?X?
-                // X?O
-                //--------------------
-                if(  (map_pointer->tile[tile_count+mw+1].data == Tile_Type::TILE_WALL)
-                   &&(map_pointer->tile[tile_count+mw-1].data == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count-mw+1].data == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count-mw-1].data == Tile_Type::TILE_WALL))
-                {
-                    map_pointer->tile[tile_count+mw-1].data = Tile_Type::TILE_WALL;
-                    map_pointer->tile[tile_count-mw+1].data = Tile_Type::TILE_WALL;
-                }
-                // Remove cross left tiles
-                // X?O
-                // ?X?
-                // O?X
-                //--------------------
-                if ((tile_count-mw-1 >= 0)
-                   &&(map_pointer->tile[tile_count+mw+1].data == Tile_Type::TILE_FLOOR)
-                   &&(map_pointer->tile[tile_count+mw-1].data == Tile_Type::TILE_WALL)
-                   &&(map_pointer->tile[tile_count-mw+1].data == Tile_Type::TILE_WALL)
-                   &&(map_pointer->tile[tile_count-mw-1].data == Tile_Type::TILE_FLOOR))
-                {
-                    map_pointer->tile[tile_count+mw+1].data = Tile_Type::TILE_WALL;
-                    map_pointer->tile[tile_count-mw-1].data = Tile_Type::TILE_WALL;
+                    // Remove single tiles
+                    // OOO
+                    // OXO
+                    // OOO
+                    //--------------------
+                    if (((layer)[i][j+1] == TILE_FLOOR)
+                            && ((layer)[i][j-1] == TILE_FLOOR)
+                            && ((layer)[i+1][j] == TILE_FLOOR)
+                            && ((layer)[i+1][j+1] == TILE_FLOOR)
+                            && ((layer)[i+1][j-1] == TILE_FLOOR)
+                            && ((layer)[i-1][j] == TILE_FLOOR)
+                            && ((layer)[i-1][j+1] == TILE_FLOOR)
+                            && ((layer)[i-1][j-1] == TILE_FLOOR))
+                    {
+                        (layer)[i][j] = TILE_FLOOR;
+                    }
+                    // Remove single horizontal tiles
+                    // ???
+                    // OXO
+                    // ???
+                    //--------------------
+                    if (((layer)[i][j+1] == TILE_FLOOR)
+                            && ((layer)[i][j-1] == TILE_FLOOR))
+                    {
+                        (layer)[i][j] = TILE_FLOOR;
+                    }
+                    // Remove single vertical tiles
+                    // ?O?
+                    // ?X?
+                    // ?O?
+                    //--------------------
+                    if (((layer)[i+1][j] == TILE_FLOOR)
+                            && ((layer)[i-1][j] == TILE_FLOOR))
+                    {
+                        (layer)[i][j] = TILE_FLOOR;
+                    }
+                    // Remove cross right tiles
+                    // O?X
+                    // ?X?
+                    // X?O
+                    //--------------------
+                    if (((layer)[i+1][j+1] == TILE_WALL)
+                            && ((layer)[i+1][j-1] == TILE_FLOOR)
+                            && ((layer)[i-1][j+1] == TILE_FLOOR)
+                            && ((layer)[i-1][j-1] == TILE_WALL))
+                    {
+                        (layer)[i+1][j-1] = TILE_WALL;
+                        (layer)[i-1][j+1] = TILE_WALL;
+                        (layer)[i][j-1] = TILE_WALL;
+                        (layer)[i][j-1] = TILE_WALL;
+                        (layer)[i+1][j] = TILE_WALL;
+                        (layer)[i-1][j] = TILE_WALL;
+                    }
+                    // Remove cross left tiles
+                    // X?O
+                    // ?X?
+                    // O?X
+                    //--------------------
+                    if (((layer)[i+1][j+1] == TILE_FLOOR)
+                            && ((layer)[i+1][j-1] == TILE_WALL)
+                            && ((layer)[i-1][j+1] == TILE_WALL)
+                            && ((layer)[i-1][j-1] == TILE_FLOOR))
+                    {
+                        (layer)[i+1][j+1] = TILE_WALL;
+                        (layer)[i-1][j-1] = TILE_WALL;
+                        (layer)[i][j-1] = TILE_WALL;
+                        (layer)[i][j-1] = TILE_WALL;
+                        (layer)[i+1][j] = TILE_WALL;
+                        (layer)[i-1][j] = TILE_WALL;
+                    }
                 }
             }
         }
@@ -108,7 +117,7 @@ void map_check   (Map* map_pointer)
 int map_gen_flood_fill_tile (Map* map_pointer, FillData* fill_data, int tile_number)
 {
     int return_value = 0;
-    if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
+    if ((fill_data[tile_number].tile_data == TILE_FLOOR) && (!fill_data[tile_number].tile_done))
     {
         fill_data[tile_number].tile_done = true;
         fill_data[tile_number].tile_join = true;
@@ -131,13 +140,13 @@ bool map_gen_room_flood_fill (Map* map_pointer)
     int  first_floor  = -1;
     bool return_value = true;
     FillData* fill_data = new FillData[map_pointer->size()];
-    for(int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
+    for(int j = 0; j < map_pointer->size(); j++)
     {
-        if (map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) floor_count++;
-        if ((floor_count == 1) && (first_floor < 0)) first_floor = tile_count;
-        fill_data[tile_count].tile_data = map_pointer->tile[tile_count].data ;
-        fill_data[tile_count].tile_done = false;
-        fill_data[tile_count].tile_join = false;
+        if (map_pointer->tile[j].data == TILE_FLOOR) floor_count++;
+        if ((floor_count == 1) && (first_floor < 0)) first_floor = j;
+        fill_data[j].tile_data = map_pointer->tile[j].data ;
+        fill_data[j].tile_done = false;
+        fill_data[j].tile_join = false;
     }
     int   number_found = map_gen_flood_fill_tile(map_pointer,fill_data,first_floor);
     if (number_found < floor_count) return_value = false;
@@ -163,7 +172,7 @@ bool map_gen_room (Map* map_pointer, Room room)
             for (int count_y = 0; count_y < room.h+2; count_y++)
             {
                 temp_tile = (map_pointer->w*(room.position.y+count_y))+(room.position.x+count_x);
-                if ((temp_tile > 0) && (temp_tile < (map_pointer->size()-map_pointer->w)) && (map_pointer->tile[temp_tile].data != Tile_Type::TILE_WALL)) return_value = false;
+                if ((temp_tile > 0) && (temp_tile < (map_pointer->size()-map_pointer->w)) && (map_pointer->tile[temp_tile].data != TILE_WALL)) return_value = false;
             }
         }
         if (return_value)
@@ -173,7 +182,7 @@ bool map_gen_room (Map* map_pointer, Room room)
                 for (int count_y = 1; count_y < room.h; count_y++)
                 {
                     temp_tile = (map_pointer->w*(room.position.y+count_y))+(room.position.x+count_x);
-                    if  ((temp_tile > 0) && (temp_tile < map_pointer->size())) map_pointer->tile[temp_tile].data = Tile_Type::TILE_FLOOR;
+                    if  ((temp_tile > 0) && (temp_tile < map_pointer->size())) map_pointer->tile[temp_tile].data = TILE_FLOOR;
                 }
             }
             map_pointer->room[map_pointer->no_of_rooms].active      = true;
@@ -203,13 +212,13 @@ void map_gen_room_exits(Map* map_pointer)
             {
                 exit_count++;
                 exit_tile = map_pointer->room[i].position.x+(map_pointer->w*map_pointer->room[i].position.y);
-                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data == Tile_Type::TILE_FLOOR))
+                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data == TILE_FLOOR))
                 {
                     exit_tile += map_pointer->w;
                 }
-                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data != Tile_Type::TILE_FLOOR))
+                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data != TILE_FLOOR))
                 {
-                    map_pointer->tile[exit_tile].data = Tile_Type::TILE_FLOOR;
+                    map_pointer->tile[exit_tile].data = TILE_FLOOR;
                     exit_tile += map_pointer->w;
                 }
                 map_pointer->room[i].exit[0] = true;
@@ -219,13 +228,13 @@ void map_gen_room_exits(Map* map_pointer)
             {
                 exit_count++;
                 exit_tile = map_pointer->room[i].position.x+(map_pointer->w*map_pointer->room[i].position.y);
-                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data == Tile_Type::TILE_FLOOR))
+                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data == TILE_FLOOR))
                 {
                     exit_tile -= map_pointer->w;
                 }
-                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data != Tile_Type::TILE_FLOOR))
+                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data != TILE_FLOOR))
                 {
-                    map_pointer->tile[exit_tile].data = Tile_Type::TILE_FLOOR;
+                    map_pointer->tile[exit_tile].data = TILE_FLOOR;
                     exit_tile -= map_pointer->w;
                 }
                 map_pointer->room[i].exit[1] = true;
@@ -235,13 +244,13 @@ void map_gen_room_exits(Map* map_pointer)
             {
                 exit_count++;
                 exit_tile = map_pointer->room[i].position.x+(map_pointer->w*map_pointer->room[i].position.y);
-                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data == Tile_Type::TILE_FLOOR))
+                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data == TILE_FLOOR))
                 {
                     exit_tile++;
                 }
-                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data != Tile_Type::TILE_FLOOR))
+                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data != TILE_FLOOR))
                 {
-                    map_pointer->tile[exit_tile].data = Tile_Type::TILE_FLOOR;
+                    map_pointer->tile[exit_tile].data = TILE_FLOOR;
                     exit_tile++;
                 }
                 map_pointer->room[i].exit[2] = true;
@@ -251,13 +260,13 @@ void map_gen_room_exits(Map* map_pointer)
             {
                 exit_count++;
                 exit_tile = map_pointer->room[i].position.x+(map_pointer->w*map_pointer->room[i].position.y);
-                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data == Tile_Type::TILE_FLOOR))
+                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data == TILE_FLOOR))
                 {
                     exit_tile--;
                 }
-                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data != Tile_Type::TILE_FLOOR))
+                while ((exit_tile >= 0)&&(exit_tile < map_pointer->size())&&(map_pointer->tile[exit_tile].data != TILE_FLOOR))
                 {
-                    map_pointer->tile[exit_tile].data = Tile_Type::TILE_FLOOR;
+                    map_pointer->tile[exit_tile].data = TILE_FLOOR;
                     exit_tile--;
                 }
                 map_pointer->room[i].exit[3] = true;
@@ -279,10 +288,10 @@ int map_gen_room_check_path (Map* map_pointer, int room_1, int room_2, bool x_th
         (r2_x >= 0) && (r2_x < map_pointer->w) &&
         (r2_y >= 0) && (r2_y < map_pointer->h))
     {
-        int previous_tile        = Tile_Type::TILE_NONE;
+        int previous_tile        = TILE_NONE;
         if (x_then_y)
         {
-            previous_tile = Tile_Type::TILE_NONE;
+            previous_tile = TILE_NONE;
             to_floor_transitions = 0;
             int x_count = r1_x;
             int y_count = r1_y;
@@ -290,46 +299,46 @@ int map_gen_room_check_path (Map* map_pointer, int room_1, int room_2, bool x_th
             {
                 for (x_count = r1_x; x_count > r2_x; x_count--)
                 {
-                    int tile_count = x_count + (map_pointer->w * (y_count));
-                    if (map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL) return_value++;
-                    if ((map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) && (previous_tile == Tile_Type::TILE_WALL)) to_floor_transitions++;
-                    previous_tile = map_pointer->tile[tile_count].data;
+                    int j = x_count + (map_pointer->w * (y_count));
+                    if (map_pointer->tile[j].data == TILE_WALL) return_value++;
+                    if ((map_pointer->tile[j].data == TILE_FLOOR) && (previous_tile == TILE_WALL)) to_floor_transitions++;
+                    previous_tile = map_pointer->tile[j].data;
                 }
             }
             else
             {
                 for (x_count = r1_x; x_count < r2_x; x_count++)
                 {
-                    int tile_count = x_count + (map_pointer->w * (y_count));
-                    if (map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL) return_value++;
-                    if ((map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) && (previous_tile == Tile_Type::TILE_WALL)) to_floor_transitions++;
-                    previous_tile = map_pointer->tile[tile_count].data;
+                    int j = x_count + (map_pointer->w * (y_count));
+                    if (map_pointer->tile[j].data == TILE_WALL) return_value++;
+                    if ((map_pointer->tile[j].data == TILE_FLOOR) && (previous_tile == TILE_WALL)) to_floor_transitions++;
+                    previous_tile = map_pointer->tile[j].data;
                 }
             }
             if (r1_y > r2_y)
             {
                 for (y_count = r1_y; y_count > r2_y; y_count--)
                 {
-                    int tile_count = x_count + (map_pointer->w * (y_count));
-                    if (map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL) return_value++;
-                    if ((map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) && (previous_tile == Tile_Type::TILE_WALL)) to_floor_transitions++;
-                    previous_tile = map_pointer->tile[tile_count].data;
+                    int j = x_count + (map_pointer->w * (y_count));
+                    if (map_pointer->tile[j].data == TILE_WALL) return_value++;
+                    if ((map_pointer->tile[j].data == TILE_FLOOR) && (previous_tile == TILE_WALL)) to_floor_transitions++;
+                    previous_tile = map_pointer->tile[j].data;
                 }
             }
             else
             {
                 for (y_count = r1_y; y_count < r2_y; y_count++)
                 {
-                    int tile_count = x_count + (map_pointer->w * (y_count));
-                    if (map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL) return_value++;
-                    if ((map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) && (previous_tile == Tile_Type::TILE_WALL)) to_floor_transitions++;
-                    previous_tile = map_pointer->tile[tile_count].data;
+                    int j = x_count + (map_pointer->w * (y_count));
+                    if (map_pointer->tile[j].data == TILE_WALL) return_value++;
+                    if ((map_pointer->tile[j].data == TILE_FLOOR) && (previous_tile == TILE_WALL)) to_floor_transitions++;
+                    previous_tile = map_pointer->tile[j].data;
                 }
             }
         }
         else
         {
-            previous_tile = Tile_Type::TILE_NONE;
+            previous_tile = TILE_NONE;
             to_floor_transitions = 0;
             int x_count = r1_x;
             int y_count = r1_y;
@@ -337,40 +346,40 @@ int map_gen_room_check_path (Map* map_pointer, int room_1, int room_2, bool x_th
             {
                 for (y_count = r1_y; y_count > r2_y; y_count--)
                 {
-                    int tile_count = x_count + (map_pointer->w * (y_count));
-                    if (map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL) return_value++;
-                    if ((map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) && (previous_tile == Tile_Type::TILE_WALL)) to_floor_transitions++;
-                    previous_tile = map_pointer->tile[tile_count].data;
+                    int j = x_count + (map_pointer->w * (y_count));
+                    if (map_pointer->tile[j].data == TILE_WALL) return_value++;
+                    if ((map_pointer->tile[j].data == TILE_FLOOR) && (previous_tile == TILE_WALL)) to_floor_transitions++;
+                    previous_tile = map_pointer->tile[j].data;
                 }
             }
             else
             {
                 for (y_count = r1_y; y_count < r2_y; y_count++)
                 {
-                    int tile_count = x_count + (map_pointer->w * (y_count));
-                    if (map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL) return_value++;
-                    if ((map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) && (previous_tile == Tile_Type::TILE_WALL)) to_floor_transitions++;
-                    previous_tile = map_pointer->tile[tile_count].data;
+                    int j = x_count + (map_pointer->w * (y_count));
+                    if (map_pointer->tile[j].data == TILE_WALL) return_value++;
+                    if ((map_pointer->tile[j].data == TILE_FLOOR) && (previous_tile == TILE_WALL)) to_floor_transitions++;
+                    previous_tile = map_pointer->tile[j].data;
                 }
             }
             if (r1_x > r2_x)
             {
                 for (x_count = r1_x; x_count > r2_x; x_count--)
                 {
-                    int tile_count = x_count + (map_pointer->w * (y_count));
-                    if (map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL) return_value++;
-                    if ((map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) && (previous_tile == Tile_Type::TILE_WALL)) to_floor_transitions++;
-                    previous_tile = map_pointer->tile[tile_count].data;
+                    int j = x_count + (map_pointer->w * (y_count));
+                    if (map_pointer->tile[j].data == TILE_WALL) return_value++;
+                    if ((map_pointer->tile[j].data == TILE_FLOOR) && (previous_tile == TILE_WALL)) to_floor_transitions++;
+                    previous_tile = map_pointer->tile[j].data;
                 }
             }
             else
             {
                 for (x_count = r1_x; x_count < r2_x; x_count++)
                 {
-                    int tile_count = x_count + (map_pointer->w * (y_count));
-                    if (map_pointer->tile[tile_count].data == Tile_Type::TILE_WALL) return_value++;
-                    if ((map_pointer->tile[tile_count].data == Tile_Type::TILE_FLOOR) && (previous_tile == Tile_Type::TILE_WALL)) to_floor_transitions++;
-                    previous_tile = map_pointer->tile[tile_count].data;
+                    int j = x_count + (map_pointer->w * (y_count));
+                    if (map_pointer->tile[j].data == TILE_WALL) return_value++;
+                    if ((map_pointer->tile[j].data == TILE_FLOOR) && (previous_tile == TILE_WALL)) to_floor_transitions++;
+                    previous_tile = map_pointer->tile[j].data;
                 }
             }
         }
@@ -422,32 +431,32 @@ void map_gen_room_path (Map* map_pointer, int room_1, int room_2, bool x_then_y)
                 {
                     for (x_count = r1_x; x_count > r2_x; x_count--)
                     {
-                        int tile_count = x_count + (map_pointer->w * (y_count));
-                        map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
+                        int j = x_count + (map_pointer->w * (y_count));
+                        map_pointer->tile[j].data = TILE_FLOOR;
                     }
                 }
                 else
                 {
                     for (x_count = r1_x; x_count < r2_x; x_count++)
                     {
-                        int tile_count = x_count + (map_pointer->w * (y_count));
-                        map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
+                        int j = x_count + (map_pointer->w * (y_count));
+                        map_pointer->tile[j].data = TILE_FLOOR;
                     }
                 }
                 if (r1_y > r2_y)
                 {
                     for (y_count = r1_y; y_count > r2_y; y_count--)
                     {
-                        int tile_count = x_count + (map_pointer->w * (y_count));
-                        map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
+                        int j = x_count + (map_pointer->w * (y_count));
+                        map_pointer->tile[j].data = TILE_FLOOR;
                     }
                 }
                 else
                 {
                     for (y_count = r1_y; y_count < r2_y; y_count++)
                     {
-                        int tile_count = x_count + (map_pointer->w * (y_count));
-                        map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
+                        int j = x_count + (map_pointer->w * (y_count));
+                        map_pointer->tile[j].data = TILE_FLOOR;
                     }
                 }
             }
@@ -459,32 +468,32 @@ void map_gen_room_path (Map* map_pointer, int room_1, int room_2, bool x_then_y)
                 {
                     for (y_count = r1_y; y_count > r2_y; y_count--)
                     {
-                        int tile_count = x_count + (map_pointer->w * (y_count));
-                        map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
+                        int j = x_count + (map_pointer->w * (y_count));
+                        map_pointer->tile[j].data = TILE_FLOOR;
                     }
                 }
                 else
                 {
                     for (y_count = r1_y; y_count < r2_y; y_count++)
                     {
-                        int tile_count = x_count + (map_pointer->w * (y_count));
-                        map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
+                        int j = x_count + (map_pointer->w * (y_count));
+                        map_pointer->tile[j].data = TILE_FLOOR;
                     }
                 }
                 if (r1_x > r2_x)
                 {
                     for (x_count = r1_x; x_count > r2_x; x_count--)
                     {
-                        int tile_count = x_count + (map_pointer->w * (y_count));
-                        map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
+                        int j = x_count + (map_pointer->w * (y_count));
+                        map_pointer->tile[j].data = TILE_FLOOR;
                     }
                 }
                 else
                 {
                     for (x_count = r1_x; x_count < r2_x; x_count++)
                     {
-                        int tile_count = x_count + (map_pointer->w * (y_count));
-                        map_pointer->tile[tile_count].data = Tile_Type::TILE_FLOOR;
+                        int j = x_count + (map_pointer->w * (y_count));
+                        map_pointer->tile[j].data = TILE_FLOOR;
                     }
                 }
             }
@@ -600,7 +609,7 @@ void map_gen_connect_rooms(Map* map_pointer, int room_ID_1, int room_ID_2, int d
         {
             while (current_tile > end_tile)
             {
-                map_pointer->tile[current_tile].data = Tile_Type::TILE_FLOOR;
+                map_pointer->tile[current_tile].data = TILE_FLOOR;
                 current_tile -= map_pointer->w;
             }
         }
@@ -608,7 +617,7 @@ void map_gen_connect_rooms(Map* map_pointer, int room_ID_1, int room_ID_2, int d
         {
             while (current_tile < end_tile)
             {
-                map_pointer->tile[current_tile].data = Tile_Type::TILE_FLOOR;
+                map_pointer->tile[current_tile].data = TILE_FLOOR;
                 current_tile += map_pointer->w;
             }
         }
@@ -616,7 +625,7 @@ void map_gen_connect_rooms(Map* map_pointer, int room_ID_1, int room_ID_2, int d
         {
             while (current_tile > end_tile)
             {
-                map_pointer->tile[current_tile].data = Tile_Type::TILE_FLOOR;
+                map_pointer->tile[current_tile].data = TILE_FLOOR;
                 current_tile --;
             }
         }
@@ -624,7 +633,7 @@ void map_gen_connect_rooms(Map* map_pointer, int room_ID_1, int room_ID_2, int d
         {
             while (current_tile < end_tile)
             {
-                map_pointer->tile[current_tile].data = Tile_Type::TILE_FLOOR;
+                map_pointer->tile[current_tile].data = TILE_FLOOR;
                 current_tile ++;
             }
         }
@@ -676,7 +685,7 @@ void map_gen_room_connect_2 (Map* map_pointer)
                         if      ((temp_tile < 0)||(temp_tile > map_pointer->size()))            fail = true;
                         else if (temp_tile % map_pointer->w == 0)                          fail = true;
                         else if (temp_tile % map_pointer->w >= map_pointer->w-2) fail = true;
-                        else if (map_pointer->tile[temp_tile].data == Tile_Type::TILE_WALL)                     done = true;
+                        else if (map_pointer->tile[temp_tile].data == TILE_WALL)                     done = true;
                         else
                         {
                             //map_pointer->tile[temp_tile].data = 1024;
@@ -694,7 +703,7 @@ void map_gen_room_connect_2 (Map* map_pointer)
                         if      ((temp_tile < 0)||(temp_tile > map_pointer->size()))            fail = true;
                         else if (temp_tile % map_pointer->w == 0)                          fail = true;
                         else if (temp_tile % map_pointer->w >= map_pointer->w-2) fail = true;
-                        else if (map_pointer->tile[temp_tile].data == Tile_Type::TILE_FLOOR)                    done = true;
+                        else if (map_pointer->tile[temp_tile].data == TILE_FLOOR)                    done = true;
                         else
                         {
                             //map_pointer->tile[temp_tile].data = 1024;
@@ -770,19 +779,19 @@ Room map_gen_room_find_stats (Map* map_pointer, FillData* fill_data, int tile_nu
     Room return_data;
     return_data.w = 0;
     return_data.h = 0;
-    int tile_count          = tile_number;
+    int j          = tile_number;
     int tile_x              = tile_number % map_pointer->w;
     int tile_y              = tile_number / map_pointer->w;
-    while (fill_data[tile_count].tile_data == Tile_Type::TILE_FLOOR)
+    while (fill_data[j].tile_data == TILE_FLOOR)
     {
         return_data.w++;
-        tile_count++;
+        j++;
     }
-    tile_count = tile_number;
-    while (fill_data[tile_count].tile_data == Tile_Type::TILE_FLOOR)
+    j = tile_number;
+    while (fill_data[j].tile_data == TILE_FLOOR)
     {
         return_data.h++;
-        tile_count += map_pointer->w;
+        j += map_pointer->w;
     }
 
     return_data.position.x = tile_x + (return_data.w / 2);
@@ -796,17 +805,17 @@ void map_gen_room_find (Map* map_pointer)
     Room room_data;
     FillData* fill_data = new FillData[map_pointer->size()];
     map_pointer->no_of_rooms = 0;
-    for (int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
+    for (int j = 0; j < map_pointer->size(); j++)
     {
-        fill_data[tile_count].tile_data = map_pointer->tile[tile_count].data;
-        fill_data[tile_count].tile_done = false;
-        fill_data[tile_count].tile_join = false;
+        fill_data[j].tile_data = map_pointer->tile[j].data;
+        fill_data[j].tile_done = false;
+        fill_data[j].tile_join = false;
     }
-    for (int tile_count = 0; tile_count < map_pointer->size(); tile_count++)
+    for (int j = 0; j < map_pointer->size(); j++)
     {
-        if ((fill_data[tile_count].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_count].tile_done))
+        if ((fill_data[j].tile_data == TILE_FLOOR) && (!fill_data[j].tile_done))
         {
-            room_data   = map_gen_room_find_stats (map_pointer,fill_data,tile_count);
+            room_data   = map_gen_room_find_stats (map_pointer,fill_data,j);
             map_pointer->room[map_pointer->no_of_rooms].active                    = true;
             map_pointer->room[map_pointer->no_of_rooms].w               = room_data.w;
             map_pointer->room[map_pointer->no_of_rooms].h               = room_data.h;
@@ -821,20 +830,20 @@ void map_gen_room_find (Map* map_pointer)
 
 void map_gen_redundant_tile_check (Map* map_pointer)
 {
-    for (int i = 0; i < map_pointer->size(); i++) if (map_pointer->tile[i].data == Tile_Type::TILE_WALL) map_pointer->tile[i].data = Tile_Type::TILE_NONE;
-    for (int i = 0; i < map_pointer->size(); i++) if (map_pointer->tile[i].data == Tile_Type::TILE_FLOOR)
+    for (int i = 0; i < map_pointer->size(); i++) if (map_pointer->tile[i].data == TILE_WALL) map_pointer->tile[i].data = TILE_NONE;
+    for (int i = 0; i < map_pointer->size(); i++) if (map_pointer->tile[i].data == TILE_FLOOR)
     {
 
         // add ((temp_tile >= 0)&&(temp_tile < map_pointer->size())&&
 
-        if (map_pointer->tile[i-1].data == Tile_Type::TILE_NONE) map_pointer->tile[i-1].data = Tile_Type::TILE_WALL;
-        if (map_pointer->tile[i+1].data == Tile_Type::TILE_NONE) map_pointer->tile[i+1].data = Tile_Type::TILE_WALL;
-        if (map_pointer->tile[i+map_pointer->w-1].data == Tile_Type::TILE_NONE) map_pointer->tile[i+map_pointer->w-1].data = Tile_Type::TILE_WALL;
-        if (map_pointer->tile[i+map_pointer->w+1].data == Tile_Type::TILE_NONE) map_pointer->tile[i+map_pointer->w+1].data = Tile_Type::TILE_WALL;
-        if (map_pointer->tile[i+map_pointer->w].data == Tile_Type::TILE_NONE)   map_pointer->tile[i+map_pointer->w].data   = Tile_Type::TILE_WALL;
-        if (map_pointer->tile[i-map_pointer->w-1].data == Tile_Type::TILE_NONE) map_pointer->tile[i-map_pointer->w-1].data = Tile_Type::TILE_WALL;
-        if (map_pointer->tile[i-map_pointer->w+1].data == Tile_Type::TILE_NONE) map_pointer->tile[i-map_pointer->w+1].data = Tile_Type::TILE_WALL;
-        if (map_pointer->tile[i-map_pointer->w].data == Tile_Type::TILE_NONE)   map_pointer->tile[i-map_pointer->w].data   = Tile_Type::TILE_WALL;
+        if (map_pointer->tile[i-1].data == TILE_NONE) map_pointer->tile[i-1].data = TILE_WALL;
+        if (map_pointer->tile[i+1].data == TILE_NONE) map_pointer->tile[i+1].data = TILE_WALL;
+        if (map_pointer->tile[i+map_pointer->w-1].data == TILE_NONE) map_pointer->tile[i+map_pointer->w-1].data = TILE_WALL;
+        if (map_pointer->tile[i+map_pointer->w+1].data == TILE_NONE) map_pointer->tile[i+map_pointer->w+1].data = TILE_WALL;
+        if (map_pointer->tile[i+map_pointer->w].data == TILE_NONE)   map_pointer->tile[i+map_pointer->w].data   = TILE_WALL;
+        if (map_pointer->tile[i-map_pointer->w-1].data == TILE_NONE) map_pointer->tile[i-map_pointer->w-1].data = TILE_WALL;
+        if (map_pointer->tile[i-map_pointer->w+1].data == TILE_NONE) map_pointer->tile[i-map_pointer->w+1].data = TILE_WALL;
+        if (map_pointer->tile[i-map_pointer->w].data == TILE_NONE)   map_pointer->tile[i-map_pointer->w].data   = TILE_WALL;
     }
 }
 
@@ -883,6 +892,6 @@ void map_gen_map_exits (Map* map_pointer)
         }
     }
     std::cout << "Stairs generated on tile " << fr1 << " and tile " << fr2 << std::endl;
-    map_pointer->tile[fr1].data = Tile_Type::TILE_EXIT;
-    map_pointer->tile[fr2].data = Tile_Type::TILE_EXIT;
+    map_pointer->tile[fr1].data = TILE_EXIT;
+    map_pointer->tile[fr2].data = TILE_EXIT;
 }

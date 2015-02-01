@@ -333,9 +333,7 @@ void MapGenerator_D1::GenerateMap(Map* map_pointer)
         if ((map_pointer->no_of_rooms >= min_rooms)&&(map_gen_room_flood_fill(map_pointer))) done = true;
         if (!done) map_gen_BSP_internal(map_pointer);
     }
-    map_check(map_pointer);
-    //map_gen_map_exits(map_pointer);
-    //map_gen_room_doors(map_pointer);
+    //map_check(map_pointer,intermediate_layer);
 }
 
 void MapGenerator_D1::GenerateMap(Map* map_pointer, int seed)

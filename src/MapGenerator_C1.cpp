@@ -97,6 +97,7 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
             }
         }
     }
+    map_check(map_pointer,current_layer);
     for (int i = 0; i < map_pointer->size(); i++)
     {
         fill_data[i].tile_data = (current_layer)[i%map_pointer->w][i/map_pointer->w];
@@ -110,7 +111,6 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
         if (fill_data[i].tile_join) (current_layer)[i%map_pointer->w][i/map_pointer->w] = TILE_FLOOR;
         else (current_layer)[i%map_pointer->w][i/map_pointer->w] = TILE_WALL;
     }
-    map_check(map_pointer);
     delete[] fill_data;
 }
 
