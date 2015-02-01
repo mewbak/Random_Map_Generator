@@ -255,7 +255,7 @@
        <item>
         <widget class="QLineEdit" name="lineEdit">
          <property name="text">
-          <string>default</string>
+          <string>default.txt</string>
          </property>
         </widget>
        </item>
