@@ -112,7 +112,6 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
     }
     map_check(map_pointer);
     delete[] fill_data;
-    //generate object / collision layer? Done during applying tile set?
 }
 
 void MapGenerator_C1::GenerateMap(Map* map_pointer, int seed)
