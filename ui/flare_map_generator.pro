@@ -11,8 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = flare_MAP_GENERATOR
 TEMPLATE = app
 
-CONFIG += c++11
-
 INCLUDEPATH += ../src \
                ../src/flare \
 
