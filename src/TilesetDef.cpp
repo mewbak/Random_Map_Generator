@@ -311,6 +311,13 @@ int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
             return 0;
         }
     }
+    if ( (type == TILE_FLOOR_RIGHT_HALF && tileset.size() == 0) || (type == TILE_FLOOR_LEFT_HALF && tileset.size() == 0) )
+    {
+        return getRandomTile(_tileset, TILESET_TILE_TYPE::_TILE_FLOOR);
+    }
+
+    if (tileset.size() == 0)
+        return 0;
 
     rand_value = rand() % tileset.size();
     it = tileset.begin();

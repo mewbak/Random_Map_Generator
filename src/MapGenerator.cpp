@@ -196,10 +196,10 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
             switch (map_pointer->layers[intermediate][i][j])
             {
                 case Tile_Type::TILE_FLOOR:
-                    map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                    map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::_TILE_FLOOR);
                     map_pointer->layers[collision][i][j] = 0;
-                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                    TILESET_TILE_TYPE::TILE_OBJECT);
                 break;
                 case Tile_Type::TILE_WALL:
@@ -210,7 +210,7 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[1].x][temp_tile[1].y] == Tile_Type::TILE_WALL)&&
                             (map_pointer->layers[intermediate][temp_tile[5].x][temp_tile[5].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_UP);
                     }
                     //wall down
@@ -219,9 +219,9 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[1].x][temp_tile[1].y] == Tile_Type::TILE_WALL)&&
                             (map_pointer->layers[intermediate][temp_tile[2].x][temp_tile[2].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_DOWN);
-                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                            TILESET_TILE_TYPE::_TILE_FLOOR);
                     }
                     //wall left
@@ -230,7 +230,7 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[5].x][temp_tile[5].y] == Tile_Type::TILE_WALL)&&
                             (map_pointer->layers[intermediate][temp_tile[0].x][temp_tile[0].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_LEFT);
                     }
                     //wall right
@@ -239,9 +239,9 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[5].x][temp_tile[5].y] == Tile_Type::TILE_WALL)&&
                             (map_pointer->layers[intermediate][temp_tile[1].x][temp_tile[1].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_RIGHT);
-                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                            TILESET_TILE_TYPE::_TILE_FLOOR);
                     }
                     //wall convex down
@@ -250,9 +250,9 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[2].x][temp_tile[2].y] == Tile_Type::TILE_WALL)&&
                             (map_pointer->layers[intermediate][temp_tile[3].x][temp_tile[3].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_convex_down);
-                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                            TILESET_TILE_TYPE::_TILE_FLOOR);
                     }
                     //wall concave down
@@ -261,9 +261,9 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[2].x][temp_tile[2].y] == Tile_Type::TILE_FLOOR)&&
                             (map_pointer->layers[intermediate][temp_tile[3].x][temp_tile[3].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_concave_down);
-                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                            TILESET_TILE_TYPE::_TILE_FLOOR);
                     }
                     //wall convex left
@@ -272,7 +272,7 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[2].x][temp_tile[2].y] == Tile_Type::TILE_WALL)&&
                             (map_pointer->layers[intermediate][temp_tile[4].x][temp_tile[4].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_convex_left);
                     }
                     //wall concave left
@@ -281,9 +281,9 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[2].x][temp_tile[2].y] == Tile_Type::TILE_FLOOR)&&
                             (map_pointer->layers[intermediate][temp_tile[4].x][temp_tile[4].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_concave_left);
-                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                            TILESET_TILE_TYPE::TILE_FLOOR_LEFT_HALF);
                     }
                     //wall convex up
@@ -292,7 +292,7 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[0].x][temp_tile[0].y] == Tile_Type::TILE_WALL)&&
                             (map_pointer->layers[intermediate][temp_tile[7].x][temp_tile[7].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_convex_up);
                     }
                     //wall concave up
@@ -301,7 +301,7 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[0].x][temp_tile[0].y] == Tile_Type::TILE_FLOOR)&&
                             (map_pointer->layers[intermediate][temp_tile[7].x][temp_tile[7].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_concave_up);
                     }
                     //wall convex right
@@ -310,7 +310,7 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[5].x][temp_tile[5].y] == Tile_Type::TILE_WALL)&&
                             (map_pointer->layers[intermediate][temp_tile[6].x][temp_tile[6].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_convex_right);
                     }
                     //wall concave right
@@ -319,9 +319,9 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
                             (map_pointer->layers[intermediate][temp_tile[5].x][temp_tile[5].y] == Tile_Type::TILE_FLOOR)&&
                             (map_pointer->layers[intermediate][temp_tile[6].x][temp_tile[6].y] == Tile_Type::TILE_FLOOR))
                     {
-                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                        TILESET_TILE_TYPE::TILE_WALL_concave_right);
-                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(TILESET::TILESET_CAVE,
+                        map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                            TILESET_TILE_TYPE::TILE_FLOOR_RIGHT_HALF);
                     }
                 break;
@@ -337,7 +337,7 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
             }
         }
     }
-
+    
     // remove intermediate layer. Currently breaks UI Preview
     //map_pointer->layers.erase(map_pointer->layers.begin() + intermediate);
     //map_pointer->layernames.erase(map_pointer->layernames.begin() + intermediate);
