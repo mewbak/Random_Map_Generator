@@ -22,7 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_SAVER
 #define MAP_SAVER
 
-#include "Map.h"
+#include "flare/Map.h"
 
 class MapSaver {
 public:
@@ -45,4 +45,4 @@ private:
     std::string dest_file;
 };
 
-#endif MAP_SAVER
+#endif //MAP_SAVER

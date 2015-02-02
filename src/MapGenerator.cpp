@@ -22,7 +22,7 @@
 #include <fstream>
 #include "MapGenerator.h"
 #include "MapHelper.h"
-#include "export/MapSaver.h"
+#include "flare/MapSaver.h"
 #include "TilesetDef.h"
 
 
