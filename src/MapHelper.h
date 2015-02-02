@@ -65,22 +65,17 @@ struct MapNode
     MapNode* right;
 };
 
-struct AppData
+struct MapProperties
 {
-    // this is only used by QT front end.
-    int     progress;
-    int     algorithm;
-    int     tile_set;
-    int     output_format;
-    int     size_x;
-    int     size_y;
-    int     seed;
-    bool    seed_set;
-    bool    gen_exits;
-    bool    gen_enemies;
-    bool    gen_chests;
-    std::string file_name;
-    std::string status;
+    Algorithm_Type  algorithm;
+    TILESET         tile_set;
+    int             size_x;
+    int             size_y;
+    int             seed;
+    bool            seed_set;
+    bool            gen_exits;
+    bool            gen_enemies;
+    bool            gen_chests;
 };
 
 void map_check                   (Map* map_pointer, maprow *layer);
@@ -99,6 +94,6 @@ void map_gen_room_find           (Map* map_pointer);
 void map_gen_redundant_tile_check(Map* map_pointer);
 void map_gen_map_exits           (Map* map_pointer);
 
-void MapGenerate(Map* map_pointer, Algorithm_Type generation_algorithm, int dimension_x, int dimension_y, TILESET tileset);
+void MapGenerate(Map* map_pointer, MapProperties properties);
 
 #endif // MAP_HELPER

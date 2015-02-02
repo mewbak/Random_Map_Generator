@@ -143,11 +143,11 @@ void map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias)
     map_gen_maze(map_pointer, ((tile_y * map_pointer->w) + tile_x),direction_bias);
 }
 
-void MapGenerator_M1::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset)
+void MapGenerator_M1::Generate (Map* map_pointer, MapProperties properties)
 {
-    Initialize(map_pointer, dimension_x, dimension_y);
+    Prepare(map_pointer, properties);
     GenerateMap(map_pointer);
-    applyTileset(map_pointer, tileset);
+    applyTileset(map_pointer, properties.tile_set);
 }
 
 void MapGenerator_M1::GenerateMap(Map* map_pointer)
@@ -168,10 +168,4 @@ void MapGenerator_M1::GenerateMap(Map* map_pointer)
     map_gen_room(map_pointer,room_data);
     map_gen_maze(map_pointer,map_pointer->w/2,map_pointer->h/2,DIRECTION_BIAS_NORTH);
     map_gen_room_exits(map_pointer);
-}
-
-void MapGenerator_M1::GenerateMap(Map* map_pointer, int seed)
-{
-    srand(seed);
-    GenerateMap(map_pointer);
 }

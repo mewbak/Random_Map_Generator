@@ -8,22 +8,22 @@
 #include "MapGenerator_D2.h"
 #include "MapGenerator_M1.h"
 
-void MapGenerate(Map* map_pointer, Algorithm_Type generation_algorithm, int dimension_x, int dimension_y, TILESET tileset)
+void MapGenerate(Map* map_pointer, MapProperties properties)
 {
     MapGenerator* generator = NULL;
-    if (generation_algorithm == Algorithm_Type::GEN_ALGORITHM_C1) {
+    if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_C1) {
         generator = new MapGenerator_C1();
     }
-    else if (generation_algorithm == Algorithm_Type::GEN_ALGORITHM_D1) {
+    else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_D1) {
         generator = new MapGenerator_D1();
     }
-    else if (generation_algorithm == Algorithm_Type::GEN_ALGORITHM_D2) {
+    else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_D2) {
         generator = new MapGenerator_D2();
     }
-    else if (generation_algorithm == Algorithm_Type::GEN_ALGORITHM_M1) {
+    else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_M1) {
         generator = new MapGenerator_M1();
     }
-    generator->Generate(map_pointer, dimension_x, dimension_y, tileset);
+    generator->Generate(map_pointer, properties);
     delete generator;
 }
 

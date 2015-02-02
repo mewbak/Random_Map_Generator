@@ -20,17 +20,11 @@
 
 #include "MapGenerator_C1.h"
 
-void MapGenerator_C1::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset)
+void MapGenerator_C1::Generate (Map* map_pointer, MapProperties properties)
 {
-    Initialize(map_pointer, dimension_x, dimension_y);
+    Prepare(map_pointer, properties);
     GenerateMap(map_pointer);
-    applyTileset(map_pointer, tileset);
-}
-
-void MapGenerator_C1::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset, int seed)
-{
-    srand(seed);
-    Generate(map_pointer, dimension_x, dimension_y, tileset);
+    applyTileset(map_pointer, properties.tile_set);
 }
 
 void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number)

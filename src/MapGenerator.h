@@ -39,11 +39,15 @@ class MapGenerator
 {
     public:
         virtual ~MapGenerator(void) {};
-        void Initialize (Map* map_pointer, int dimension_x, int dimension_y);
-        virtual void Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset) = 0;
         static void Export (Map* map_pointer, std::string file_name);
+        virtual void Generate (Map* map_pointer, MapProperties properties) = 0;
 
+    protected:
+        void Prepare (Map* map_pointer, MapProperties properties);
         static void applyTileset(Map* map_pointer, TILESET tileset);
+
+    private:
+        void Initialize (Map* map_pointer, int dimension_x, int dimension_y);
 };
 
 #endif // MAP_GENERATOR_H

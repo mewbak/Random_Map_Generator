@@ -78,6 +78,16 @@ void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y
     }
 }
 
+void MapGenerator::Prepare(Map *map_pointer, MapProperties properties)
+{
+    Initialize(map_pointer, properties.size_x, properties.size_y);
+    if (properties.seed_set)
+    {
+        srand(properties.seed);
+    }
+    else srand(time(NULL));
+}
+
 void MapGenerator::Export(Map* map_pointer, std::string file_name)
 {
     MapSaver* mapSaver = new MapSaver(map_pointer);
@@ -327,4 +337,8 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
             }
         }
     }
+
+    // remove intermediate layer. Currently breaks UI Preview
+    //map_pointer->layers.erase(map_pointer->layers.begin() + intermediate);
+    //map_pointer->layernames.erase(map_pointer->layernames.begin() + intermediate);
 }

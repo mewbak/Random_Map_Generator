@@ -91,15 +91,20 @@ void MainWindow::on_pushButton_released()
     app_data.file_name = MainWindow::ui->lineEdit->text().toStdString();
     this->ui->progressBar->setValue(0);
     this->ui->label_status->setText("Seeding random...");
-    if (app_data.seed_set)
-        srand(app_data.seed);
-    else srand(time(NULL));
     this->ui->progressBar->setValue(1);
     this->ui->label_status->setText("Initializing intermediate map...");
     this->ui->progressBar->setValue(10);
     this->ui->label_status->setText("Generating map...");
-    MapGenerate(map_pointer, static_cast<Algorithm_Type>(app_data.algorithm), app_data.size_x, app_data.size_y,
-                             static_cast<TILESET>(app_data.tile_set));
+
+    MapProperties properties;
+    properties.algorithm = static_cast<Algorithm_Type>(app_data.algorithm);
+    properties.tile_set = static_cast<TILESET>(app_data.tile_set);
+    properties.size_x = app_data.size_x;
+    properties.size_y = app_data.size_y;
+    properties.seed = app_data.seed;
+    properties.seed_set = app_data.seed_set;
+
+    MapGenerate(map_pointer, properties);
 
     this->ui->textEdit_mapview->clear();
 

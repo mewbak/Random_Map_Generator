@@ -316,11 +316,10 @@ void map_gen_BSP_internal(Map* map_pointer)
     map_gen_room_connect_2(map_pointer);
 };
 
-void MapGenerator_D1::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset)
+void MapGenerator_D1::Generate (Map* map_pointer, MapProperties properties)
 {
-    Initialize(map_pointer, dimension_x, dimension_y);
     GenerateMap(map_pointer);
-    applyTileset(map_pointer, tileset);
+    applyTileset(map_pointer, properties.tile_set);
 }
 
 void MapGenerator_D1::GenerateMap(Map* map_pointer)
@@ -334,11 +333,5 @@ void MapGenerator_D1::GenerateMap(Map* map_pointer)
         if (!done) map_gen_BSP_internal(map_pointer);
     }
     //map_check(map_pointer,intermediate_layer);
-}
-
-void MapGenerator_D1::GenerateMap(Map* map_pointer, int seed)
-{
-    srand(seed);
-    GenerateMap(map_pointer);
 }
 

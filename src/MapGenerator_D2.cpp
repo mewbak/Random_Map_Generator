@@ -47,11 +47,11 @@ void map_gen_RC_internal (Map* map_pointer)
     map_gen_room_connect(map_pointer);
 }
 
-void MapGenerator_D2::Generate (Map* map_pointer, int dimension_x, int dimension_y, TILESET tileset)
+void MapGenerator_D2::Generate (Map* map_pointer, MapProperties properties)
 {
-    Initialize(map_pointer, dimension_x, dimension_y);
+    Prepare(map_pointer, properties);
     GenerateMap(map_pointer);
-    applyTileset(map_pointer, tileset);
+    applyTileset(map_pointer, properties.tile_set);
 }
 
 void MapGenerator_D2::GenerateMap(Map* map_pointer)
@@ -64,10 +64,4 @@ void MapGenerator_D2::GenerateMap(Map* map_pointer)
     map_gen_RC_internal(map_pointer);
     if (!map_gen_room_flood_fill(map_pointer)) map_gen_RC_internal(map_pointer);
     //map_check(map_pointer,intermediate_layer);
-}
-
-void MapGenerator_D2::GenerateMap(Map* map_pointer, int seed)
-{
-    srand(seed);
-    GenerateMap(map_pointer);
 }
