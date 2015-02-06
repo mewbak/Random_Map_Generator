@@ -96,7 +96,7 @@ void MapGenerator::Export(Map* map_pointer, std::string file_name)
 }
 
 
-void MapGenerator::applyTileset(Map* map_pointer, TILESET tileset)
+void MapGenerator::applyTileset(Map* map_pointer, TILESET::TILESET tileset)
 {
     switch (tileset)
     {

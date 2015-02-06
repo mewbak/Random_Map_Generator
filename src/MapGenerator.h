@@ -44,7 +44,7 @@ class MapGenerator
 
     protected:
         void Prepare (Map* map_pointer, MapProperties properties);
-        static void applyTileset(Map* map_pointer, TILESET tileset);
+        static void applyTileset(Map* map_pointer, TILESET::TILESET tileset);
 
     private:
         void Initialize (Map* map_pointer, int dimension_x, int dimension_y);

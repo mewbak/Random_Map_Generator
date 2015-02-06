@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     app_data.seed          = time(NULL);
     app_data.seed_set      = false;
     app_data.status        = "Ready";
-    app_data.tile_set      = TILESET_CAVE;
+    app_data.tile_set      = TILESET::TILESET_CAVE;
 }
 
 MainWindow::~MainWindow()
@@ -97,8 +97,8 @@ void MainWindow::on_pushButton_released()
     this->ui->label_status->setText("Generating map...");
 
     MapProperties properties;
-    properties.algorithm = static_cast<Algorithm_Type>(app_data.algorithm);
-    properties.tile_set = static_cast<TILESET>(app_data.tile_set);
+    properties.algorithm = static_cast<Algorithm_Type::Algorithm_Type>(app_data.algorithm);
+    properties.tile_set = static_cast<TILESET::TILESET>(app_data.tile_set);
     properties.size_x = app_data.size_x;
     properties.size_y = app_data.size_y;
     properties.seed = app_data.seed;

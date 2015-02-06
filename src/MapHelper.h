@@ -6,13 +6,19 @@
 #include <math.h>
 #include "flare/Map.h"
 
-enum TILESET {TILESET_CAVE = 0, TILESET_DUNGEON = 1, TILESET_GRASSLAND = 2};
+namespace TILESET
+{
+    enum TILESET {TILESET_CAVE, TILESET_DUNGEON, TILESET_GRASSLAND};
+}
 
 #define OUTPUT_FORMAT_FLARE           0
 #define OUTPUT_FORMAT_TILED           1
 #define OUTPUT_FORMAT_FROST_AND_FLAME 2
 
-enum Tile_Type {TILE_NONE = 0, TILE_WALL = 1, TILE_FLOOR = 2, TILE_EXIT = 3, TILE_DOOR = 4, TILE_KEY = 5, TILE_PATH = 6};
+namespace Tile_Type
+{
+    enum Tile_Type {TILE_NONE, TILE_WALL, TILE_FLOOR, TILE_EXIT, TILE_DOOR, TILE_KEY, TILE_PATH};
+}
 
 #define TILE_ATTRIBUTE_NONE        0
 #define TILE_ATTRIBUTE_PROCESSED   1
@@ -26,12 +32,15 @@ enum Tile_Type {TILE_NONE = 0, TILE_WALL = 1, TILE_FLOOR = 2, TILE_EXIT = 3, TIL
 #define DIRECTION_BIAS_SOUTH       3
 #define DIRECTION_BIAS_WEST        4
 
-enum Algorithm_Type {GEN_ALGORITHM_C1 = 0,
-                     GEN_ALGORITHM_M1 = 1,
-                     GEN_ALGORITHM_D1 = 2,
-                     GEN_ALGORITHM_D2 = 3,
-                     GEN_ALGORITHM_D3 = 4,
-                     GEN_ALGORITHM_T1 = 5};
+namespace Algorithm_Type
+{
+    enum Algorithm_Type {GEN_ALGORITHM_C1,
+                         GEN_ALGORITHM_M1,
+                         GEN_ALGORITHM_D1,
+                         GEN_ALGORITHM_D2,
+                         GEN_ALGORITHM_D3,
+                         GEN_ALGORITHM_T1};
+}
 
 #define ROOM_MAX                   64
 #define ROOM_PATH                  2
@@ -67,8 +76,8 @@ struct MapNode
 
 struct MapProperties
 {
-    Algorithm_Type  algorithm;
-    TILESET         tile_set;
+    Algorithm_Type::Algorithm_Type  algorithm;
+    TILESET::TILESET                 tile_set;
     int             size_x;
     int             size_y;
     int             seed;
