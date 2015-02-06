@@ -27,14 +27,14 @@ void path_init_map (Map* map_pointer, int tile_start, int tile_end)
         map_pointer->tile[i].G = 0;
         map_pointer->tile[i].F = 0;
         map_pointer->tile[i].parent = 0;
-        if (map_pointer->tile[i].data == TILE_PATH) map_pointer->tile[i].data = TILE_FLOOR;
+        if (map_pointer->tile[i].data == Tile_Type::TILE_PATH) map_pointer->tile[i].data = Tile_Type::TILE_FLOOR;
     }
     map_pointer->tile[tile_start].parent = tile_start;
 }
 
 void path_calc_node(Map* map_pointer, int tile_no, int tile_start, int tile_end)
 {
-    if ((map_pointer->tile[tile_no].data != TILE_WALL) && (!map_pointer->tile[tile_no].closed_list))
+    if ((map_pointer->tile[tile_no].data != Tile_Type::TILE_WALL) && (!map_pointer->tile[tile_no].closed_list))
     {
         if (map_pointer->tile[tile_no].open_list)
         {
@@ -206,7 +206,7 @@ void get_path_data(Map* map_pointer, path_type* path_pointer, int tile_start, in
     int tile_next = tile_end;
     for (int i = 0; i < path_pointer->length; i++)
     {
-        map_pointer->tile[tile_next].data = TILE_PATH; // debug
+        map_pointer->tile[tile_next].data = Tile_Type::TILE_PATH; // debug
         path_pointer->data[path_pointer->length-i-1] = tile_next;
         tile_next = map_pointer->tile[tile_next].parent;
     }

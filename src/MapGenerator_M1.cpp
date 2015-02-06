@@ -113,7 +113,7 @@ bool isWallTile(Map* map_pointer, int tile)
     int x = tile % map_pointer->w;
     int y = tile / map_pointer->w;
      
-    if (x >= 0 && y >= 0 && x < map_pointer->w && y < map_pointer->h && map_pointer->layers[intermediate][x][y] != TILE_WALL)
+    if (x >= 0 && y >= 0 && x < map_pointer->w && y < map_pointer->h && map_pointer->layers[intermediate][x][y] != Tile_Type::TILE_WALL)
     {
         return false;
     }
@@ -125,7 +125,7 @@ void map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias)
     int intermediate = findLayerByName("intermediate");
     if (intermediate == -1) return;
 
-    map_pointer->layers[intermediate][tile_x][tile_y] = TILE_FLOOR;
+    map_pointer->layers[intermediate][tile_x][tile_y] = Tile_Type::TILE_FLOOR;
     
     int attribute = findLayerByName("attribute");
     if (attribute == -1) return;
@@ -228,7 +228,7 @@ void MapGenerator_M1::GenerateMap(Map* map_pointer)
     {
         for (int i = 0; i < map_pointer->w; i++)
         {
-            (current_layer)[i][j] = TILE_WALL;
+            (current_layer)[i][j] = Tile_Type::TILE_WALL;
             (attribute_layer)[i][j] = TILE_ATTRIBUTE_NONE;
         }
     }

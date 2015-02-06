@@ -60,20 +60,20 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
         for (int i = 0; i < map_pointer->w; i++)
         {
             if ((j == 0)||(j == map_pointer->h-1)||(i == 0)||(i == map_pointer->w-1))
-                (current_layer)[i][j] = TILE_WALL;
+                (current_layer)[i][j] = Tile_Type::TILE_WALL;
             else
-                (current_layer)[i][j] = TILE_FLOOR;
+                (current_layer)[i][j] = Tile_Type::TILE_FLOOR;
         }
     }
     for (int i = 0; i < ((map_pointer->size()) * 0.6); i++)
     {
-        (current_layer)[rand() % map_pointer->w][rand() % map_pointer->h] = TILE_WALL;
+        (current_layer)[rand() % map_pointer->w][rand() % map_pointer->h] = Tile_Type::TILE_WALL;
     }
     for(int j = -1; j < 2; j++)
     {
         for(int i = -1; i < 2; i++)
         {
-            (current_layer)[(map_pointer->w/2)+i][(map_pointer->h/2)+j] = TILE_FLOOR;
+            (current_layer)[(map_pointer->w/2)+i][(map_pointer->h/2)+j] = Tile_Type::TILE_FLOOR;
         }
     }
     for (int s = 0; s < 2; s++)
@@ -83,17 +83,17 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
             for (int i = 1; i < map_pointer->w-1; i++)
             {
                 int num_walls = 0;
-                if ((current_layer)[i][j-1] == TILE_WALL) num_walls++;
-                if ((current_layer)[i][j+1] == TILE_WALL) num_walls++;
-                if ((current_layer)[i-1][j] == TILE_WALL) num_walls++;
-                if ((current_layer)[i-1][j-1] == TILE_WALL) num_walls++;
-                if ((current_layer)[i-1][j+1] == TILE_WALL) num_walls++;
-                if ((current_layer)[i+1][j] == TILE_WALL) num_walls++;
-                if ((current_layer)[i+1][j-1] == TILE_WALL) num_walls++;
-                if ((current_layer)[i+1][j+1] == TILE_WALL) num_walls++;
-                if (((current_layer)[i][j] == TILE_WALL)&&(num_walls > 3)) (current_layer)[i][j] = TILE_WALL;
-                else if (((current_layer)[i][j] == TILE_FLOOR)&&(num_walls > 4)) (current_layer)[i][j] = TILE_WALL;
-                else (current_layer)[i][j] = TILE_FLOOR;
+                if ((current_layer)[i][j-1] == Tile_Type::TILE_WALL) num_walls++;
+                if ((current_layer)[i][j+1] == Tile_Type::TILE_WALL) num_walls++;
+                if ((current_layer)[i-1][j] == Tile_Type::TILE_WALL) num_walls++;
+                if ((current_layer)[i-1][j-1] == Tile_Type::TILE_WALL) num_walls++;
+                if ((current_layer)[i-1][j+1] == Tile_Type::TILE_WALL) num_walls++;
+                if ((current_layer)[i+1][j] == Tile_Type::TILE_WALL) num_walls++;
+                if ((current_layer)[i+1][j-1] == Tile_Type::TILE_WALL) num_walls++;
+                if ((current_layer)[i+1][j+1] == Tile_Type::TILE_WALL) num_walls++;
+                if (((current_layer)[i][j] == Tile_Type::TILE_WALL)&&(num_walls > 3)) (current_layer)[i][j] = Tile_Type::TILE_WALL;
+                else if (((current_layer)[i][j] == Tile_Type::TILE_FLOOR)&&(num_walls > 4)) (current_layer)[i][j] = Tile_Type::TILE_WALL;
+                else (current_layer)[i][j] = Tile_Type::TILE_FLOOR;
             }
         }
     }
@@ -108,8 +108,8 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
     CheckJoiningTiles(map_pointer,fill_data,(map_pointer->w*(map_pointer->h/2))+(map_pointer->w/2));
     for (int i = 0; i < map_pointer->size(); i++)
     {
-        if (fill_data[i].tile_join) (current_layer)[i%map_pointer->w][i/map_pointer->w] = TILE_FLOOR;
-        else (current_layer)[i%map_pointer->w][i/map_pointer->w] = TILE_WALL;
+        if (fill_data[i].tile_join) (current_layer)[i%map_pointer->w][i/map_pointer->w] = Tile_Type::TILE_FLOOR;
+        else (current_layer)[i%map_pointer->w][i/map_pointer->w] = Tile_Type::TILE_WALL;
     }
     delete[] fill_data;
 }

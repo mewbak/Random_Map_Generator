@@ -1,4 +1,5 @@
 #include <iostream>
+#include "a-star.h"
 #include "flare/Map.h"
 #include "MapHelper.h"
 #include "MapGenerator.h"

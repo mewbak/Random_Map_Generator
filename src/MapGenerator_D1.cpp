@@ -28,7 +28,7 @@ void map_gen_base_BSP(Map* map_pointer)
     node_count = 0;
     for (int i = 0; i < map_pointer->size(); i++)
     {
-        map_pointer->tile[i].data      = TILE_WALL;
+        map_pointer->tile[i].data      = Tile_Type::TILE_WALL;
         map_pointer->tile[i].attribute = TILE_ATTRIBUTE_NONE;
         map_pointer->no_of_rooms       = 0;
         for (int i = 0; i < ROOM_MAX; i++)
@@ -151,7 +151,7 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
         int passage_x_2 = (map_node->right->data.w/2)+map_node->left->data.w;
         for (int pos_x = passage_x_1;pos_x < passage_x_2;pos_x++)
         {
-            map_node->data.tile[((passage_y*map_node->data.w)+pos_x)].data = TILE_FLOOR;
+            map_node->data.tile[((passage_y*map_node->data.w)+pos_x)].data = Tile_Type::TILE_FLOOR;
         }
         */
         delete[] map_node->left->data.tile;
@@ -242,7 +242,7 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
         int passage_y_2 = (map_node->right->data.h/2)+map_node->left->data.h;
         for (int pos_y = passage_y_1;pos_y < passage_y_2;pos_y++)
         {
-            map_node->data.tile[((pos_y*map_node->data.w)+passage_x)].data = TILE_FLOOR;
+            map_node->data.tile[((pos_y*map_node->data.w)+passage_x)].data = Tile_Type::TILE_FLOOR;
         }
         */
         delete[] map_node->left->data.tile;
@@ -272,7 +272,7 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
         {
             for (int x_position = (room_size_x+1); x_position < (map_node->data.w-1-room_size_x); x_position++)
             {
-                map_node->data.tile[((y_position*map_node->data.w)+x_position)].data = TILE_FLOOR;
+                map_node->data.tile[((y_position*map_node->data.w)+x_position)].data = Tile_Type::TILE_FLOOR;
             }
 
         }
