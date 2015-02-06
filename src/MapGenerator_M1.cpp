@@ -1,14 +1,21 @@
 
 #include "MapGenerator_M1.h"
 
-bool map_gen_maze_check_tile(Map* map_pointer, int tile_count, int direction_bias)
+bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
 {
     bool return_value = true;
-    if (tile_count < map_pointer->w) return_value = false;
-    if (tile_count > (map_pointer->size() - map_pointer->w-1)) return_value = false;
-    if (!(tile_count % map_pointer->w)) return_value = false;
-    if (!((tile_count+1) % map_pointer->w)) return_value = false;
-    if (map_pointer->tile[tile_count].attribute == TILE_ATTRIBUTE_PROCESSED) return_value = false;
+    
+    if (tile.y == 0 || tile.y == map_pointer->h-1 || tile.x == 0 || tile.x == map_pointer->w-1)
+    {
+        return_value = false;
+    }
+    int attribute = findLayerByName("attribute");
+    if (attribute == -1) return false;
+
+    if (map_pointer->layers[attribute][tile.x][tile.y] == TILE_ATTRIBUTE_PROCESSED) return_value = false;
+    
+    int tile_count = tile.y * map_pointer->w + tile.x;
+    
     if (return_value)
     {
         switch (direction_bias)
@@ -16,41 +23,65 @@ bool map_gen_maze_check_tile(Map* map_pointer, int tile_count, int direction_bia
             case DIRECTION_BIAS_NORTH:
                 for (int wall_count = 1; wall_count <= WALL_WIDTH; wall_count++)
                 {
-                    if (((tile_count-wall_count) < map_pointer->size()) && ((tile_count-wall_count) > 0) && (map_pointer->tile[tile_count-wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+wall_count) < map_pointer->size()) && ((tile_count+wall_count) > 0) && (map_pointer->tile[tile_count+wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count-map_pointer->w*wall_count) < map_pointer->size()) && ((tile_count-map_pointer->w*wall_count) > 0) && (map_pointer->tile[tile_count-map_pointer->w*wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count-map_pointer->w-wall_count) < map_pointer->size()) && ((tile_count-map_pointer->w-wall_count) > 0) && (map_pointer->tile[tile_count-map_pointer->w-wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count-map_pointer->w+wall_count) < map_pointer->size()) && ((tile_count-map_pointer->w+wall_count) > 0) && (map_pointer->tile[tile_count-map_pointer->w+wall_count].data != TILE_WALL)) return_value = false;
+                    int t[4];
+                    t[0] = tile_count-wall_count;
+                    t[1] = tile_count+wall_count;
+                    t[2] = tile_count-map_pointer->w*wall_count;
+                    t[3] = tile_count-map_pointer->w-wall_count;
+                    t[4] = tile_count-map_pointer->w+wall_count;
+                    
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (isWallTile(map_pointer, t[i]) return_value = false;
+                    }
                 }
             break;
             case DIRECTION_BIAS_SOUTH:
                 for (int wall_count = 1; wall_count <= WALL_WIDTH; wall_count++)
                 {
-                    if (((tile_count-wall_count) < map_pointer->size()) && ((tile_count-wall_count) > 0) && (map_pointer->tile[tile_count-wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+wall_count) < map_pointer->size()) && ((tile_count+wall_count) > 0) && (map_pointer->tile[tile_count+wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+map_pointer->w*wall_count) < map_pointer->size()) && ((tile_count+map_pointer->w*wall_count) > 0) && (map_pointer->tile[tile_count+map_pointer->w*wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+map_pointer->w-wall_count) < map_pointer->size()) && ((tile_count+map_pointer->w-wall_count) > 0) && (map_pointer->tile[tile_count+map_pointer->w-wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+map_pointer->w+wall_count) < map_pointer->size()) && ((tile_count+map_pointer->w+wall_count) > 0) && (map_pointer->tile[tile_count+map_pointer->w+wall_count].data != TILE_WALL)) return_value = false;
+                    int t[4];
+                    t[0] = tile_count-wall_count;
+                    t[1] = tile_count+wall_count;
+                    t[2] = tile_count+map_pointer->w*wall_count;
+                    t[3] = tile_count+map_pointer->w-wall_count;
+                    t[4] = tile_count+map_pointer->w+wall_count;
+                    
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (isWallTile(map_pointer, t[i]) return_value = false;
+                    }
                 }
             break;
             case DIRECTION_BIAS_EAST:
                 for (int wall_count = 1; wall_count <= WALL_WIDTH; wall_count++)
                 {
-                    if (((tile_count-wall_count) < map_pointer->size()) && ((tile_count-wall_count) > 0) && (map_pointer->tile[tile_count-wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count-map_pointer->w*wall_count) < map_pointer->size()) && ((tile_count-map_pointer->w*wall_count) > 0) && (map_pointer->tile[tile_count-map_pointer->w*wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count-map_pointer->w-wall_count) < map_pointer->size()) && ((tile_count-map_pointer->w-wall_count) > 0) && (map_pointer->tile[tile_count-map_pointer->w-wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+map_pointer->w*wall_count) < map_pointer->size()) && ((tile_count+map_pointer->w*wall_count) > 0) && (map_pointer->tile[tile_count+map_pointer->w*wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+map_pointer->w-wall_count) < map_pointer->size()) && ((tile_count+map_pointer->w-wall_count) > 0) && (map_pointer->tile[tile_count+map_pointer->w-wall_count].data != TILE_WALL)) return_value = false;
+                    int t[4];
+                    t[0] = tile_count-wall_count;
+                    t[1] = tile_count-map_pointer->w*wall_count;
+                    t[2] = tile_count-map_pointer->w-wall_count;
+                    t[3] = tile_count+map_pointer->w*wall_count;
+                    t[4] = tile_count+map_pointer->w-wall_count;
+                    
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (isWallTile(map_pointer, t[i]) return_value = false;
+                    }
                 }
             break;
             case DIRECTION_BIAS_WEST:
                 for (int wall_count = 1; wall_count <= WALL_WIDTH; wall_count++)
                 {
-                    if (((tile_count+wall_count) < map_pointer->size()) && ((tile_count+wall_count) > 0) && (map_pointer->tile[tile_count+wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count-map_pointer->w*wall_count) < map_pointer->size()) && ((tile_count-map_pointer->w*wall_count) > 0) && (map_pointer->tile[tile_count-map_pointer->w*wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count-map_pointer->w+wall_count) < map_pointer->size()) && ((tile_count-map_pointer->w+wall_count) > 0) && (map_pointer->tile[tile_count-map_pointer->w+wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+map_pointer->w*wall_count) < map_pointer->size()) && ((tile_count+map_pointer->w*wall_count) > 0) && (map_pointer->tile[tile_count+map_pointer->w*wall_count].data != TILE_WALL)) return_value = false;
-                    if (((tile_count+map_pointer->w+wall_count) < map_pointer->size()) && ((tile_count+map_pointer->w+wall_count) > 0) && (map_pointer->tile[tile_count+map_pointer->w+wall_count].data != TILE_WALL)) return_value = false;
+                    int t[4];
+                    t[0] = tile_count+wall_count;
+                    t[1] = tile_count-map_pointer->w*wall_count;
+                    t[2] = tile_count-map_pointer->w+wall_count;
+                    t[3] = tile_count+map_pointer->w*wall_count;
+                    t[4] = tile_count+map_pointer->w+wall_count;
+                    
+                    for (int i = 0; i < 5; i++) 
+                    {
+                        if (isWallTile(map_pointer, t[i]) return_value = false;
+                    }
                 }
             break;
             case DIRECTION_BIAS_NONE:
@@ -63,28 +94,66 @@ bool map_gen_maze_check_tile(Map* map_pointer, int tile_count, int direction_bia
     return (return_value);
 };
 
-void map_gen_maze(Map* map_pointer, int tile_count, int direction_bias)
+int findLayerByName(std::string layer)
 {
-    map_pointer->tile[tile_count].data      = TILE_FLOOR;
-    map_pointer->tile[tile_count].attribute = TILE_ATTRIBUTE_PROCESSED;
+    for (unsigned i = 0; i < map_pointer->layers.size(); ++i) {
+        if (map_pointer->layernames[i] == layer) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+bool isWallTile(Map* map_pointer, int tile)
+{
+    int intermediate = findLayerByName("intermediate");
+
+    if (intermediate == -1) return true;
+    
+    int x = tile % map_pointer->w;
+    int y = tile / map_pointer->w;
+     
+    if (x >= 0 && y >= 0 && x < map_pointer->w && y < map_pointer->h && map_pointer->layers[intermediate][x][y] != TILE_WALL)
+    {
+        return false;
+    }
+    return true;
+}
+
+void map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias)
+{
+    int intermediate = findLayerByName("intermediate");
+    if (intermediate == -1) return;
+
+    map_pointer->layers[intermediate][tile_x][tile_y] = TILE_FLOOR;
+    
+    int attribute = findLayerByName("attribute");
+    if (attribute == -1) return;
+
+    map_pointer->layers[attribute][tile_x][tile_y] = TILE_ATTRIBUTE_PROCESSED;
+    
     int  tiles_available    = 1;
     bool new_direction_bias = false;
     int tile_direction      = 0;
     while (tiles_available > 0)
     {
         tiles_available = 0;
-        int  tile_north      = tile_count-map_pointer->w;
-        bool tile_north_ok   = map_gen_maze_check_tile(map_pointer,tile_north,DIRECTION_BIAS_NORTH);
+        Point tile_north     = Point(tile_x, tile_y-1);
+        bool tile_north_ok   = map_gen_maze_check_tile(map_pointer, tile_north, DIRECTION_BIAS_NORTH);
         if (tile_north_ok) tiles_available++;
-        int  tile_south      = tile_count+map_pointer->w;
-        bool tile_south_ok   = map_gen_maze_check_tile(map_pointer,tile_south,DIRECTION_BIAS_SOUTH);
+        
+        Point tile_south     = Point(tile_x, tile_y+1);
+        bool tile_south_ok   = map_gen_maze_check_tile(map_pointer, tile_south, DIRECTION_BIAS_SOUTH);
         if (tile_south_ok) tiles_available++;
-        int  tile_east       = tile_count-1;
-        bool tile_east_ok    = map_gen_maze_check_tile(map_pointer,tile_east,DIRECTION_BIAS_EAST);
+        
+        Point tile_east      = Point(tile_x-1, tile_y);
+        bool tile_east_ok    = map_gen_maze_check_tile(map_pointer, tile_east, DIRECTION_BIAS_EAST);
         if (tile_east_ok) tiles_available++;
-        int  tile_west       = tile_count+1;
-        bool tile_west_ok    = map_gen_maze_check_tile(map_pointer,tile_west,DIRECTION_BIAS_WEST);
+
+        Point tile_west      = Point(tile_x+1, tile_y);
+        bool tile_west_ok    = map_gen_maze_check_tile(map_pointer, tile_west, DIRECTION_BIAS_WEST);
         if (tile_west_ok) tiles_available++;
+        
         if ((new_direction_bias) || (direction_bias == DIRECTION_BIAS_NONE)) tile_direction = (rand() % 4) + 1;
         else
         {
@@ -103,7 +172,7 @@ void map_gen_maze(Map* map_pointer, int tile_count, int direction_bias)
                 {
                     tiles_available--;
                     tile_north_ok = false;
-                    map_gen_maze(map_pointer,tile_north,direction_bias);
+                    map_gen_maze(map_pointer, tile_north.x, tile_north.y, direction_bias);
                 }
             break;
             case DIRECTION_BIAS_SOUTH:
@@ -111,7 +180,7 @@ void map_gen_maze(Map* map_pointer, int tile_count, int direction_bias)
                 {
                     tiles_available--;
                     tile_south_ok = false;
-                    map_gen_maze(map_pointer,tile_south,direction_bias);
+                    map_gen_maze(map_pointer, tile_south.x, tile_south.y, direction_bias);
                 }
             break;
             case DIRECTION_BIAS_EAST:
@@ -119,7 +188,7 @@ void map_gen_maze(Map* map_pointer, int tile_count, int direction_bias)
                 {
                     tiles_available--;
                     tile_east_ok = false;
-                    map_gen_maze(map_pointer,tile_east,direction_bias);
+                    map_gen_maze(map_pointer, tile_east.x, tile_east.y, direction_bias);
                 }
             break;
             case DIRECTION_BIAS_WEST:
@@ -127,7 +196,7 @@ void map_gen_maze(Map* map_pointer, int tile_count, int direction_bias)
                 {
                     tiles_available--;
                     tile_west_ok = false;
-                    map_gen_maze(map_pointer,tile_west,direction_bias);
+                    map_gen_maze(map_pointer, tile_west.x, tile_west.y, direction_bias);
                 }
             break;
             default:
@@ -136,11 +205,6 @@ void map_gen_maze(Map* map_pointer, int tile_count, int direction_bias)
             break;
         }
     }
-}
-
-void map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias)
-{
-    map_gen_maze(map_pointer, ((tile_y * map_pointer->w) + tile_x),direction_bias);
 }
 
 void MapGenerator_M1::Generate (Map* map_pointer, MapProperties properties)
@@ -152,10 +216,21 @@ void MapGenerator_M1::Generate (Map* map_pointer, MapProperties properties)
 
 void MapGenerator_M1::GenerateMap(Map* map_pointer)
 {
-    for (int i = 0; i < map_pointer->size(); i++)
+    maprow *current_layer = new maprow[map_pointer->w];
+    map_pointer->layers.push_back(current_layer);
+    map_pointer->layernames.push_back("intermediate");
+    
+    maprow *attribute_layer = new maprow[map_pointer->w];
+    map_pointer->layers.push_back(attribute_layer);
+    map_pointer->layernames.push_back("attribute");
+    
+    for (int j = 0; j < map_pointer->h; j++)
     {
-        map_pointer->tile[i].data      = TILE_WALL;
-        map_pointer->tile[i].attribute = TILE_ATTRIBUTE_NONE;
+        for (int i = 0; i < map_pointer->w; i++)
+        {
+            (current_layer)[i][j] = TILE_WALL;
+            (attribute_layer)[i][j] = TILE_ATTRIBUTE_NONE;
+        }
     }
     Room room_data;
     room_data.position.x  = 0;
@@ -166,6 +241,11 @@ void MapGenerator_M1::GenerateMap(Map* map_pointer)
     map_gen_room(map_pointer,room_data);
     map_gen_room(map_pointer,room_data);
     map_gen_room(map_pointer,room_data);
-    map_gen_maze(map_pointer,map_pointer->w/2,map_pointer->h/2,DIRECTION_BIAS_NORTH);
+    map_gen_maze(map_pointer,map_pointer->w/2, map_pointer->h/2, DIRECTION_BIAS_NORTH);
     map_gen_room_exits(map_pointer);
+    
+    int attribute = 1;
+    delete [] map_pointer->layers[attribute];
+    map_pointer->layers.erase(map_pointer->layers.begin() + attribute);
+    map_pointer->layernames.erase(map_pointer->layernames.begin() + attribute);
 }
