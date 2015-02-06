@@ -339,6 +339,7 @@ void MapGenerator::applyTileset(Map* map_pointer, TILESET::TILESET tileset)
     }
     
     // remove intermediate layer. Currently breaks UI Preview
+    //delete [] map_pointer->layers[intermediate];
     //map_pointer->layers.erase(map_pointer->layers.begin() + intermediate);
     //map_pointer->layernames.erase(map_pointer->layernames.begin() + intermediate);
 }

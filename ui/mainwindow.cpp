@@ -159,6 +159,7 @@ void MainWindow::renderPreview(Map* map_pointer)
     this->ui->textEdit_mapview->insertHtml(temp_stream.str().c_str());
     
     // this code is here to make preview work. Correct way is to have this in MapGenerator::applyTileset()
+    delete [] map_pointer->layers[intermediate];
     map_pointer->layers.erase(map_pointer->layers.begin() + intermediate);
     map_pointer->layernames.erase(map_pointer->layernames.begin() + intermediate);
 }
