@@ -288,7 +288,7 @@ int TilesetDef::getRandomTile(TILESET::TILESET _tileset, TILESET_TILE_TYPE::TILE
     {
       if (it->second != type)
       {
-        it = tileset.erase(it);
+        tileset.erase(it++);
       }
       else
         ++it;
