@@ -20,9 +20,9 @@
 
 #include "TilesetDef.h"
 
-std::map<int, TILESET_TILE_TYPE> TilesetDef::cave;
-std::map<int, TILESET_TILE_TYPE> TilesetDef::dungeon;
-std::map<int, TILESET_TILE_TYPE> TilesetDef::grassland;
+std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> TilesetDef::cave;
+std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> TilesetDef::dungeon;
+std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> TilesetDef::grassland;
 
 TilesetDef::TilesetDef()
 {
@@ -265,9 +265,9 @@ void TilesetDef::init()
 
 }
 
-int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
+int TilesetDef::getRandomTile(TILESET::TILESET _tileset, TILESET_TILE_TYPE::TILESET_TILE_TYPE type)
 {
-    std::map<int, TILESET_TILE_TYPE> tileset;
+    std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> tileset;
     init();
 
     switch(_tileset)
@@ -283,7 +283,7 @@ int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
         break;
     }
 
-    std::map<int, TILESET_TILE_TYPE>::iterator it = tileset.begin();
+    std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE>::iterator it = tileset.begin();
     while (it != tileset.end())
     {
       if (it->second != type)
@@ -311,7 +311,8 @@ int TilesetDef::getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type)
             return 0;
         }
     }
-    if ( (type == TILE_FLOOR_RIGHT_HALF && tileset.size() == 0) || (type == TILE_FLOOR_LEFT_HALF && tileset.size() == 0) )
+    if ( (type == TILESET_TILE_TYPE::TILE_FLOOR_RIGHT_HALF && tileset.size() == 0) ||
+         (type == TILESET_TILE_TYPE::TILE_FLOOR_LEFT_HALF && tileset.size() == 0) )
     {
         return getRandomTile(_tileset, TILESET_TILE_TYPE::_TILE_FLOOR);
     }

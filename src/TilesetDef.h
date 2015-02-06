@@ -24,42 +24,45 @@
 #include <map>
 #include "MapHelper.h"
 
-enum TILESET_TILE_TYPE {
-    _TILE_FLOOR,
-    TILE_FLOOR_RIGHT_HALF,
-    TILE_FLOOR_LEFT_HALF,
-    TILE_OBJECT,
+namespace TILESET_TILE_TYPE
+{
+    enum TILESET_TILE_TYPE {
+        _TILE_FLOOR,
+        TILE_FLOOR_RIGHT_HALF,
+        TILE_FLOOR_LEFT_HALF,
+        TILE_OBJECT,
 
-    TILE_WALL_UP,
-    TILE_WALL_DOWN,
-    TILE_WALL_LEFT,
-    TILE_WALL_RIGHT,
+        TILE_WALL_UP,
+        TILE_WALL_DOWN,
+        TILE_WALL_LEFT,
+        TILE_WALL_RIGHT,
 
-    TILE_WALL_convex_down,
-    TILE_WALL_concave_down,
+        TILE_WALL_convex_down,
+        TILE_WALL_concave_down,
 
-    TILE_WALL_convex_left,
-    TILE_WALL_concave_left,
+        TILE_WALL_convex_left,
+        TILE_WALL_concave_left,
 
-    TILE_WALL_convex_up,
-    TILE_WALL_concave_up,
+        TILE_WALL_convex_up,
+        TILE_WALL_concave_up,
 
-    TILE_WALL_convex_right,
-    TILE_WALL_concave_right,
+        TILE_WALL_convex_right,
+        TILE_WALL_concave_right,
 
-    TILE_EXIT_LEFT,
-    TILE_EXIT_RIGHT,
+        TILE_EXIT_LEFT,
+        TILE_EXIT_RIGHT,
 
-    TILE_PATH_LEFT,
-    TILE_PATH_RIGHT//,
+        TILE_PATH_LEFT,
+        TILE_PATH_RIGHT//,
 
     //TILE_NONE
     };
+}
 
 class TilesetDef
 {
 public:
-    static int getRandomTile(TILESET _tileset, TILESET_TILE_TYPE type);
+    static int getRandomTile(TILESET::TILESET _tileset, TILESET_TILE_TYPE::TILESET_TILE_TYPE type);
 
 private:
     static void init();
@@ -67,13 +70,13 @@ private:
     //supported tilesets
 
     // Cave
-    static std::map<int, TILESET_TILE_TYPE> cave;
+    static std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> cave;
 
     // dungeon
-    static std::map<int, TILESET_TILE_TYPE> dungeon;
+    static std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> dungeon;
 
     // grassland
-    static std::map<int, TILESET_TILE_TYPE> grassland;
+    static std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> grassland;
 
     TilesetDef();
     ~TilesetDef();

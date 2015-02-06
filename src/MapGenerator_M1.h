@@ -38,6 +38,9 @@ class MapGenerator_M1 : public MapGenerator
 
     private:
         void GenerateMap(Map* map_pointer);
+        bool isWallTile(Map* map_pointer, int tile);
+        bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias);
+        void map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias);
 };
 
 #endif // MAP_GENERATOR_M1_H

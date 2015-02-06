@@ -1,7 +1,17 @@
 
 #include "MapGenerator_M1.h"
 
-bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
+int findLayerByName(Map* map_pointer, std::string layer)
+{
+    for (unsigned i = 0; i < map_pointer->layers.size(); ++i) {
+        if (map_pointer->layernames[i] == layer) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+bool MapGenerator_M1::map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
 {
     bool return_value = true;
     
@@ -9,7 +19,7 @@ bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
     {
         return_value = false;
     }
-    int attribute = findLayerByName("attribute");
+    int attribute = findLayerByName(map_pointer, "attribute");
     if (attribute == -1) return false;
 
     if (map_pointer->layers[attribute][tile.x][tile.y] == TILE_ATTRIBUTE_PROCESSED) return_value = false;
@@ -32,7 +42,7 @@ bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
                     
                     for (int i = 0; i < 5; i++)
                     {
-                        if (isWallTile(map_pointer, t[i]) return_value = false;
+                        if (isWallTile(map_pointer, t[i])) return_value = false;
                     }
                 }
             break;
@@ -48,7 +58,7 @@ bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
                     
                     for (int i = 0; i < 5; i++)
                     {
-                        if (isWallTile(map_pointer, t[i]) return_value = false;
+                        if (isWallTile(map_pointer, t[i])) return_value = false;
                     }
                 }
             break;
@@ -64,7 +74,7 @@ bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
                     
                     for (int i = 0; i < 5; i++)
                     {
-                        if (isWallTile(map_pointer, t[i]) return_value = false;
+                        if (isWallTile(map_pointer, t[i])) return_value = false;
                     }
                 }
             break;
@@ -80,7 +90,7 @@ bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
                     
                     for (int i = 0; i < 5; i++) 
                     {
-                        if (isWallTile(map_pointer, t[i]) return_value = false;
+                        if (isWallTile(map_pointer, t[i])) return_value = false;
                     }
                 }
             break;
@@ -94,19 +104,9 @@ bool map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
     return (return_value);
 };
 
-int findLayerByName(std::string layer)
+bool MapGenerator_M1::isWallTile(Map* map_pointer, int tile)
 {
-    for (unsigned i = 0; i < map_pointer->layers.size(); ++i) {
-        if (map_pointer->layernames[i] == layer) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-bool isWallTile(Map* map_pointer, int tile)
-{
-    int intermediate = findLayerByName("intermediate");
+    int intermediate = findLayerByName(map_pointer, "intermediate");
 
     if (intermediate == -1) return true;
     
@@ -120,14 +120,14 @@ bool isWallTile(Map* map_pointer, int tile)
     return true;
 }
 
-void map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias)
+void MapGenerator_M1::map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int direction_bias)
 {
-    int intermediate = findLayerByName("intermediate");
+    int intermediate = findLayerByName(map_pointer, "intermediate");
     if (intermediate == -1) return;
 
     map_pointer->layers[intermediate][tile_x][tile_y] = Tile_Type::TILE_FLOOR;
     
-    int attribute = findLayerByName("attribute");
+    int attribute = findLayerByName(map_pointer, "attribute");
     if (attribute == -1) return;
 
     map_pointer->layers[attribute][tile_x][tile_y] = TILE_ATTRIBUTE_PROCESSED;
