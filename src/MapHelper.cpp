@@ -27,6 +27,16 @@ void MapGenerate(Map* map_pointer, MapProperties properties)
     delete generator;
 }
 
+int findLayerByName(Map* map_pointer, std::string layer)
+{
+    for (unsigned i = 0; i < map_pointer->layers.size(); ++i) {
+        if (map_pointer->layernames[i] == layer) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 void map_check (Map* map_pointer, maprow *layer)
 {
     int iterations  = 2;

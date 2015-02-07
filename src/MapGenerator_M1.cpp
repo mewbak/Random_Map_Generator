@@ -1,16 +1,6 @@
 
 #include "MapGenerator_M1.h"
 
-int findLayerByName(Map* map_pointer, std::string layer)
-{
-    for (unsigned i = 0; i < map_pointer->layers.size(); ++i) {
-        if (map_pointer->layernames[i] == layer) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 bool MapGenerator_M1::map_gen_maze_check_tile(Map* map_pointer, Point tile, int direction_bias)
 {
     bool return_value = true;

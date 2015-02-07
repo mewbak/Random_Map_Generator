@@ -104,5 +104,6 @@ void map_gen_redundant_tile_check(Map* map_pointer);
 void map_gen_map_exits           (Map* map_pointer);
 
 void MapGenerate(Map* map_pointer, MapProperties properties);
+int findLayerByName(Map* map_pointer, std::string layer);
 
 #endif // MAP_HELPER
