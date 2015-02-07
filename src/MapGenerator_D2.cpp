@@ -10,9 +10,8 @@ bool  RC_circle_collision(float x1, float y1, float r1, float x2, float y2, floa
 
 void map_gen_RC_internal (Map* map_pointer)
 {
-    const int number_of_circles = ROOM_MAX;
-    Room room_node[number_of_circles];
-    for (int node_count = 0; node_count < number_of_circles; node_count++)
+    Room room_node[ROOM_MAX];
+    for (int node_count = 0; node_count < ROOM_MAX; node_count++)
     {
         int map_boundry = 4;
         room_node[node_count].active      = true;
@@ -21,11 +20,11 @@ void map_gen_RC_internal (Map* map_pointer)
         room_node[node_count].position.x  = map_boundry + (room_node[node_count].w/2) + rand() % (map_pointer->w - room_node[node_count].w - (map_boundry*2));
         room_node[node_count].position.y  = map_boundry + (room_node[node_count].h/2) + rand() % (map_pointer->h - room_node[node_count].h - (map_boundry*2));
     }
-    for (int node_count_1 = 0; node_count_1 < number_of_circles; node_count_1++)
+    for (int node_count_1 = 0; node_count_1 < ROOM_MAX; node_count_1++)
     {
         if (room_node[node_count_1].active)
         {
-            for (int node_count_2 = 0; node_count_2 < number_of_circles; node_count_2++)
+            for (int node_count_2 = 0; node_count_2 < ROOM_MAX; node_count_2++)
             {
                 if ((room_node[node_count_2].active) && (node_count_1 != node_count_2))
                 {
@@ -37,7 +36,7 @@ void map_gen_RC_internal (Map* map_pointer)
             }
         }
     }
-    for (int node_count = 0; node_count < number_of_circles; node_count++)
+    for (int node_count = 0; node_count < ROOM_MAX; node_count++)
     {
         if (room_node[node_count].active)
         {
