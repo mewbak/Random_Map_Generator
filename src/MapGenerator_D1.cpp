@@ -118,7 +118,7 @@ void map_gen_D1_split(MapNode *map_node)
             }
         }
         //generate horizontal passages
-        /*
+
         int passage_y   =  map_node->data.h/2;
         int passage_x_1 =  map_node->left->data.w/2;
         int passage_x_2 = (map_node->right->data.w/2)+map_node->left->data.w;
@@ -126,7 +126,7 @@ void map_gen_D1_split(MapNode *map_node)
         {
             map_node->data.tile[((passage_y*map_node->data.w)+pos_x)].data = Tile_Type::TILE_FLOOR;
         }
-        */
+
         delete[] map_node->left->data.tile;
         delete map_node->left;
         delete[] map_node->right->data.tile;
@@ -205,7 +205,7 @@ void map_gen_D1_split(MapNode *map_node)
             }
         }
         //generate vertical passages
-        /*
+
         int passage_x   =  map_node->data.w/2;
         int passage_y_1 =  map_node->left->data.h/2;
         int passage_y_2 = (map_node->right->data.h/2)+map_node->left->data.h;
@@ -213,7 +213,7 @@ void map_gen_D1_split(MapNode *map_node)
         {
             map_node->data.tile[((pos_y*map_node->data.w)+passage_x)].data = Tile_Type::TILE_FLOOR;
         }
-        */
+
         delete[] map_node->left->data.tile;
         delete map_node->left;
         delete[] map_node->right->data.tile;
@@ -238,23 +238,6 @@ void map_gen_D1_split(MapNode *map_node)
             for (int pos_x = (room_size_x+1); pos_x < (map_node->data.w-1-room_size_x); pos_x++)
                 map_node->data.tile[((pos_y*map_node->data.w)+pos_x)].data = Tile_Type::TILE_FLOOR;
         }
-        // set room data for passage gen code
-        /*
-        map_node->room.w = map_node->data.w-2-(room_size_x*2);
-        map_node->room.h = map_node->data.h-2-(room_size_y*2);
-        map_node->room.position.x  = map_node->data.tile[map_node->room.w/2].position.x;
-        map_node->room.position.y  = map_node->data.tile[map_node->room.h/2].position.y;
-        */
-        // Save to room list for future usage?
-        /*
-        map_pointer->room[map_pointer->no_of_rooms].active                = true;
-        map_pointer->room[map_pointer->no_of_rooms].w           = map_node->room.w;
-        map_pointer->room[map_pointer->no_of_rooms].h           = map_node->room.h;
-        map_pointer->room[map_pointer->no_of_rooms].position.x            = map_node->room.position.x;
-        map_pointer->room[map_pointer->no_of_rooms].position.y            = map_node->room.position.y;
-        map_pointer->room[map_pointer->no_of_rooms].no_of_connected_rooms = 0;
-        map_pointer->no_of_rooms++;
-        */
     }
 }
 
@@ -294,7 +277,6 @@ void map_gen_D1_internal(Map* map_pointer)
     }
     delete[] temp_map->data.tile;
     delete temp_map;
-    //map_gen_room_connect_2(map_pointer); // this was an old incomplete function, will re-write
 }
 
 void MapGenerator_D1::Generate (Map* map_pointer, MapProperties properties)
@@ -307,8 +289,5 @@ void MapGenerator_D1::Generate (Map* map_pointer, MapProperties properties)
 void MapGenerator_D1::GenerateMap(Map* map_pointer)
 {
     map_gen_D1_internal(map_pointer);
-    // below lines used after room connect code written
-    //while (!map_gen_flood_fill(map_pointer))
-      //  map_gen_BSP_internal(map_pointer);
 }
 
