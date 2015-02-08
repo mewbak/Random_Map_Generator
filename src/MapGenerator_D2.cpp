@@ -166,5 +166,5 @@ void MapGenerator_D2::Generate (Map* map_pointer, MapProperties properties)
 void MapGenerator_D2::GenerateMap(Map* map_pointer)
 {
     map_gen_RC_internal(map_pointer);
-    if (!map_gen_room_flood_fill(map_pointer)) map_gen_RC_internal(map_pointer);
+    if (!map_gen_flood_fill(map_pointer)) map_gen_RC_internal(map_pointer);
 }

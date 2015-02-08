@@ -134,19 +134,24 @@ int map_gen_flood_fill_tile (Map* map_pointer, FillData* fill_data, int tile_num
     return (return_value);
 }
 
-bool map_gen_room_flood_fill (Map* map_pointer)
+bool map_gen_flood_fill (Map* map_pointer)
 {
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+        if (intermediate == -1) return false;
     int  floor_count  = 0;
     int  first_floor  = -1;
     bool return_value = true;
     FillData* fill_data = new FillData[map_pointer->size()];
-    for(int j = 0; j < map_pointer->size(); j++)
+    for (int j = 0; j < map_pointer->h; j++)
     {
-        if (map_pointer->tile[j].data == Tile_Type::TILE_FLOOR) floor_count++;
-        if ((floor_count == 1) && (first_floor < 0)) first_floor = j;
-        fill_data[j].tile_data = map_pointer->tile[j].data ;
-        fill_data[j].tile_done = false;
-        fill_data[j].tile_join = false;
+        for (int i = 0; i < map_pointer->w; i++)
+        {
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_FLOOR) floor_count++;
+            if ((floor_count == 1) && (first_floor < 0)) first_floor = j;
+            fill_data[(j*map_pointer->w)+i].tile_data = map_pointer->layers[intermediate][i][j];
+            fill_data[(j*map_pointer->w)+i].tile_done = false;
+            fill_data[(j*map_pointer->w)+i].tile_join = false;
+        }
     }
     int   number_found = map_gen_flood_fill_tile(map_pointer,fill_data,first_floor);
     if (number_found < floor_count) return_value = false;
