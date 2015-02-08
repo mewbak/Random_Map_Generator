@@ -31,16 +31,25 @@ void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, FillData* fill_data, i
 {
     if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
     {
+        int map_size = map_pointer->w*map_pointer->h;
         fill_data[tile_number].tile_done = true;
         fill_data[tile_number].tile_join = true;
-        if ((tile_number+1) <= (map_pointer->w*map_pointer->h)) CheckJoiningTiles(map_pointer,fill_data,tile_number+1);
-        if ((tile_number-1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-1);
-        if ((tile_number+map_pointer->w) <= (map_pointer->w*map_pointer->h)) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w);
-        if ((tile_number+map_pointer->w+1) <= (map_pointer->w*map_pointer->h)) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w+1);
-        if ((tile_number+map_pointer->w-1) <= (map_pointer->w*map_pointer->h)) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w-1);
-        if ((tile_number-map_pointer->w) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w);
-        if ((tile_number-map_pointer->w+1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w+1);
-        if ((tile_number-map_pointer->w-1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w-1);
+        if ((tile_number+1) <= map_size)
+            CheckJoiningTiles(map_pointer,fill_data,tile_number+1);
+        if ((tile_number-1) >= 0)
+            CheckJoiningTiles(map_pointer,fill_data,tile_number-1);
+        if ((tile_number+map_pointer->w) <= map_size)
+            CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w);
+        if ((tile_number+map_pointer->w+1) <= map_size)
+            CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w+1);
+        if ((tile_number+map_pointer->w-1) <= map_size)
+            CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w-1);
+        if ((tile_number-map_pointer->w) >= 0)
+            CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w);
+        if ((tile_number-map_pointer->w+1) >= 0)
+            CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w+1);
+        if ((tile_number-map_pointer->w-1) >= 0)
+            CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w-1);
     }
 }
 

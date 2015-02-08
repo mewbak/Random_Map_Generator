@@ -140,17 +140,26 @@ int map_gen_flood_fill_tile (Map* map_pointer, FillData* fill_data, int tile_num
     int return_value = 0;
     if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
     {
+        int map_size = map_pointer->w*map_pointer->h;
         fill_data[tile_number].tile_done = true;
         fill_data[tile_number].tile_join = true;
         return_value++;
-        if ((tile_number+1) <= (map_pointer->w*map_pointer->h)) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+1);
-        if ((tile_number-1) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-1);
-        if ((tile_number+map_pointer->w) <= (map_pointer->w*map_pointer->h)) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w);
-        if ((tile_number+map_pointer->w+1) <= (map_pointer->w*map_pointer->h)) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w+1);
-        if ((tile_number+map_pointer->w-1) <= (map_pointer->w*map_pointer->h)) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w-1);
-        if ((tile_number-map_pointer->w) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w);
-        if ((tile_number-map_pointer->w+1) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w+1);
-        if ((tile_number-map_pointer->w-1) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w-1);
+        if ((tile_number+1) <= map_size)
+            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+1);
+        if ((tile_number-1) >= 0)
+            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-1);
+        if ((tile_number+map_pointer->w) <= map_size)
+            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w);
+        if ((tile_number+map_pointer->w+1) <= map_size)
+            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w+1);
+        if ((tile_number+map_pointer->w-1) <= map_size)
+            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w-1);
+        if ((tile_number-map_pointer->w) >= 0)
+            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w);
+        if ((tile_number-map_pointer->w+1) >= 0)
+            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w+1);
+        if ((tile_number-map_pointer->w-1) >= 0)
+            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w-1);
     }
     return (return_value);
 }
