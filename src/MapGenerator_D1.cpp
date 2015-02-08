@@ -243,6 +243,7 @@ void map_gen_BSP_split(MapNode *map_node)
             for (int x_position = (room_size_x+1); x_position < (map_node->data.w-1-room_size_x); x_position++)
             {
                 map_node->data.tile[((y_position*map_node->data.w)+x_position)].data = Tile_Type::TILE_FLOOR;
+                //std::cout << map_node->data.tile[((y_position*map_node->data.w)+x_position)].data << std::endl;
             }
 
         }
@@ -298,11 +299,12 @@ void map_gen_BSP_internal(Map* map_pointer)
     }
     delete[] temp_map->data.tile;
     delete temp_map;
-    //map_gen_room_connect_2(map_pointer);
+    //map_gen_room_connect_2(map_pointer); // this was an old incomplete function, will re-write
 }
 
 void MapGenerator_D1::Generate (Map* map_pointer, MapProperties properties)
 {
+    Prepare(map_pointer, properties);
     GenerateMap(map_pointer);
     applyTileset(map_pointer, properties.tile_set);
 }
@@ -310,6 +312,7 @@ void MapGenerator_D1::Generate (Map* map_pointer, MapProperties properties)
 void MapGenerator_D1::GenerateMap(Map* map_pointer)
 {
     map_gen_BSP_internal(map_pointer);
+    // below lines used after room connect code written
     //while (!map_gen_flood_fill(map_pointer))
       //  map_gen_BSP_internal(map_pointer);
 }
