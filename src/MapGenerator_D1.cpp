@@ -21,7 +21,7 @@
 #include "MapGenerator_D1.h"
 #include "MapHelper.h"
 
-void map_gen_BSP_split(MapNode *map_node)
+void map_gen_D1_split(MapNode *map_node)
 {
     int  x_range = map_node->data.w - (ROOM_MAX_X*2) - 2;
     int  y_range = map_node->data.h - (ROOM_MAX_Y*2) - 2;
@@ -75,7 +75,7 @@ void map_gen_BSP_split(MapNode *map_node)
                 tile_count_y_out++;
             }
         }
-        map_gen_BSP_split(map_node->left);
+        map_gen_D1_split(map_node->left);
         for(int tile_count = 0; tile_count < map_node->left->data.no_of_tiles; tile_count++)
         {
             for(tile_data_count = 0; tile_data_count < map_node->data.no_of_tiles; tile_data_count++)
@@ -107,7 +107,7 @@ void map_gen_BSP_split(MapNode *map_node)
                 tile_count_y_out++;
             }
         }
-        map_gen_BSP_split(map_node->right);
+        map_gen_D1_split(map_node->right);
         for(int tile_count = 0; tile_count < map_node->right->data.no_of_tiles; tile_count++)
         {
             for(tile_data_count = 0; tile_data_count < map_node->data.no_of_tiles; tile_data_count++)
@@ -162,7 +162,7 @@ void map_gen_BSP_split(MapNode *map_node)
                 tile_count_y_out++;
             }
         }
-        map_gen_BSP_split(map_node->left);
+        map_gen_D1_split(map_node->left);
         for(int tile_count = 0; tile_count < map_node->left->data.no_of_tiles; tile_count++)
         {
             for(tile_data_count = 0; tile_data_count < map_node->data.no_of_tiles; tile_data_count++)
@@ -194,7 +194,7 @@ void map_gen_BSP_split(MapNode *map_node)
                 tile_count_y_out++;
             }
         }
-        map_gen_BSP_split(map_node->right);
+        map_gen_D1_split(map_node->right);
         for(int tile_count = 0; tile_count < map_node->right->data.no_of_tiles; tile_count++)
         {
             for(tile_data_count = 0; tile_data_count < map_node->data.no_of_tiles; tile_data_count++)
@@ -238,6 +238,8 @@ void map_gen_BSP_split(MapNode *map_node)
             for (int pos_x = (room_size_x+1); pos_x < (map_node->data.w-1-room_size_x); pos_x++)
             {
                 map_node->data.tile[((pos_y*map_node->data.w)+pos_x)].data = Tile_Type::TILE_FLOOR;
+                // why does this data is not present?
+                // could have rooms and populate later
             }
 
         }
@@ -261,7 +263,7 @@ void map_gen_BSP_split(MapNode *map_node)
     }
 }
 
-void map_gen_BSP_internal(Map* map_pointer)
+void map_gen_D1_internal(Map* map_pointer)
 {
     if (findLayerByName(map_pointer,"intermediate") == -1)
     {
@@ -284,7 +286,7 @@ void map_gen_BSP_internal(Map* map_pointer)
     {
         temp_map->data.tile[i].data = Tile_Type::TILE_WALL;
     }
-    map_gen_BSP_split(temp_map);
+    map_gen_D1_split(temp_map);
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)
@@ -304,7 +306,7 @@ void MapGenerator_D1::Generate (Map* map_pointer, MapProperties properties)
 
 void MapGenerator_D1::GenerateMap(Map* map_pointer)
 {
-    map_gen_BSP_internal(map_pointer);
+    map_gen_D1_internal(map_pointer);
     // below lines used after room connect code written
     //while (!map_gen_flood_fill(map_pointer))
       //  map_gen_BSP_internal(map_pointer);
