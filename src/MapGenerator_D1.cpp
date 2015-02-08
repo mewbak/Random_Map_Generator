@@ -236,12 +236,7 @@ void map_gen_D1_split(MapNode *map_node)
         for (int pos_y = (room_size_y+1); pos_y < (map_node->data.h-1-room_size_y); pos_y++)
         {
             for (int pos_x = (room_size_x+1); pos_x < (map_node->data.w-1-room_size_x); pos_x++)
-            {
                 map_node->data.tile[((pos_y*map_node->data.w)+pos_x)].data = Tile_Type::TILE_FLOOR;
-                // why does this data is not present?
-                // could have rooms and populate later
-            }
-
         }
         // set room data for passage gen code
         /*
