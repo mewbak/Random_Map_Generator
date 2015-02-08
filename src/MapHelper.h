@@ -46,10 +46,6 @@ namespace Algorithm_Type
 #define ROOM_MIN_Y                 11
 #define ROOM_MAX_X                 15
 #define ROOM_MAX_Y                 15
-// 3 defines bellow may be rendered obsolite in the future...
-#define ROOM_MAX                   64
-#define ROOM_PATH                  2
-#define ROOM_MAX_R                 (int)(sqrt(pow((double)(ROOM_MAX_X/2), 2) + pow((double)(ROOM_MAX_Y/2), 2)) + ROOM_PATH)
 
 struct FillData
 {
@@ -68,8 +64,7 @@ struct MapGen
 
 struct MapNode
 {
-    bool           leaf;
-    Room           room;
+    bool     leaf;
     MapGen   data;
     MapNode* left;
     MapNode* right;
@@ -91,18 +86,6 @@ struct MapProperties
 void map_check                   (Map* map_pointer, maprow *layer);
 int  map_gen_flood_fill_tile     (Map* map_pointer, FillData* fill_data, int tile_number);
 bool map_gen_room_flood_fill     (Map* map_pointer);
-bool map_gen_room                (Map* map_pointer, Room room);
-void map_gen_room_add            (Map* map_pointer);
-void map_gen_room_exits          (Map* map_pointer);
-int  map_gen_room_check_path     (Map* map_pointer, int room_1, int room_2, bool x_then_y);
-void map_gen_room_path           (Map* map_pointer, int room_1, int room_2, bool x_then_y);
-void map_gen_room_connect        (Map* map_pointer);
-void map_gen_room_connect_2      (Map* map_pointer);
-void map_gen_room_connect_path   (Map* map_pointer);
-Room map_gen_room_find_stats(Map* map_pointer, FillData* fill_data, int tile_number);
-void map_gen_room_find           (Map* map_pointer);
-void map_gen_redundant_tile_check(Map* map_pointer);
-void map_gen_map_exits           (Map* map_pointer);
 
 void MapGenerate(Map* map_pointer, MapProperties properties);
 int findLayerByName(Map* map_pointer, std::string layer);

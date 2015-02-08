@@ -8,8 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
 {
     ui->setupUi(this);
     map_pointer            = new Map;
-    map_pointer->room      = new Room[ROOM_MAX];
-    map_pointer->tile      = new GenTile[100*100];
     app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_C1;
     app_data.file_name     = "default.txt";
     app_data.gen_chests    = false;
@@ -27,8 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
 
 MainWindow::~MainWindow()
 {
-    delete[] map_pointer->room;
-    delete[] map_pointer->tile;
     delete   map_pointer;
     delete ui;
 }

@@ -29,33 +29,6 @@
 void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y)
 {
     map_pointer->clearEvents();
-    //map_pointer->clearQueues(); // cant use protected
-    //map_pointer->clearLayers(); // cant use protected
-
-    // this is moved from
-    // void map_init(Map* map_pointer, int size_x, int size_y);
-    delete[] map_pointer->room;
-    delete[] map_pointer->tile;
-    map_pointer->no_of_rooms = ROOM_MAX;
-    //if (map_pointer->room != NULL) delete[] map_pointer->room;
-    map_pointer->room = new Room[map_pointer->no_of_rooms];
-    for (int i = 0; i < map_pointer->no_of_rooms; i++)
-    {
-        map_pointer->room[i].active      = false;
-        map_pointer->room[i].position.x  = 0;
-        map_pointer->room[i].position.y  = 0;
-        map_pointer->room[i].w = 0;
-        map_pointer->room[i].h = 0;
-        map_pointer->room[i].no_of_connected_rooms = 0;
-        for (int j = 0; j < ROOM_MAX_CONNECTIONS; j++)
-        {
-            map_pointer->room[i].exit[j] = false;
-            map_pointer->room[i].connected_room[j].connected = false;
-            map_pointer->room[i].connected_room[j].room_no   = 0;
-            map_pointer->room[i].connected_room[j].direction = DIRECTION_BIAS_NONE;
-        }
-    }
-    map_pointer->no_of_rooms = 0;
 
     map_pointer->w = dimension_x;
     map_pointer->h = dimension_y;

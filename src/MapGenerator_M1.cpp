@@ -222,6 +222,7 @@ void MapGenerator_M1::GenerateMap(Map* map_pointer)
             (attribute_layer)[i][j] = TILE_ATTRIBUTE_NONE;
         }
     }
+    /*
     Room room_data;
     room_data.position.x  = 0;
     room_data.position.y  = 0;
@@ -231,8 +232,9 @@ void MapGenerator_M1::GenerateMap(Map* map_pointer)
     map_gen_room(map_pointer,room_data);
     map_gen_room(map_pointer,room_data);
     map_gen_room(map_pointer,room_data);
+    */
     map_gen_maze(map_pointer,map_pointer->w/2, map_pointer->h/2, DIRECTION_BIAS_NORTH);
-    map_gen_room_exits(map_pointer);
+    //map_gen_room_exits(map_pointer);
     
     int attribute = 1;
     delete [] map_pointer->layers[attribute];

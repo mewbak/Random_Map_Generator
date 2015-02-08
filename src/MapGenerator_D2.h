@@ -22,7 +22,6 @@
 #define MAP_GENERATOR_D2_H
 
 #include "MapGenerator.h"
-#include "MapHelper.h"
 
 /**
  * class MapGenerator_D2
