@@ -54,6 +54,12 @@ struct FillData
     bool tile_join;
 };
 
+struct GenTile
+{
+    Point position;
+    int   data;
+};
+
 struct MapGen
 {
     int        no_of_tiles;

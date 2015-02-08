@@ -115,40 +115,6 @@ public:
 	}
 };
 
-// should be removed from Map class and used as temp tings on generation stage
-struct GenTile
-{
-    Point position;
-    int     data;
-    int     attribute;
-    bool    closed_list;
-    bool    open_list;
-    int     H;
-    int     G;
-    int     F;
-    int     parent;
-};
-// should be removed from Map class and used as temp tings on generation stage
-struct ConnectedRoom
-{
-    bool connected;
-    int  room_no;
-    int  direction;
-};
-
-// should be removed from Map class and used as temp tings on generation stage
-#define ROOM_MAX_CONNECTIONS       4
-struct Room
-{
-    bool                active;
-    short               w;
-    short               h;
-    Point               position;
-    int                 no_of_connected_rooms;
-    bool                exit[ROOM_MAX_CONNECTIONS];
-    ConnectedRoom connected_room[ROOM_MAX_CONNECTIONS];
-};
-
 class Map {
 protected:
 	void loadHeader(FileParser &infile);
@@ -202,11 +168,6 @@ public:
 
     // should be added to Map class later
     int size() { return w*h; }
-
-    // should be removed from Map class and used as temp tings on generation stage
-    GenTile*   tile;
-    int        no_of_rooms;
-    Room*      room;
 
 };
 

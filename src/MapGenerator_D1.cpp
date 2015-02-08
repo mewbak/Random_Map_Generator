@@ -238,12 +238,11 @@ void map_gen_BSP_split(MapNode *map_node)
             room_size_y = ((map_node->data.h - ROOM_MAX_Y)/2);
             room_size_y = (room_size_y > 0) ? rand()%room_size_y : 0;
         }
-        for (int y_position = (room_size_y+1); y_position < (map_node->data.h-1-room_size_y); y_position++)
+        for (int pos_y = (room_size_y+1); pos_y < (map_node->data.h-1-room_size_y); pos_y++)
         {
-            for (int x_position = (room_size_x+1); x_position < (map_node->data.w-1-room_size_x); x_position++)
+            for (int pos_x = (room_size_x+1); pos_x < (map_node->data.w-1-room_size_x); pos_x++)
             {
-                map_node->data.tile[((y_position*map_node->data.w)+x_position)].data = Tile_Type::TILE_FLOOR;
-                //std::cout << map_node->data.tile[((y_position*map_node->data.w)+x_position)].data << std::endl;
+                map_node->data.tile[((pos_y*map_node->data.w)+pos_x)].data = Tile_Type::TILE_FLOOR;
             }
 
         }
