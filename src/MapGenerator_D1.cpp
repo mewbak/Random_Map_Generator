@@ -19,9 +19,8 @@
 */
 
 #include "MapGenerator_D1.h"
-#include "MapHelper.h"
 
-void map_gen_D1_split(MapNode *map_node)
+void MapGenerator_D1::map_gen_D1_split(MapNode *map_node)
 {
     int  x_range = map_node->data.w - (ROOM_MAX_X*2) - 2;
     int  y_range = map_node->data.h - (ROOM_MAX_Y*2) - 2;
@@ -241,7 +240,7 @@ void map_gen_D1_split(MapNode *map_node)
     }
 }
 
-void map_gen_D1_internal(Map* map_pointer)
+void MapGenerator_D1::map_gen_D1_internal(Map* map_pointer)
 {
     if (findLayerByName(map_pointer,"intermediate") == -1)
     {
