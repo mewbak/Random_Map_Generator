@@ -36,7 +36,7 @@ class MapGenerator_D2 : public MapGenerator
         void Generate (Map* map_pointer, MapProperties properties);
 
     private:
-        void map_gen_RC_internal (Map* map_pointer);
+        void map_gen_D2_internal (Map* map_pointer);
         void GenerateMap(Map* map_pointer);
 
 };
