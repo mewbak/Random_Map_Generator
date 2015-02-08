@@ -16,7 +16,6 @@ INCLUDEPATH += ../src \
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    ../src/a-star.cpp \
     ../src/MapHelper.cpp \
     ../src/flare/EventManager.cpp \
     ../src/flare/FileParser.cpp \
@@ -34,7 +33,6 @@ SOURCES += main.cpp\
     ../src/flare/MapSaver.cpp
 
 HEADERS  += mainwindow.h \
-    ../src/a-star.h \
     ../src/MapHelper.h \
     ../src/MapGenerator_C1.h \
     ../src/MapGenerator_D1.h \
