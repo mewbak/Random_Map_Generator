@@ -56,6 +56,7 @@ void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y
         }
     }
     map_pointer->no_of_rooms = 0;
+
     map_pointer->w = dimension_x;
     map_pointer->h = dimension_y;
     //delete[] map_pointer->tile;

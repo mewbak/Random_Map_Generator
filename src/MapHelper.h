@@ -42,12 +42,13 @@ namespace Algorithm_Type
                          GEN_ALGORITHM_T1};
 }
 
+#define ROOM_MIN_X                 11
+#define ROOM_MIN_Y                 11
+#define ROOM_MAX_X                 15
+#define ROOM_MAX_Y                 15
+// 3 defines bellow may be rendered obsolite in the future...
 #define ROOM_MAX                   64
 #define ROOM_PATH                  2
-#define ROOM_MIN_X                 7
-#define ROOM_MIN_Y                 7
-#define ROOM_MAX_X                 9
-#define ROOM_MAX_Y                 9
 #define ROOM_MAX_R                 (int)(sqrt(pow((double)(ROOM_MAX_X/2), 2) + pow((double)(ROOM_MAX_Y/2), 2)) + ROOM_PATH)
 
 struct FillData
