@@ -173,11 +173,6 @@ void MapGenerator_D2::Generate (Map* map_pointer, MapProperties properties)
 
 void MapGenerator_D2::GenerateMap(Map* map_pointer)
 {
-    for (int i = 0; i < map_pointer->size(); i++)
-    {
-        map_pointer->tile[i].data      = Tile_Type::TILE_WALL;
-        map_pointer->tile[i].attribute = TILE_ATTRIBUTE_NONE;
-    }
     map_gen_RC_internal(map_pointer);
     if (!map_gen_room_flood_fill(map_pointer)) map_gen_RC_internal(map_pointer);
 }
