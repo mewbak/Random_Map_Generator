@@ -11,7 +11,6 @@ void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
         map_pointer->layernames.push_back("intermediate");
     }
     int intermediate = findLayerByName(map_pointer,"intermediate");
-
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)

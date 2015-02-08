@@ -21,7 +21,7 @@
 #include "MapGenerator_D1.h"
 #include "MapHelper.h"
 
-void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
+void map_gen_BSP_split(MapNode *map_node)
 {
     int  x_range = map_node->data.w - (ROOM_MAX_X*2) - 2;
     int  y_range = map_node->data.h - (ROOM_MAX_Y*2) - 2;
@@ -76,7 +76,7 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
                 tile_count_y_out++;
             }
         }
-        map_gen_BSP_split(map_pointer,map_node->left);
+        map_gen_BSP_split(map_node->left);
         for(int tile_count = 0; tile_count < map_node->left->data.no_of_tiles; tile_count++)
         {
             for(tile_data_count = 0; tile_data_count < map_node->data.no_of_tiles; tile_data_count++)
@@ -109,7 +109,7 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
                 tile_count_y_out++;
             }
         }
-        map_gen_BSP_split(map_pointer,map_node->right);
+        map_gen_BSP_split(map_node->right);
         for(int tile_count = 0; tile_count < map_node->right->data.no_of_tiles; tile_count++)
         {
             for(tile_data_count = 0; tile_data_count < map_node->data.no_of_tiles; tile_data_count++)
@@ -165,7 +165,7 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
                 tile_count_y_out++;
             }
         }
-        map_gen_BSP_split(map_pointer,map_node->left);
+        map_gen_BSP_split(map_node->left);
         for(int tile_count = 0; tile_count < map_node->left->data.no_of_tiles; tile_count++)
         {
             for(tile_data_count = 0; tile_data_count < map_node->data.no_of_tiles; tile_data_count++)
@@ -198,7 +198,7 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
                 tile_count_y_out++;
             }
         }
-        map_gen_BSP_split(map_pointer,map_node->right);
+        map_gen_BSP_split(map_node->right);
         for(int tile_count = 0; tile_count < map_node->right->data.no_of_tiles; tile_count++)
         {
             for(tile_data_count = 0; tile_data_count < map_node->data.no_of_tiles; tile_data_count++)
@@ -226,7 +226,6 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
     if (!split_x && !split_y)
     {
         map_node->leaf = true;
-        // gen_room code goes here
         int room_size_x = 0;
         int room_size_y = 0;
         if (map_node->data.w > ROOM_MAX_X)
@@ -239,8 +238,6 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
             room_size_y = ((map_node->data.h - ROOM_MAX_Y)/2);
             room_size_y = (room_size_y > 0) ? rand()%room_size_y : 0;
         }
-        //room_size_x = 0; //test
-        //room_size_y = 0; //test
         for (int y_position = (room_size_y+1); y_position < (map_node->data.h-1-room_size_y); y_position++)
         {
             for (int x_position = (room_size_x+1); x_position < (map_node->data.w-1-room_size_x); x_position++)
@@ -271,13 +268,17 @@ void map_gen_BSP_split(Map* map_pointer, MapNode *map_node)
 
 void map_gen_BSP_internal(Map* map_pointer)
 {
-    maprow *current_layer = new maprow[map_pointer->w];
-    map_pointer->layers.push_back(current_layer);
-    map_pointer->layernames.push_back("intermediate");
+    if (findLayerByName(map_pointer,"intermediate") == -1)
+    {
+        maprow *current_layer = new maprow[map_pointer->w];
+        map_pointer->layers.push_back(current_layer);
+        map_pointer->layernames.push_back("intermediate");
+    }
+    int intermediate = findLayerByName(map_pointer,"intermediate");
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)
-            (current_layer)[i][j] = Tile_Type::TILE_WALL;
+            map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_FLOOR;
     }
     MapNode* temp_map = new MapNode;
     temp_map->data.w = map_pointer->w;
@@ -289,11 +290,11 @@ void map_gen_BSP_internal(Map* map_pointer)
         temp_map->data.tile[i].data = Tile_Type::TILE_WALL;
     }
     temp_map->leaf = false;
-    map_gen_BSP_split(map_pointer,temp_map);
+    map_gen_BSP_split(temp_map);
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)
-            (current_layer)[i][j] = temp_map->data.tile[(j*map_pointer->w)+i].data;
+            map_pointer->layers[intermediate][i][j] = temp_map->data.tile[(j*map_pointer->w)+i].data;
     }
     delete[] temp_map->data.tile;
     delete temp_map;
@@ -308,16 +309,8 @@ void MapGenerator_D1::Generate (Map* map_pointer, MapProperties properties)
 
 void MapGenerator_D1::GenerateMap(Map* map_pointer)
 {
-    int min_rooms = (map_pointer->w / (ROOM_MAX_X*2)) * (map_pointer->h / (ROOM_MAX_Y*2));
-    bool done = false;
     map_gen_BSP_internal(map_pointer);
-    /*
-     *
-    while (!done)
-    {
-        if ((map_pointer->no_of_rooms >= min_rooms)&&(map_gen_room_flood_fill(map_pointer))) done = true;
-        if (!done) map_gen_BSP_internal(map_pointer);
-    }
-    */
+    //while (!map_gen_flood_fill(map_pointer))
+      //  map_gen_BSP_internal(map_pointer);
 }
 
