@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     app_data.gen_chests    = false;
     app_data.gen_enemies   = false;
     app_data.gen_exits     = false;
-    app_data.output_format = OUTPUT_FORMAT_FLARE;
     app_data.progress      = 0;
     app_data.size_x        = 100;
     app_data.size_y        = 100;
@@ -49,11 +48,6 @@ void MainWindow::on_comboBox_mapSize_currentIndexChanged(int index)
         MainWindow::app_data.size_y = 100;
         break;
     }
-}
-
-void MainWindow::on_comboBox_outputFormat_currentIndexChanged(int index)
-{
-    MainWindow::app_data.output_format = index;
 }
 
 void MainWindow::on_checkBox_genExits_stateChanged(int arg1)
@@ -106,25 +100,11 @@ void MainWindow::on_pushButton_released()
 
     renderPreview(map_pointer);
 
-    switch (app_data.output_format)
-    {
-    case OUTPUT_FORMAT_FROST_AND_FLAME:
-        //file_export_frost_and_flame(map_pointer,file_name);
-    break;
-    case OUTPUT_FORMAT_TILED:
-        //file_export_tiled(map_pointer,file_name);
-    break;
-    default:
-    case OUTPUT_FORMAT_FLARE:
-        this->ui->progressBar->setValue(80);
-        this->ui->label_status->setText("Applying tile set...");
-        this->ui->progressBar->setValue(90);
-
-        this->ui->label_status->setText("Exporting to file...");
-
-        MapGenerator::Export(map_pointer, app_data.file_name);
-    break;
-    }
+    this->ui->progressBar->setValue(80);
+    this->ui->label_status->setText("Applying tile set...");
+    this->ui->progressBar->setValue(90);
+    this->ui->label_status->setText("Exporting to file...");
+    MapGenerator::Export(map_pointer, app_data.file_name);
     this->ui->progressBar->setValue(100);
     this->ui->label_status->setText("Done.");
 }

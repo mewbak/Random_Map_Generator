@@ -14,7 +14,6 @@ struct AppData
     int     progress;
     int     algorithm;
     int     tile_set;
-    int     output_format;
     int     size_x;
     int     size_y;
     int     seed;
@@ -40,7 +39,6 @@ private slots:
     void on_comboBox_algorithm_currentIndexChanged(int index);
     void on_comboBox_tileSet_currentIndexChanged(int index);
     void on_comboBox_mapSize_currentIndexChanged(int index);
-    void on_comboBox_outputFormat_currentIndexChanged(int index);
     void on_checkBox_genExits_stateChanged(int arg1);
     void on_checkBox_genChests_stateChanged(int arg1);
     void on_checkBox_genEnemies_stateChanged(int arg1);

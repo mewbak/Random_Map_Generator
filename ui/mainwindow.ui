@@ -232,39 +232,6 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_outputFormat">
-         <property name="text">
-          <string>Output format:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_outputFormat">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <item>
-          <property name="text">
-           <string>Flare map format</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Tiled TMX</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Frost and Flame FMX</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
         <widget class="QLabel" name="label_fileName">
