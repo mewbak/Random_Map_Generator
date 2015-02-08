@@ -62,6 +62,15 @@ struct MapGen
     GenTile* tile;
 };
 
+struct room_struct
+{
+    bool valid;
+    int x;
+    int y;
+    int w;
+    int h;
+};
+
 struct MapNode
 {
     bool     leaf;

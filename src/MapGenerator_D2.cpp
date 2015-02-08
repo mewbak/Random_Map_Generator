@@ -2,7 +2,7 @@
 #include "MapGenerator_D2.h"
 #include "MapHelper.h"
 
-void map_gen_RC_internal (Map* map_pointer)
+void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
 {
     maprow *current_layer = new maprow[map_pointer->w];
     map_pointer->layers.push_back(current_layer);
@@ -12,14 +12,6 @@ void map_gen_RC_internal (Map* map_pointer)
         for (int i = 0; i < map_pointer->w; i++)
             (current_layer)[i][j] = Tile_Type::TILE_WALL;
     }
-    struct room_struct
-    {
-        bool valid;
-        int x;
-        int y;
-        int w;
-        int h;
-    };
     int max_r = (int)sqrt((ROOM_MAX_X*ROOM_MAX_X)+(ROOM_MAX_Y*ROOM_MAX_Y));
     int max_rooms = map_pointer->size() / (ROOM_MIN_X*ROOM_MIN_Y);
     room_struct room[max_rooms];
