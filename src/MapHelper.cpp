@@ -143,11 +143,11 @@ int map_gen_flood_fill_tile (Map* map_pointer, FillData* fill_data, int tile_num
         fill_data[tile_number].tile_done = true;
         fill_data[tile_number].tile_join = true;
         return_value++;
-        if ((tile_number+1) <= map_pointer->size()) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+1);
+        if ((tile_number+1) <= (map_pointer->w*map_pointer->h)) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+1);
         if ((tile_number-1) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-1);
-        if ((tile_number+map_pointer->w) <= map_pointer->size()) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w);
-        if ((tile_number+map_pointer->w+1) <= map_pointer->size()) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w+1);
-        if ((tile_number+map_pointer->w-1) <= map_pointer->size()) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w-1);
+        if ((tile_number+map_pointer->w) <= (map_pointer->w*map_pointer->h)) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w);
+        if ((tile_number+map_pointer->w+1) <= (map_pointer->w*map_pointer->h)) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w+1);
+        if ((tile_number+map_pointer->w-1) <= (map_pointer->w*map_pointer->h)) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w-1);
         if ((tile_number-map_pointer->w) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w);
         if ((tile_number-map_pointer->w+1) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w+1);
         if ((tile_number-map_pointer->w-1) >= 0) return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w-1);
@@ -162,7 +162,7 @@ bool map_gen_flood_fill (Map* map_pointer)
     int  floor_count  = 0;
     int  first_floor  = -1;
     bool return_value = true;
-    FillData* fill_data = new FillData[map_pointer->size()];
+    FillData* fill_data = new FillData[(map_pointer->w*map_pointer->h)];
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)

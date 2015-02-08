@@ -35,7 +35,7 @@ void MapGenerator_D2::map_gen_D2_internal (Map* map_pointer)
             map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_WALL;
     }
     int max_r = (int)sqrt((ROOM_MAX_X*ROOM_MAX_X)+(ROOM_MAX_Y*ROOM_MAX_Y));
-    int max_rooms = map_pointer->size() / (ROOM_MIN_X*ROOM_MIN_Y);
+    int max_rooms = (map_pointer->w*map_pointer->h) / (ROOM_MIN_X*ROOM_MIN_Y);
     room_struct room[max_rooms];
     for (int i = 0; i < max_rooms; i++)
     {

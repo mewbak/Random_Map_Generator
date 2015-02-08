@@ -166,9 +166,6 @@ public:
 	FPoint spawn;
 	int spawn_dir;
 
-    // should be added to Map class later
-    int size() { return w*h; }
-
 };
 
 #endif // MAP_H

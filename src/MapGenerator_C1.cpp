@@ -33,11 +33,11 @@ void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, FillData* fill_data, i
     {
         fill_data[tile_number].tile_done = true;
         fill_data[tile_number].tile_join = true;
-        if ((tile_number+1) <= map_pointer->size()) CheckJoiningTiles(map_pointer,fill_data,tile_number+1);
+        if ((tile_number+1) <= (map_pointer->w*map_pointer->h)) CheckJoiningTiles(map_pointer,fill_data,tile_number+1);
         if ((tile_number-1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-1);
-        if ((tile_number+map_pointer->w) <= map_pointer->size()) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w);
-        if ((tile_number+map_pointer->w+1) <= map_pointer->size()) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w+1);
-        if ((tile_number+map_pointer->w-1) <= map_pointer->size()) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w-1);
+        if ((tile_number+map_pointer->w) <= (map_pointer->w*map_pointer->h)) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w);
+        if ((tile_number+map_pointer->w+1) <= (map_pointer->w*map_pointer->h)) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w+1);
+        if ((tile_number+map_pointer->w-1) <= (map_pointer->w*map_pointer->h)) CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w-1);
         if ((tile_number-map_pointer->w) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w);
         if ((tile_number-map_pointer->w+1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w+1);
         if ((tile_number-map_pointer->w-1) >= 0) CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w-1);
@@ -58,8 +58,8 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
         for (int i = 0; i < map_pointer->w; i++)
             map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_FLOOR;
     }
-    FillData *fill_data = new FillData[map_pointer->size()];
-    for (int i = 0; i < map_pointer->size(); i++)
+    FillData *fill_data = new FillData[(map_pointer->w*map_pointer->h)];
+    for (int i = 0; i < (map_pointer->w*map_pointer->h); i++)
     {
         fill_data[i].tile_join = false;
     }
@@ -74,7 +74,7 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
                 map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_FLOOR;
         }
     }
-    for (int i = 0; i < ((map_pointer->size()) * 0.6); i++)
+    for (int i = 0; i < (((map_pointer->w*map_pointer->h)) * 0.6); i++)
     {
         map_pointer->layers[intermediate][rand() % map_pointer->w][rand() % map_pointer->h] = Tile_Type::TILE_WALL;
     }
@@ -107,7 +107,7 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
         }
     }
     map_check(map_pointer,map_pointer->layers[intermediate]);
-    for (int i = 0; i < map_pointer->size(); i++)
+    for (int i = 0; i < (map_pointer->w*map_pointer->h); i++)
     {
         fill_data[i].tile_data = map_pointer->layers[intermediate][i%map_pointer->w][i/map_pointer->w];
         fill_data[i].tile_join = false;
@@ -115,7 +115,7 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
     }
     fill_data[(map_pointer->w*(map_pointer->h/2))+(map_pointer->w/2)].tile_join = true;
     CheckJoiningTiles(map_pointer,fill_data,(map_pointer->w*(map_pointer->h/2))+(map_pointer->w/2));
-    for (int i = 0; i < map_pointer->size(); i++)
+    for (int i = 0; i < (map_pointer->w*map_pointer->h); i++)
     {
         if (fill_data[i].tile_join) map_pointer->layers[intermediate][i%map_pointer->w][i/map_pointer->w] = Tile_Type::TILE_FLOOR;
         else map_pointer->layers[intermediate][i%map_pointer->w][i/map_pointer->w] = Tile_Type::TILE_WALL;
