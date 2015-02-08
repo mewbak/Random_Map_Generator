@@ -55,7 +55,6 @@ void map_gen_BSP_split(MapNode *map_node)
         int new_size_x_2 = map_node->data.w - new_size_x_1;
         // left --------------------------------------------------------------------------------------------------------
         map_node->left = new MapNode;
-        map_node->left->leaf = false;
         map_node->left->data.w = new_size_x_1;
         map_node->left->data.h = map_node->data.h;
         map_node->left->data.no_of_tiles = map_node->left->data.w * map_node->left->data.h;
@@ -88,7 +87,6 @@ void map_gen_BSP_split(MapNode *map_node)
         }
         // right --------------------------------------------------------------------------------------------------------
         map_node->right = new MapNode;
-        map_node->right->leaf = false;
         map_node->right->data.w = new_size_x_2;
         map_node->right->data.h = map_node->data.h;
         map_node->right->data.no_of_tiles = map_node->right->data.w * map_node->right->data.h;
@@ -144,7 +142,6 @@ void map_gen_BSP_split(MapNode *map_node)
         int new_size_y_2 = map_node->data.h - new_size_y_1;
         // left --------------------------------------------------------------------------------------------------------
         map_node->left = new MapNode;
-        map_node->left->leaf = false;
         map_node->left->data.w = map_node->data.w;
         map_node->left->data.h = new_size_y_1;
         map_node->left->data.no_of_tiles = map_node->left->data.w * map_node->left->data.h;
@@ -177,7 +174,6 @@ void map_gen_BSP_split(MapNode *map_node)
         }
         // right --------------------------------------------------------------------------------------------------------
         map_node->right = new MapNode;
-        map_node->right->leaf = false;
         map_node->right->data.w = map_node->data.w;
         map_node->right->data.h = new_size_y_2;
         map_node->right->data.no_of_tiles = map_node->right->data.w * map_node->right->data.h;
@@ -225,7 +221,6 @@ void map_gen_BSP_split(MapNode *map_node)
     }
     if (!split_x && !split_y)
     {
-        map_node->leaf = true;
         int room_size_x = 0;
         int room_size_y = 0;
         if (map_node->data.w > ROOM_MAX_X)
@@ -289,7 +284,6 @@ void map_gen_BSP_internal(Map* map_pointer)
     {
         temp_map->data.tile[i].data = Tile_Type::TILE_WALL;
     }
-    temp_map->leaf = false;
     map_gen_BSP_split(temp_map);
     for (int j = 0; j < map_pointer->h; j++)
     {

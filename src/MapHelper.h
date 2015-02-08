@@ -79,7 +79,6 @@ struct room_struct
 
 struct MapNode
 {
-    bool     leaf;
     MapGen   data;
     MapNode* left;
     MapNode* right;
