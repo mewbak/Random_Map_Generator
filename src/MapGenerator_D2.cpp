@@ -4,13 +4,18 @@
 
 void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
 {
-    maprow *current_layer = new maprow[map_pointer->w];
-    map_pointer->layers.push_back(current_layer);
-    map_pointer->layernames.push_back("intermediate");
+    if (findLayerByName(map_pointer,"intermediate") == -1)
+    {
+        maprow *current_layer = new maprow[map_pointer->w];
+        map_pointer->layers.push_back(current_layer);
+        map_pointer->layernames.push_back("intermediate");
+    }
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)
-            (current_layer)[i][j] = Tile_Type::TILE_WALL;
+            map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_WALL;
     }
     int max_r = (int)sqrt((ROOM_MAX_X*ROOM_MAX_X)+(ROOM_MAX_Y*ROOM_MAX_Y));
     int max_rooms = map_pointer->size() / (ROOM_MIN_X*ROOM_MIN_Y);
@@ -41,7 +46,7 @@ void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
             for (int j = 1; j < room[i].w; j++)
             {
                 for (int k = 1; k < room[i].h; k++)
-                    (current_layer)[room[i].x-(room[i].w/2)+j][room[i].y-(room[i].h/2)+k] = Tile_Type::TILE_FLOOR;
+                    map_pointer->layers[intermediate][room[i].x-(room[i].w/2)+j][room[i].y-(room[i].h/2)+k] = Tile_Type::TILE_FLOOR;
             }
         }
     }
@@ -62,21 +67,21 @@ void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
                         int current_y = room[i].y;
                         for (current_x = room[i].x; current_x != room[j].x;)
                         {
-                            if (previous_tile != (current_layer)[current_x][current_y])
+                            if (previous_tile != map_pointer->layers[intermediate][current_x][current_y])
                                 transitions++;
-                            if ((current_layer)[current_x][current_y] == Tile_Type::TILE_PATH)
+                            if (map_pointer->layers[intermediate][current_x][current_y] == Tile_Type::TILE_PATH)
                                 transitions++;
-                            previous_tile = (current_layer)[current_x][current_y];
+                            previous_tile = map_pointer->layers[intermediate][current_x][current_y];
                             if (room[i].x < room[j].x) current_x++;
                                     else current_x--;
                         }
                         for (current_y = room[i].y; current_y != room[j].y;)
                         {
-                            if (previous_tile != (current_layer)[current_x][current_y])
+                            if (previous_tile != map_pointer->layers[intermediate][current_x][current_y])
                                 transitions++;
-                            if ((current_layer)[current_x][current_y] == Tile_Type::TILE_PATH)
+                            if (map_pointer->layers[intermediate][current_x][current_y] == Tile_Type::TILE_PATH)
                                 transitions++;
-                            previous_tile = (current_layer)[current_x][current_y];
+                            previous_tile = map_pointer->layers[intermediate][current_x][current_y];
                             if (room[i].y < room[j].y) current_y++;
                                     else current_y--;
                         }
@@ -87,13 +92,13 @@ void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
                             current_y = room[i].y;
                             for (current_x = room[i].x; current_x != room[j].x;)
                             {
-                                (current_layer)[current_x][current_y] = Tile_Type::TILE_PATH;
+                                map_pointer->layers[intermediate][current_x][current_y] = Tile_Type::TILE_PATH;
                                 if (room[i].x < room[j].x) current_x++;
                                         else current_x--;
                             }
                             for (current_y = room[i].y; current_y != room[j].y;)
                             {
-                                (current_layer)[current_x][current_y] = Tile_Type::TILE_PATH;
+                                map_pointer->layers[intermediate][current_x][current_y] = Tile_Type::TILE_PATH;
                                 if (room[i].y < room[j].y) current_y++;
                                         else current_y--;
                             }
@@ -107,21 +112,21 @@ void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
                         int current_y = room[i].y;
                         for (current_y = room[i].y; current_y != room[j].y;)
                         {
-                            if (previous_tile != (current_layer)[current_x][current_y])
+                            if (previous_tile != map_pointer->layers[intermediate][current_x][current_y])
                                 transitions++;
-                            if ((current_layer)[current_x][current_y] == Tile_Type::TILE_PATH)
+                            if (map_pointer->layers[intermediate][current_x][current_y] == Tile_Type::TILE_PATH)
                                 transitions++;
-                            previous_tile = (current_layer)[current_x][current_y];
+                            previous_tile = map_pointer->layers[intermediate][current_x][current_y];
                             if (room[i].y < room[j].y) current_y++;
                                     else current_y--;
                         }
                         for (current_x = room[i].x; current_x != room[j].x;)
                         {
-                            if (previous_tile != (current_layer)[current_x][current_y])
+                            if (previous_tile != map_pointer->layers[intermediate][current_x][current_y])
                                 transitions++;
-                            if ((current_layer)[current_x][current_y] == Tile_Type::TILE_PATH)
+                            if (map_pointer->layers[intermediate][current_x][current_y] == Tile_Type::TILE_PATH)
                                 transitions++;
-                            previous_tile = (current_layer)[current_x][current_y];
+                            previous_tile = map_pointer->layers[intermediate][current_x][current_y];
                             if (room[i].x < room[j].x) current_x++;
                                     else current_x--;
                         }
@@ -132,13 +137,13 @@ void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
                             current_y = room[i].y;
                             for (current_y = room[i].y; current_y != room[j].y;)
                             {
-                                (current_layer)[current_x][current_y] = Tile_Type::TILE_PATH;
+                                map_pointer->layers[intermediate][current_x][current_y] = Tile_Type::TILE_PATH;
                                 if (room[i].y < room[j].y) current_y++;
                                         else current_y--;
                             }
                             for (current_x = room[i].x; current_x != room[j].x;)
                             {
-                                (current_layer)[current_x][current_y] = Tile_Type::TILE_PATH;
+                                map_pointer->layers[intermediate][current_x][current_y] = Tile_Type::TILE_PATH;
                                 if (room[i].x < room[j].x) current_x++;
                                         else current_x--;
                             }
@@ -151,8 +156,8 @@ void MapGenerator_D2::map_gen_RC_internal (Map* map_pointer)
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)
-            if ((current_layer)[i][j] == Tile_Type::TILE_PATH)
-                (current_layer)[i][j] = Tile_Type::TILE_FLOOR;
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_PATH)
+                map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_FLOOR;
     }
 }
 
