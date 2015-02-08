@@ -277,9 +277,14 @@ void map_gen_D1_internal(Map* map_pointer)
     temp_map->data.h = map_pointer->h;
     temp_map->data.no_of_tiles = temp_map->data.w * temp_map->data.h;
     temp_map->data.tile = new GenTile[temp_map->data.no_of_tiles];
-    for (int i =0; i < map_pointer->size(); i++)
+    for (int j = 0; j < map_pointer->h; j++)
     {
-        temp_map->data.tile[i].data = Tile_Type::TILE_WALL;
+        for (int i = 0; i < map_pointer->w; i++)
+        {
+            temp_map->data.tile[(j*map_pointer->w)+i].data = Tile_Type::TILE_WALL;
+            temp_map->data.tile[(j*map_pointer->w)+i].position.x = i;
+            temp_map->data.tile[(j*map_pointer->w)+i].position.y = j;
+        }
     }
     map_gen_D1_split(temp_map);
     for (int j = 0; j < map_pointer->h; j++)
