@@ -67,16 +67,13 @@ public:
 private:
     static void init();
 
-    //supported tilesets
-
-    // Cave
-    static std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> cave;
-
-    // dungeon
-    static std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> dungeon;
-
-    // grassland
-    static std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> grassland;
+    static std::vector< std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> > tilesets;
+    
+    static std::vector<std::string> tileset_names;
+    
+    static std::vector<std::string> tileset_locations;
+    
+    static std::vector<std::string> tileset_definitions;
 
     TilesetDef();
     ~TilesetDef();

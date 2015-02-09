@@ -20,9 +20,13 @@
 
 #include "TilesetDef.h"
 
-std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> TilesetDef::cave;
-std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> TilesetDef::dungeon;
-std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> TilesetDef::grassland;
+std::vector< std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> > TilesetDef::tilesets;
+
+std::vector<std::string> TilesetDef::tileset_names;
+    
+std::vector<std::string> TilesetDef::tileset_locations;
+    
+std::vector<std::string> TilesetDef::tileset_definitions;
 
 TilesetDef::TilesetDef()
 {
@@ -34,232 +38,246 @@ TilesetDef::~TilesetDef()
 
 void TilesetDef::init()
 {
-    if (cave.empty() || dungeon.empty() || grassland.empty())
+    if (tilesets.empty())
     {
         // Cave
-
+        tilesets.resize(1);
+        tileset_names.push_back("cave");
+        tileset_locations.push_back("");
+        tileset_definitions.push_back("");
+        
         for (int i = 16; i < 31; i++)
         {
-            cave[i] = TILESET_TILE_TYPE::_TILE_FLOOR;
+            tilesets[0][i] = TILESET_TILE_TYPE::_TILE_FLOOR;
         }
 
-        cave[56] = TILESET_TILE_TYPE::TILE_FLOOR_RIGHT_HALF;
-        cave[57] = TILESET_TILE_TYPE::TILE_FLOOR_LEFT_HALF;
+        tilesets[0][56] = TILESET_TILE_TYPE::TILE_FLOOR_RIGHT_HALF;
+        tilesets[0][57] = TILESET_TILE_TYPE::TILE_FLOOR_LEFT_HALF;
 
-        cave[132] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[133] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[134] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[135] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[48] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[49] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[50] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[51] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[52] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[53] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[54] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[55] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[144] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[145] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[146] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[147] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[148] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[149] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[150] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[151] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[152] = TILESET_TILE_TYPE::TILE_OBJECT;
-        cave[153] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][132] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][133] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][134] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][135] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][48] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][49] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][50] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][51] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][52] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][53] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][54] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][55] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][144] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][145] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][146] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][147] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][148] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][149] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][150] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][151] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][152] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[0][153] = TILESET_TILE_TYPE::TILE_OBJECT;
 
-        cave[107] = TILESET_TILE_TYPE::TILE_WALL_UP;
-        cave[71] = TILESET_TILE_TYPE::TILE_WALL_UP;
-        cave[67] = TILESET_TILE_TYPE::TILE_WALL_UP;
+        tilesets[0][107] = TILESET_TILE_TYPE::TILE_WALL_UP;
+        tilesets[0][71] = TILESET_TILE_TYPE::TILE_WALL_UP;
+        tilesets[0][67] = TILESET_TILE_TYPE::TILE_WALL_UP;
 
-        cave[113] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        cave[109] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        cave[105] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        cave[101] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        cave[97] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        cave[69] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        cave[65] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[0][113] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[0][109] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[0][105] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[0][101] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[0][97] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[0][69] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[0][65] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
 
-        cave[106] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
-        cave[70] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
-        cave[66] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
+        tilesets[0][106] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
+        tilesets[0][70] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
+        tilesets[0][66] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
 
-        cave[112] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        cave[108] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        cave[104] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        cave[100] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        cave[96] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        cave[68] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        cave[64] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[0][112] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[0][108] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[0][104] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[0][100] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[0][96] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[0][68] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[0][64] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
 
-        cave[114] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
-        cave[102] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
-        cave[98] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
-        cave[76] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
-        cave[72] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        tilesets[0][114] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        tilesets[0][102] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        tilesets[0][98] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        tilesets[0][76] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        tilesets[0][72] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
 
-        cave[115] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
-        cave[103] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
-        cave[99] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
-        cave[84] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
-        cave[80] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        tilesets[0][115] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        tilesets[0][103] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        tilesets[0][99] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        tilesets[0][84] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        tilesets[0][80] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
 
-        cave[77] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
-        cave[73] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
+        tilesets[0][77] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
+        tilesets[0][73] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
 
-        cave[85] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
-        cave[81] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
+        tilesets[0][85] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
+        tilesets[0][81] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
 
-        cave[78] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
-        cave[74] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
+        tilesets[0][78] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
+        tilesets[0][74] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
 
-        cave[86] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
-        cave[82] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
+        tilesets[0][86] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
+        tilesets[0][82] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
 
-        cave[79] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
-        cave[75] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
+        tilesets[0][79] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
+        tilesets[0][75] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
 
-        cave[87] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
-        cave[83] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
+        tilesets[0][87] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
+        tilesets[0][83] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
 
         // Dungeon
 
-        dungeon[16] = TILESET_TILE_TYPE::_TILE_FLOOR;
-        dungeon[17] = TILESET_TILE_TYPE::_TILE_FLOOR;
-        dungeon[18] = TILESET_TILE_TYPE::_TILE_FLOOR;
+        tilesets.resize(2);
+        tileset_names.push_back("dungeon");
+        tileset_locations.push_back("");
+        tileset_definitions.push_back("");
+        
+        tilesets[1][16] = TILESET_TILE_TYPE::_TILE_FLOOR;
+        tilesets[1][17] = TILESET_TILE_TYPE::_TILE_FLOOR;
+        tilesets[1][18] = TILESET_TILE_TYPE::_TILE_FLOOR;
         for (int i = 36; i < 48; i++)
         {
-            dungeon[i] = TILESET_TILE_TYPE::_TILE_FLOOR;
+            tilesets[1][i] = TILESET_TILE_TYPE::_TILE_FLOOR;
         }
 
-        dungeon[176] = TILESET_TILE_TYPE::TILE_OBJECT;
-        dungeon[177] = TILESET_TILE_TYPE::TILE_OBJECT;
-        dungeon[178] = TILESET_TILE_TYPE::TILE_OBJECT;
-        dungeon[179] = TILESET_TILE_TYPE::TILE_OBJECT;
-        dungeon[180] = TILESET_TILE_TYPE::TILE_OBJECT;
-        dungeon[181] = TILESET_TILE_TYPE::TILE_OBJECT;
-        dungeon[182] = TILESET_TILE_TYPE::TILE_OBJECT;
-        dungeon[183] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[1][176] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[1][177] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[1][178] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[1][179] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[1][180] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[1][181] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[1][182] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[1][183] = TILESET_TILE_TYPE::TILE_OBJECT;
 
-        dungeon[67] = TILESET_TILE_TYPE::TILE_WALL_UP;
+        tilesets[1][67] = TILESET_TILE_TYPE::TILE_WALL_UP;
 
-        dungeon[109] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        dungeon[107] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        dungeon[105] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        dungeon[103] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        dungeon[101] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        dungeon[99] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        dungeon[97] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        dungeon[69] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        dungeon[65] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][109] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][107] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][105] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][103] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][101] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][99] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][97] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][69] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[1][65] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
 
-        dungeon[66] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
+        tilesets[1][66] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
 
-        dungeon[108] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        dungeon[106] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        dungeon[104] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        dungeon[102] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        dungeon[100] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        dungeon[96] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        dungeon[68] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        dungeon[64] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[1][108] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[1][106] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[1][104] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[1][102] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[1][100] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[1][96] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[1][68] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[1][64] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
 
-        dungeon[77] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        tilesets[1][77] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
 
-        dungeon[73] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        tilesets[1][73] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
 
-        dungeon[78] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
+        tilesets[1][78] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
 
-        dungeon[74] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
+        tilesets[1][74] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
 
-        dungeon[79] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
+        tilesets[1][79] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
 
-        dungeon[75] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
+        tilesets[1][75] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
 
-        dungeon[76] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
+        tilesets[1][76] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
 
-        dungeon[72] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
+        tilesets[1][72] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
 
         // Grassland
 
+        tilesets.resize(3);
+        tileset_names.push_back("grassland");
+        tileset_locations.push_back("");
+        tileset_definitions.push_back("");
+        
         for (int i = 16; i < 32; i++)
         {
-            grassland[i] = TILESET_TILE_TYPE::_TILE_FLOOR;
+            tilesets[2][i] = TILESET_TILE_TYPE::_TILE_FLOOR;
         }
 
-        grassland[112] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[113] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[114] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[115] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[116] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[117] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[118] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[119] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[120] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[121] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[122] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[123] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[124] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[125] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[126] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[127] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[128] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[129] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[130] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[131] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[136] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[137] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[240] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[241] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[242] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[243] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[244] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[245] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[246] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[247] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[248] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[249] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[250] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[241] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[242] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[243] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[244] = TILESET_TILE_TYPE::TILE_OBJECT;
-        grassland[245] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][112] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][113] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][114] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][115] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][116] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][117] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][118] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][119] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][120] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][121] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][122] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][123] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][124] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][125] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][126] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][127] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][128] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][129] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][130] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][131] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][136] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][137] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][240] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][241] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][242] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][243] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][244] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][245] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][246] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][247] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][248] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][249] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][250] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][241] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][242] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][243] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][244] = TILESET_TILE_TYPE::TILE_OBJECT;
+        tilesets[2][245] = TILESET_TILE_TYPE::TILE_OBJECT;
 
-        grassland[51] = TILESET_TILE_TYPE::TILE_WALL_UP;
+        tilesets[2][51] = TILESET_TILE_TYPE::TILE_WALL_UP;
 
-        grassland[53] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
-        grassland[49] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[2][53] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
+        tilesets[2][49] = TILESET_TILE_TYPE::TILE_WALL_DOWN;
 
-        grassland[50] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
+        tilesets[2][50] = TILESET_TILE_TYPE::TILE_WALL_LEFT;
 
-        grassland[52] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
-        grassland[48] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[2][52] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
+        tilesets[2][48] = TILESET_TILE_TYPE::TILE_WALL_RIGHT;
 
-        grassland[60] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
-        grassland[56] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        tilesets[2][60] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
+        tilesets[2][56] = TILESET_TILE_TYPE::TILE_WALL_convex_down;
 
-        grassland[68] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
-        grassland[64] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        tilesets[2][68] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
+        tilesets[2][64] = TILESET_TILE_TYPE::TILE_WALL_concave_down;
 
-        grassland[61] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
-        grassland[57] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
+        tilesets[2][61] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
+        tilesets[2][57] = TILESET_TILE_TYPE::TILE_WALL_convex_left;
 
-        grassland[69] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
-        grassland[65] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
+        tilesets[2][69] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
+        tilesets[2][65] = TILESET_TILE_TYPE::TILE_WALL_concave_left;
 
-        grassland[62] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
-        grassland[58] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
+        tilesets[2][62] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
+        tilesets[2][58] = TILESET_TILE_TYPE::TILE_WALL_convex_up;
 
-        grassland[70] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
-        grassland[66] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
+        tilesets[2][70] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
+        tilesets[2][66] = TILESET_TILE_TYPE::TILE_WALL_concave_up;
 
-        grassland[63] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
-        grassland[59] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
+        tilesets[2][63] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
+        tilesets[2][59] = TILESET_TILE_TYPE::TILE_WALL_convex_right;
 
-        grassland[71] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
-        grassland[67] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
+        tilesets[2][71] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
+        tilesets[2][67] = TILESET_TILE_TYPE::TILE_WALL_concave_right;
 
     }
 
@@ -273,13 +291,13 @@ int TilesetDef::getRandomTile(TILESET::TILESET _tileset, TILESET_TILE_TYPE::TILE
     switch(_tileset)
     {
     case TILESET::TILESET_CAVE:
-        tileset = cave;
+        tileset = tilesests[0];
         break;
     case TILESET::TILESET_DUNGEON:
-        tileset = dungeon;
+        tileset = tilesets[1];
         break;
     case TILESET::TILESET_GRASSLAND:
-        tileset = grassland;
+        tileset = tilesets[2];
         break;
     }
 
