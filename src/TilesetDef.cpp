@@ -291,7 +291,7 @@ int TilesetDef::getRandomTile(TILESET::TILESET _tileset, TILESET_TILE_TYPE::TILE
     switch(_tileset)
     {
     case TILESET::TILESET_CAVE:
-        tileset = tilesests[0];
+        tileset = tilesets[0];
         break;
     case TILESET::TILESET_DUNGEON:
         tileset = tilesets[1];
