@@ -66,6 +66,8 @@ public:
 
 private:
     static void init();
+    
+    static TILESET_TILE_TYPE::TILESET_TILE_TYPE toTyleType(std::string type);
 
     static std::vector< std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> > tilesets;
     

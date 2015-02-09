@@ -36,10 +36,45 @@ TilesetDef::~TilesetDef()
 {
 }
 
+TILESET_TILE_TYPE::TILESET_TILE_TYPE TilesetDef::toTyleType(std::string type)
+{
+    return TILESET_TILE_TYPE::_TILE_FLOOR;
+}
+
 void TilesetDef::init()
 {
     if (tilesets.empty())
     {
+        /*FileParser infile;
+
+	     if (!infile.open("tiletypes.txt"))
+	      	return 0;
+	      	
+	     while (infile.next()) {
+            if (infile.new_section) {
+                tilesets.resize(tilesets.size()+1);
+                tileset_names.resize(tilesets.size());
+                tileset_locations.resize(tilesets.size());
+                tileset_definitions.resize(tilesets.size());
+            }
+            
+            if (infile.key == "name") {
+                tileset_names.back() = infile.val;
+            }
+            else if (infile.key == "location") {
+                tileset_locations.back() = infile.val;
+            }
+            else if (infile.key == "tileset") {
+                tileset_definitions.back() += infile.val;
+                tileset_definitions.back() += '\n';
+            }
+            else if (infile.key == "tile") {
+                tilesets.back()[toInt(infile.nextValue())] = toTyleType(infile.nextValue());
+            }
+			}
+
+        infile.close();
+        */
         // Cave
         tilesets.resize(1);
         tileset_names.push_back("cave");
