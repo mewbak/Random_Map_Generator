@@ -152,6 +152,8 @@ std::vector<std::string> TilesetDef::tilesetNames()
 
 int TilesetDef::findTilesetByName(std::string name)
 {
+    init();
+
     for (unsigned i = 0; i < tilesets.size(); ++i) {
         if (tileset_names[i] == name) {
             return i;
@@ -162,6 +164,8 @@ int TilesetDef::findTilesetByName(std::string name)
 
 int TilesetDef::findTilesetByLocation(std::string location)
 {
+    init();
+
     for (unsigned i = 0; i < tilesets.size(); ++i) {
         if (tileset_locations[i] == location) {
             return i;
