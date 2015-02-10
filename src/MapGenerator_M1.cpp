@@ -47,7 +47,7 @@ bool MapGenerator_M1::map_gen_maze_check_tile(Map* map_pointer, Point tile, int 
 
                     for (int i = 0; i < 5; i++)
                     {
-                        return_value = isWallTile(map_pointer, t[i]);
+                        if (!isWallTile(map_pointer, t[i])) return_value = false;
                     }
                 }
             break;
@@ -63,7 +63,7 @@ bool MapGenerator_M1::map_gen_maze_check_tile(Map* map_pointer, Point tile, int 
 
                     for (int i = 0; i < 5; i++)
                     {
-                        return_value = isWallTile(map_pointer, t[i]);
+                        if (!isWallTile(map_pointer, t[i])) return_value = false;
                     }
                 }
             break;
@@ -79,7 +79,7 @@ bool MapGenerator_M1::map_gen_maze_check_tile(Map* map_pointer, Point tile, int 
 
                     for (int i = 0; i < 5; i++)
                     {
-                        return_value = isWallTile(map_pointer, t[i]);
+                        if (!isWallTile(map_pointer, t[i])) return_value = false;
                     }
                 }
             break;
@@ -95,7 +95,7 @@ bool MapGenerator_M1::map_gen_maze_check_tile(Map* map_pointer, Point tile, int 
 
                     for (int i = 0; i < 5; i++)
                     {
-                        return_value = isWallTile(map_pointer, t[i]);
+                        if (!isWallTile(map_pointer, t[i])) return_value = false;
                     }
                 }
             break;

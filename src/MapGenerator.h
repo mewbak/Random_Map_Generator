@@ -38,7 +38,7 @@
 class MapGenerator
 {
     public:
-        virtual ~MapGenerator(void) {};
+        virtual ~MapGenerator(void) {}
         static void Export (Map* map_pointer, std::string file_name);
         virtual void Generate (Map* map_pointer, MapProperties properties) = 0;
 

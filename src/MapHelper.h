@@ -33,7 +33,7 @@ namespace Tile_Type
     enum Tile_Type {TILE_NONE, TILE_WALL, TILE_FLOOR, TILE_EXIT, TILE_DOOR, TILE_KEY, TILE_PATH};
 }
 
-#define WALL_WIDTH                 1
+#define WALL_WIDTH                 3
 
 #define DIRECTION_BIAS_THRESHOLD   32 // Higher numbers result in mazes with longer passages.
 #define DIRECTION_BIAS_NONE        0

@@ -25,7 +25,6 @@
 #include "flare/MapSaver.h"
 #include "TilesetDef.h"
 
-
 void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y)
 {
     map_pointer->w = dimension_x;
@@ -50,7 +49,6 @@ void MapGenerator::Export(Map* map_pointer, std::string file_name)
 	mapSaver->saveMap(file_name, TilesetDef::tilesetDefinitions(tilesetIndex));
     delete mapSaver;
 }
-
 
 void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
 {
