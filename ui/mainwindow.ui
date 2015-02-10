@@ -126,17 +126,17 @@
          </property>
          <item>
           <property name="text">
-           <string>Cave</string>
+           <string>cave</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Dungeon</string>
+           <string>dungeon</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Grassland</string>
+           <string>grassland</string>
           </property>
          </item>
         </widget>

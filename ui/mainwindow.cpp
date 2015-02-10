@@ -88,7 +88,20 @@ void MainWindow::on_pushButton_released()
 
     MapProperties properties;
     properties.algorithm = static_cast<Algorithm_Type::Algorithm_Type>(app_data.algorithm);
-    properties.tile_set = static_cast<TILESET::TILESET>(app_data.tile_set);
+    
+    // TODO : do not hardcode tileset list, get it from TilesetDef::tilesetNames() and fill combobox with strings
+    switch( app_data.tile_set )
+    {
+    case 0:
+        properties.tile_set = "cave";
+        break;
+    case 1:
+        properties.tile_set = "dungeon";
+        break;
+    case 2:
+        properties.tile_set = "grassland";
+        break;
+    }
     properties.size_x = app_data.size_x;
     properties.size_y = app_data.size_y;
     properties.seed = app_data.seed;

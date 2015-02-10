@@ -28,11 +28,6 @@
 #include <math.h>
 #include "flare/Map.h"
 
-namespace TILESET
-{
-    enum TILESET {TILESET_CAVE, TILESET_DUNGEON, TILESET_GRASSLAND};
-}
-
 namespace Tile_Type
 {
     enum Tile_Type {TILE_NONE, TILE_WALL, TILE_FLOOR, TILE_EXIT, TILE_DOOR, TILE_KEY, TILE_PATH};
@@ -105,7 +100,7 @@ struct MapNode
 struct MapProperties
 {
     Algorithm_Type::Algorithm_Type  algorithm;
-    TILESET::TILESET                 tile_set;
+    std::string     tile_set;
     int             size_x;
     int             size_y;
     int             seed;

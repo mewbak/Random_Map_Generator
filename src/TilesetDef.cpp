@@ -123,11 +123,25 @@ void TilesetDef::init()
 
 }
 
- std::string TilesetDef::tilesetDefinitions(int index)
+std::string TilesetDef::tilesetDefinitions(int index)
 {
 	init();
 
 	return tileset_definitions[index];
+}
+
+std::string TilesetDef::tilesetLocation(int index)
+{
+	init();
+
+	return tileset_locations[index];
+}
+
+std::vector<std::string> TilesetDef::tilesetNames()
+{
+	init();
+
+	return tileset_names;
 }
 
 int TilesetDef::findTilesetByName(std::string name)
@@ -150,42 +164,18 @@ int TilesetDef::findTilesetByLocation(std::string location)
     return -1;
 }
 
-int TilesetDef::getRandomTile(TILESET::TILESET _tileset, TILESET_TILE_TYPE::TILESET_TILE_TYPE type)
+int TilesetDef::getRandomTile(std::string _tileset, TILESET_TILE_TYPE::TILESET_TILE_TYPE type)
 {
     std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> tileset;
     init();
 
-	int i = -1;
-    switch(_tileset)
+    int i = findTilesetByName(_tileset);
+    if (i == -1)
     {
-    case TILESET::TILESET_CAVE:
-		i = findTilesetByName("cave");
-		if (i == -1)
-		{
-			logError("TilesetDef: tileset \"cave\" not defined");
-			return 0;
-		}
-        tileset = tilesets[i];
-        break;
-    case TILESET::TILESET_DUNGEON:
-		i = findTilesetByName("dungeon");
-		if (i == -1)
-		{
-			logError("TilesetDef: tileset \"dungeon\" not defined");
-			return 0;
-		}
-        tileset = tilesets[i];
-        break;
-    case TILESET::TILESET_GRASSLAND:
-		i = findTilesetByName("grassland");
-		if (i == -1)
-		{
-			logError("TilesetDef: tileset \"grassland\" not defined");
-			return 0;
-		}
-        tileset = tilesets[i];
-        break;
+        logError("TilesetDef: tileset '%s' not defined", _tileset.c_str());
+        return 0;
     }
+    tileset = tilesets[i];
 
     std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE>::iterator it = tileset.begin();
     while (it != tileset.end())

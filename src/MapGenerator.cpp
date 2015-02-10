@@ -52,23 +52,11 @@ void MapGenerator::Export(Map* map_pointer, std::string file_name)
 }
 
 
-void MapGenerator::applyTileset(Map* map_pointer, TILESET::TILESET tileset)
+void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
 {
-    switch (tileset)
-    {
-    case TILESET::TILESET_CAVE:
-        map_pointer->title = "Randomly generated cave";
-        map_pointer->setTileset("tilesetdefs/tileset_cave.txt");
-        break;
-    case TILESET::TILESET_DUNGEON:
-        map_pointer->title = "Randomly generated dungeon";
-        map_pointer->setTileset("tilesetdefs/tileset_dungeon.txt");
-        break;
-    case TILESET::TILESET_GRASSLAND:
-        map_pointer->title = "Randomly generated grassland";
-        map_pointer->setTileset("tilesetdefs/tileset_grassland.txt");
-        break;
-    }
+    map_pointer->title = "Randomly generated " + tileset;
+    
+    map_pointer->setTileset(TilesetDef::tilesetLocation(TilesetDef::findTilesetByName(tileset)));
 
     //map_pointer->tile_width = 64;
     //map_pointer->tile_height = 32;
