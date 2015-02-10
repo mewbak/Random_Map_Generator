@@ -264,11 +264,11 @@ bool MapGenerator_M1::connect_room (Map* map_pointer, room_struct* room)
 void MapGenerator_M1::Generate (Map* map_pointer, MapProperties properties)
 {
     Prepare(map_pointer, properties);
-    GenerateMap(map_pointer);
+    GenerateMap(map_pointer,properties);
     applyTileset(map_pointer, properties.tile_set);
 }
 
-void MapGenerator_M1::GenerateMap(Map* map_pointer)
+void MapGenerator_M1::GenerateMap(Map* map_pointer, MapProperties properties)
 {
     if (findLayerByName(map_pointer,"intermediate") == -1)
     {
@@ -290,4 +290,5 @@ void MapGenerator_M1::GenerateMap(Map* map_pointer)
     for (int i = 0; i < no_of_rooms; i++)
         connect_room(map_pointer,&room[i]);
     //map_gen_maze_check(map_pointer);
+    if (properties.gen_exits) map_gen_exits (map_pointer);
 }

@@ -37,7 +37,7 @@ class MapGenerator_C1 : public MapGenerator
 
     private:
         void CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number);
-        void GenerateMap(Map* map_pointer);
+        void GenerateMap(Map* map_pointer, MapProperties properties);
 };
 
 #endif // MAP_GENERATOR_C1_H

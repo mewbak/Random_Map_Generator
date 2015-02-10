@@ -281,12 +281,13 @@ void MapGenerator_D1::map_gen_D1_internal(Map* map_pointer)
 void MapGenerator_D1::Generate (Map* map_pointer, MapProperties properties)
 {
     Prepare(map_pointer, properties);
-    GenerateMap(map_pointer);
+    GenerateMap(map_pointer,properties);
     applyTileset(map_pointer, properties.tile_set);
 }
 
-void MapGenerator_D1::GenerateMap(Map* map_pointer)
+void MapGenerator_D1::GenerateMap(Map* map_pointer, MapProperties properties)
 {
     map_gen_D1_internal(map_pointer);
+    if (properties.gen_exits) map_gen_exits (map_pointer);
 }
 

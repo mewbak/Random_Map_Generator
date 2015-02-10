@@ -23,7 +23,7 @@
 void MapGenerator_C1::Generate (Map* map_pointer, MapProperties properties)
 {
     Prepare(map_pointer, properties);
-    GenerateMap(map_pointer);
+    GenerateMap(map_pointer,properties);
     applyTileset(map_pointer, properties.tile_set);
 }
 
@@ -53,7 +53,7 @@ void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, FillData* fill_data, i
     }
 }
 
-void MapGenerator_C1::GenerateMap(Map* map_pointer)
+void MapGenerator_C1::GenerateMap(Map* map_pointer, MapProperties properties)
 {
     if (findLayerByName(map_pointer,"intermediate") == -1)
     {
@@ -130,4 +130,5 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer)
         else map_pointer->layers[intermediate][i%map_pointer->w][i/map_pointer->w] = Tile_Type::TILE_WALL;
     }
     delete[] fill_data;
+    if (properties.gen_exits) map_gen_exits (map_pointer);
 }

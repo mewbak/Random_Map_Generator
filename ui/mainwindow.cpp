@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     app_data.file_name     = "default.txt";
     app_data.gen_chests    = false;
     app_data.gen_enemies   = false;
-    app_data.gen_exits     = false;
+    app_data.gen_exits     = true;
     app_data.progress      = 0;
     app_data.size_x        = 100;
     app_data.size_y        = 100;
@@ -100,6 +100,7 @@ void MainWindow::on_pushButton_released()
     properties.size_y = app_data.size_y;
     properties.seed = app_data.seed;
     properties.seed_set = app_data.seed_set;
+    properties.gen_exits = app_data.gen_exits;
 
     MapGenerate(map_pointer, properties);
 
@@ -134,6 +135,7 @@ void MainWindow::renderPreview(Map* map_pointer)
         {
             if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_FLOOR) temp_stream << "<font color=#006600>";
             if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_WALL)  temp_stream << "<font color=#F8F8F8>";
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_EXIT)  temp_stream << "<font color=#FF0000>";
             temp_stream << "&#9632;";//map_pointer->tile[i].data;
             temp_stream << "</font>";
             if ((i % map_pointer->w) == (map_pointer->w-1)) temp_stream << std::endl;

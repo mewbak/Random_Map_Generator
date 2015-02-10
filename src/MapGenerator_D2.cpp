@@ -184,12 +184,13 @@ void MapGenerator_D2::map_gen_D2_internal (Map* map_pointer)
 void MapGenerator_D2::Generate (Map* map_pointer, MapProperties properties)
 {
     Prepare(map_pointer, properties);
-    GenerateMap(map_pointer);
+    GenerateMap(map_pointer,properties);
     applyTileset(map_pointer, properties.tile_set);
 }
 
-void MapGenerator_D2::GenerateMap(Map* map_pointer)
+void MapGenerator_D2::GenerateMap(Map* map_pointer, MapProperties properties)
 {
     map_gen_D2_internal(map_pointer);
     if (!map_gen_flood_fill(map_pointer)) map_gen_D2_internal(map_pointer);
+    if (properties.gen_exits) map_gen_exits (map_pointer);
 }

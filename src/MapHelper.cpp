@@ -198,3 +198,27 @@ int findLayerByName(Map* map_pointer, std::string layer)
     }
     return -1;
 }
+
+void map_gen_exits (Map* map_pointer)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+        if (intermediate == -1) return;
+    bool exit[4];
+    int exit_count = 0;
+    while (exit_count < 2)
+    {
+        exit_count = 0;
+        for (int i = 0; i < 5; i++)
+        {
+            exit[i] = ((rand() % 100) < 50);
+            if (exit[i]) exit_count++;
+        }
+    }
+    for (int i = 0; i < 5; i++)
+    {
+        // will add better code for map exit tomorrow, it is now 2:44am and sleep is needed....
+        if (exit[i])
+            map_pointer->layers[intermediate][rand() % map_pointer->w][rand() % map_pointer->h] = Tile_Type::TILE_EXIT;
+    }
+
+}
