@@ -124,21 +124,6 @@
          <property name="enabled">
           <bool>true</bool>
          </property>
-         <item>
-          <property name="text">
-           <string>cave</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>dungeon</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>grassland</string>
-          </property>
-         </item>
         </widget>
        </item>
       </layout>
