@@ -27,7 +27,6 @@ struct AppData
     // this is only used by console app.
     int     progress;
     int     algorithm;
-    int     tile_set;
     int     size_x;
     int     size_y;
     int     seed;
@@ -36,6 +35,7 @@ struct AppData
     bool    gen_enemies;
     bool    gen_chests;
     std::string file_name;
+    std::string tile_set;
     std::string status;
 };
 
@@ -56,13 +56,13 @@ int main(int argc, char *argv[])
     app_data.seed          = time(NULL);
     app_data.seed_set      = false;
     app_data.status        = "Ready";
-    app_data.tile_set      = TILESET::TILESET_CAVE;
+    app_data.tile_set      = "cave";
 	
-	app_data.file_name = "default.txt";
+    app_data.file_name = "default.txt";
 	
     MapProperties properties;
     properties.algorithm = static_cast<Algorithm_Type::Algorithm_Type>(app_data.algorithm);
-    properties.tile_set = static_cast<TILESET::TILESET>(app_data.tile_set);
+    properties.tile_set = app_data.tile_set;
     properties.size_x = app_data.size_x;
     properties.size_y = app_data.size_y;
     properties.seed = app_data.seed;
