@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "flare/Map.h"
 #include "MapGenerator.h"
+#include "TilesetDef.h"
 #include "ui_mainwindow.h"
 #include <sstream>
 
@@ -20,6 +21,11 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     app_data.seed_set      = false;
     app_data.status        = "Ready";
     app_data.tile_set      = "cave";
+
+    std::vector<std::string> tileset_names = TilesetDef::tilesetNames();
+    for (unsigned i=0; i<tileset_names.size(); ++i) {
+        ui->comboBox_tileSet->insertItem(i, QString(tileset_names[i].c_str()));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -35,7 +41,7 @@ void MainWindow::on_comboBox_algorithm_currentIndexChanged(int index)
 
 void MainWindow::on_comboBox_tileSet_currentIndexChanged(int index)
 {
-    MainWindow::app_data.tile_set = index;
+    MainWindow::app_data.tile_set = ui->comboBox_tileSet->itemText(index).toStdString();
 }
 
 void MainWindow::on_comboBox_mapSize_currentIndexChanged(int index)
