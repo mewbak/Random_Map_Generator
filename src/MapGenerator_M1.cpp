@@ -205,6 +205,62 @@ void MapGenerator_M1::map_gen_maze(Map* map_pointer, int tile_x, int tile_y, int
     }
 }
 
+bool MapGenerator_M1::add_room (Map* map_pointer, room_struct* room)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+    if (intermediate == -1) return false;
+    room->x = ROOM_MAX_X + rand() % (map_pointer->w - (ROOM_MAX_X*2));
+    room->y = ROOM_MAX_X + rand() % (map_pointer->h - (ROOM_MAX_X*2));
+    room->w = ROOM_MIN_X + rand() % (ROOM_MAX_X - ROOM_MIN_X);
+    room->h = ROOM_MIN_Y + rand() % (ROOM_MAX_Y - ROOM_MIN_Y);
+    for (int i = room->x-1-(int)room->w/2.0f; i < room->x+1+(int)room->w/2.0f; i++)
+    {
+        for (int j = room->y-1-(int)room->h/2.0f; j < room->y+1+(int)room->h/2.0f; j++)
+        {
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_FLOOR) return false;
+        }
+    }
+    for (int i = room->x-(int)room->w/2.0f; i < room->x+(int)room->w/2.0f; i++)
+    {
+        for (int j = room->y-(int)room->h/2.0f; j < room->y+(int)room->h/2.0f; j++)
+        {
+            map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_FLOOR;
+        }
+    }
+    return true;
+}
+
+bool MapGenerator_M1::connect_room (Map* map_pointer, room_struct* room)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+    if (intermediate == -1) return false;
+    if (abs(room->x - map_pointer->w/2) > abs(room->y - map_pointer->h/2))
+    {
+        bool found_wall = false;
+        for (int i = room->x; (i != map_pointer->w-1)||(i != 0);)
+        {
+            if ((found_wall)&&(map_pointer->layers[intermediate][i][room->y] == Tile_Type::TILE_FLOOR)) break;
+            if (map_pointer->layers[intermediate][i][room->y] == Tile_Type::TILE_WALL) found_wall = true;
+            map_pointer->layers[intermediate][i][room->y] = Tile_Type::TILE_FLOOR;
+            if (room->x > map_pointer->w/2) i--;
+            else  i++;
+        }
+    }
+    else
+    {
+        bool found_wall = false;
+        for (int i = room->y; (i != map_pointer->h-1)||(i != 0);)
+        {
+            if ((found_wall)&&(map_pointer->layers[intermediate][room->x][i] == Tile_Type::TILE_FLOOR)) break;
+            if (map_pointer->layers[intermediate][room->x][i] == Tile_Type::TILE_WALL) found_wall = true;
+            map_pointer->layers[intermediate][room->x][i] = Tile_Type::TILE_FLOOR;
+            if (room->y > map_pointer->h/2) i--;
+            else  i++;
+        }
+    }
+    return true;
+}
+
 void MapGenerator_M1::Generate (Map* map_pointer, MapProperties properties)
 {
     Prepare(map_pointer, properties);
@@ -226,6 +282,12 @@ void MapGenerator_M1::GenerateMap(Map* map_pointer)
         for (int i = 0; i < map_pointer->w; i++)
             map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_WALL;
     }
+    int no_of_rooms = 2+ rand() % 4;
+    room_struct *room = new room_struct[no_of_rooms];
+    for (int i = 0; i < no_of_rooms; i++)
+        while (!add_room(map_pointer,&room[i]));
     map_gen_maze(map_pointer,map_pointer->w/2,map_pointer->h/2,DIRECTION_BIAS_NONE);
+    for (int i = 0; i < no_of_rooms; i++)
+        connect_room(map_pointer,&room[i]);
     //map_gen_maze_check(map_pointer);
 }
