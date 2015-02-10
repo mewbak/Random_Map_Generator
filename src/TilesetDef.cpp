@@ -127,12 +127,18 @@ std::string TilesetDef::tilesetDefinitions(int index)
 {
 	init();
 
+    if (index < 0 || index >= tileset_definitions.size())
+        return "";
+
 	return tileset_definitions[index];
 }
 
 std::string TilesetDef::tilesetLocation(int index)
 {
 	init();
+
+    if (index < 0 || index >= tileset_locations.size())
+        return "";
 
 	return tileset_locations[index];
 }

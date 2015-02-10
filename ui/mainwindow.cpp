@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     app_data.seed          = time(NULL);
     app_data.seed_set      = false;
     app_data.status        = "Ready";
-    app_data.tile_set      = TILESET::TILESET_CAVE;
+    app_data.tile_set      = "cave";
 }
 
 MainWindow::~MainWindow()
@@ -89,19 +89,7 @@ void MainWindow::on_pushButton_released()
     MapProperties properties;
     properties.algorithm = static_cast<Algorithm_Type::Algorithm_Type>(app_data.algorithm);
     
-    // TODO : do not hardcode tileset list, get it from TilesetDef::tilesetNames() and fill combobox with strings
-    switch( app_data.tile_set )
-    {
-    case 0:
-        properties.tile_set = "cave";
-        break;
-    case 1:
-        properties.tile_set = "dungeon";
-        break;
-    case 2:
-        properties.tile_set = "grassland";
-        break;
-    }
+    properties.tile_set = app_data.tile_set;
     properties.size_x = app_data.size_x;
     properties.size_y = app_data.size_y;
     properties.seed = app_data.seed;

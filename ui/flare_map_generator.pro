@@ -56,3 +56,5 @@ INCLUDEPATH += flare \
 
 FORMS    += mainwindow.ui
 
+CONFIG   += debug_and_release
+
