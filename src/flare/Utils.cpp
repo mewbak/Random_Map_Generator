@@ -286,10 +286,11 @@ void logError(const char* format, ...) {
 /*
 #if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, format, args);
-#else
+#else*/
 	printf("ERROR: ");
 	vprintf(format, args);
 	printf("\n");
+	/*
 #endif
 */
 	va_end(args);

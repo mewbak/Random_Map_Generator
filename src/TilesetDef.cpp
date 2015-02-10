@@ -91,8 +91,10 @@ void TilesetDef::init()
     {
 		FileParser infile;
 
-		if (!infile.open("tiles/tiletypes.txt"))
-		return;
+		if (!infile.open("tiles/tiletypes.txt")) {
+          logError("TilesetDef: cannot open tiles/tiletypes.txt");
+          return;
+		}
 	      	
 		while (infile.next()) {
 		if (infile.new_section) {
