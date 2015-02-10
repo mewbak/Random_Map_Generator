@@ -45,7 +45,9 @@ void MapGenerator::Prepare(Map *map_pointer, MapProperties properties)
 void MapGenerator::Export(Map* map_pointer, std::string file_name)
 {
     MapSaver* mapSaver = new MapSaver(map_pointer);
-    mapSaver->saveMap(file_name);
+
+	int tilesetIndex = TilesetDef::findTilesetByLocation(map_pointer->getTileset());
+	mapSaver->saveMap(file_name, TilesetDef::tilesetDefinitions(tilesetIndex));
     delete mapSaver;
 }
 

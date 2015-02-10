@@ -64,18 +64,24 @@ class TilesetDef
 public:
     static int getRandomTile(TILESET::TILESET _tileset, TILESET_TILE_TYPE::TILESET_TILE_TYPE type);
 
+	static std::string tilesetDefinitions(int index);
+
+	static int findTilesetByLocation(std::string location);
+
 private:
     static void init();
     
     static TILESET_TILE_TYPE::TILESET_TILE_TYPE toTyleType(std::string type);
+
+	static int findTilesetByName(std::string name);
 
     static std::vector< std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> > tilesets;
     
     static std::vector<std::string> tileset_names;
     
     static std::vector<std::string> tileset_locations;
-    
-    static std::vector<std::string> tileset_definitions;
+
+	static std::vector<std::string> tileset_definitions;
 
     TilesetDef();
     ~TilesetDef();

@@ -34,9 +34,9 @@ void MapGenerator_D2::map_gen_D2_internal (Map* map_pointer)
         for (int i = 0; i < map_pointer->w; i++)
             map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_WALL;
     }
-    int max_r = (int)sqrt((ROOM_MAX_X*ROOM_MAX_X)+(ROOM_MAX_Y*ROOM_MAX_Y));
+    int max_r = (int)sqrt((float)(ROOM_MAX_X*ROOM_MAX_X)+(ROOM_MAX_Y*ROOM_MAX_Y));
     int max_rooms = (map_pointer->w*map_pointer->h) / (ROOM_MIN_X*ROOM_MIN_Y);
-    room_struct room[max_rooms];
+    room_struct* room = new room_struct[max_rooms];
     for (int i = 0; i < max_rooms; i++)
     {
         room[i].valid = true;
@@ -51,7 +51,7 @@ void MapGenerator_D2::map_gen_D2_internal (Map* map_pointer)
         {
             if ((room[i].valid && room[j].valid)&&(i!=j))
             {
-                if (max_r > (int)sqrt(((room[i].x-room[j].x)*(room[i].x-room[j].x))+((room[i].y-room[j].y)*(room[i].y-room[j].y))))
+                if (max_r > (int)sqrt((float)((room[i].x-room[j].x)*(room[i].x-room[j].x))+((room[i].y-room[j].y)*(room[i].y-room[j].y))))
                     room[j].valid = false;
             }
         }
@@ -170,6 +170,9 @@ void MapGenerator_D2::map_gen_D2_internal (Map* map_pointer)
             }
         }
     }
+
+	delete [] room;
+
     for (int j = 0; j < map_pointer->h; j++)
     {
         for (int i = 0; i < map_pointer->w; i++)
