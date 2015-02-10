@@ -185,16 +185,14 @@ int TilesetDef::getRandomTile(std::string _tileset, TILESET_TILE_TYPE::TILESET_T
         logError("TilesetDef: tileset '%s' not defined", _tileset.c_str());
         return 0;
     }
-    tileset = tilesets[i];
 
-    std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE>::iterator it = tileset.begin();
-    while (it != tileset.end())
+    std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE>::iterator it = tilesets[i].begin();
+    while (it != tilesets[i].end())
     {
-      if (it->second != type)
-      {
-        tileset.erase(it++);
-      }
-      else
+        if (it->second == type)
+        {
+            tileset[it->first] = it->second;
+        }
         ++it;
     }
 
