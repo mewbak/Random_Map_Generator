@@ -13,7 +13,7 @@ struct AppData
     // this is only used by QT front end.
     int     progress;
     int     algorithm;
-    int     tile_set;
+    std::string tile_set;
     int     size_x;
     int     size_y;
     int     seed;
