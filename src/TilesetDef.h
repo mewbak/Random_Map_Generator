@@ -79,7 +79,7 @@ private:
     
     static TILESET_TILE_TYPE::TILESET_TILE_TYPE toTyleType(std::string type);
 
-    static std::vector< std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> > tilesets;
+    static std::vector< std::multimap<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int> > tilesets;
     
     static std::vector<std::string> tileset_names;
     

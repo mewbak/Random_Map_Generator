@@ -21,7 +21,7 @@
 #include "TilesetDef.h"
 #include "UtilsParsing.h"
 
-std::vector< std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> > TilesetDef::tilesets;
+std::vector< std::multimap<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int> > TilesetDef::tilesets;
 
 std::vector<std::string> TilesetDef::tileset_names;
     
@@ -116,7 +116,9 @@ void TilesetDef::init()
 			tileset_definitions.back() += '\n';
 		}
 		else if (infile.key == "tile") {
-			tilesets.back()[toInt(infile.nextValue())] = toTyleType(infile.nextValue());
+            int tileId = toInt(infile.nextValue());
+            std::string type = infile.nextValue();
+            tilesets.back().insert(std::pair<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int>(toTyleType(type), tileId));
 		}
 		}
 
@@ -178,7 +180,6 @@ int TilesetDef::findTilesetByLocation(std::string location)
 
 int TilesetDef::getRandomTile(std::string _tileset, TILESET_TILE_TYPE::TILESET_TILE_TYPE type)
 {
-    std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE> tileset;
     init();
 
     int i = findTilesetByName(_tileset);
@@ -188,15 +189,13 @@ int TilesetDef::getRandomTile(std::string _tileset, TILESET_TILE_TYPE::TILESET_T
         return 0;
     }
 
-    std::map<int, TILESET_TILE_TYPE::TILESET_TILE_TYPE>::iterator it = tilesets[i].begin();
-    while (it != tilesets[i].end())
-    {
-        if (it->second == type)
-        {
-            tileset[it->first] = it->second;
-        }
-        ++it;
-    }
+    std::pair <std::multimap<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int>::iterator,
+               std::multimap<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int>::iterator> iterator_pair;
+
+    iterator_pair = tilesets[i].equal_range(type);
+
+    std::map<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int> tileset(iterator_pair.first, iterator_pair.second);
+    std::map<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int>::iterator it = tileset.begin();
 
     int rand_value = 0;
 
@@ -208,7 +207,7 @@ int TilesetDef::getRandomTile(std::string _tileset, TILESET_TILE_TYPE::TILESET_T
         {
             it = tileset.begin();
             std::advance(it, rand_value);
-            return it->first;
+            return it->second;
         }
         else
         {
@@ -227,5 +226,5 @@ int TilesetDef::getRandomTile(std::string _tileset, TILESET_TILE_TYPE::TILESET_T
     rand_value = rand() % tileset.size();
     it = tileset.begin();
     std::advance(it, rand_value);
-    return it->first;
+    return it->second;
 }
