@@ -116,9 +116,9 @@ void TilesetDef::init()
 			tileset_definitions.back() += '\n';
 		}
 		else if (infile.key == "tile") {
-            int tileId = toInt(infile.nextValue());
-            std::string type = infile.nextValue();
-            tilesets.back().insert(std::pair<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int>(toTyleType(type), tileId));
+			int tileId = toInt(infile.nextValue());
+			std::string type = infile.nextValue();
+			tilesets.back().insert(std::pair<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int>(toTyleType(type), tileId));
 		}
 		}
 
@@ -194,8 +194,8 @@ int TilesetDef::getRandomTile(std::string _tileset, TILESET_TILE_TYPE::TILESET_T
 
     iterator_pair = tilesets[i].equal_range(type);
 
-    std::map<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int> tileset(iterator_pair.first, iterator_pair.second);
-    std::map<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int>::iterator it = tileset.begin();
+    std::multimap<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int> tileset(iterator_pair.first, iterator_pair.second);
+    std::multimap<TILESET_TILE_TYPE::TILESET_TILE_TYPE, int>::iterator it = tileset.begin();
 
     int rand_value = 0;
 
