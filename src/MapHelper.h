@@ -28,14 +28,14 @@
 #include <math.h>
 #include "flare/Map.h"
 
-namespace Tile_Type
-{
-    enum Tile_Type {TILE_NONE, TILE_WALL, TILE_FLOOR, TILE_EXIT, TILE_DOOR, TILE_KEY, TILE_PATH};
-}
-
 #define WALL_WIDTH                 3
 
 #define EXITS_COUNT                4
+
+#define ROOM_MIN_X                 11
+#define ROOM_MIN_Y                 11
+#define ROOM_MAX_X                 15
+#define ROOM_MAX_Y                 15
 
 #define DIRECTION_BIAS_THRESHOLD   32 // Higher numbers result in mazes with longer passages.
 #define DIRECTION_BIAS_NONE        0
@@ -43,6 +43,22 @@ namespace Tile_Type
 #define DIRECTION_BIAS_EAST        2
 #define DIRECTION_BIAS_SOUTH       3
 #define DIRECTION_BIAS_WEST        4
+
+namespace Tile_Type
+{
+    enum Tile_Type {TILE_NONE,
+                    TILE_WALL,
+                    TILE_FLOOR,
+                    TILE_EXIT,
+                    TILE_DOOR,
+                    TILE_KEY,
+                    TILE_PATH,
+                    TILE_ROOM,
+                    TILE_WATER,
+                    TILE_ROAD,
+                    TILE_BRIDGE,
+                    TILE_HOUSE};
+}
 
 namespace Algorithm_Type
 {
@@ -53,11 +69,6 @@ namespace Algorithm_Type
                          GEN_ALGORITHM_D3,
                          GEN_ALGORITHM_T1};
 }
-
-#define ROOM_MIN_X                 11
-#define ROOM_MIN_Y                 11
-#define ROOM_MAX_X                 15
-#define ROOM_MAX_Y                 15
 
 struct FillData
 {

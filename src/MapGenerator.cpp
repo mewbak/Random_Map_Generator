@@ -276,9 +276,17 @@ void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
                     map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                                                            TILESET_TILE_TYPE::_TILE_FLOOR);
                 break;
-                case Tile_Type::TILE_PATH:
+                case Tile_Type::TILE_WATER:
                 break;
-            case Tile_Type::TILE_NONE:
+                case Tile_Type::TILE_BRIDGE:
+                break;
+                case Tile_Type::TILE_ROAD:
+                break;
+                case Tile_Type::TILE_PATH:
+                    map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
+                                                                                       TILESET_TILE_TYPE::_TILE_FLOOR);
+                break;
+                case Tile_Type::TILE_NONE:
                 default:
                     map_pointer->layers[background][i][j] = 0;
                     map_pointer->layers[collision][i][j] = 3;
