@@ -274,7 +274,7 @@ void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
                     map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                    TILESET_TILE_TYPE::TILE_EXIT_LEFT);
                     map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
-                                                                                                                           TILESET_TILE_TYPE::_TILE_FLOOR);
+                                                                                      TILESET_TILE_TYPE::_TILE_FLOOR);
                 break;
                 case Tile_Type::TILE_WATER:
                 break;

@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     ../src/MapGenerator_M1.cpp \
     ../src/MapGenerator.cpp \
     ../src/TilesetDef.cpp \
-    ../src/flare/MapSaver.cpp
+    ../src/flare/MapSaver.cpp \
+    ../src/MapGenerator_D3.cpp \
+    ../src/MapGenerator_T1.cpp
 
 HEADERS  += mainwindow.h \
     ../src/MapHelper.h \
@@ -49,7 +51,9 @@ HEADERS  += mainwindow.h \
     ../src/flare/Utils.h \
     ../src/flare/UtilsFileSystem.h \
     ../src/flare/UtilsMath.h \
-    ../src/flare/UtilsParsing.h
+    ../src/flare/UtilsParsing.h \
+    ../src/MapGenerator_D3.h \
+    ../src/MapGenerator_T1.h
 
 INCLUDEPATH += flare \
                export

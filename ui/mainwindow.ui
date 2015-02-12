@@ -106,6 +106,16 @@
            <string>Dungeon 2</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>Dungeon 3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Town</string>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>

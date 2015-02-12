@@ -25,9 +25,11 @@
 #include "MapHelper.h"
 #include "MapGenerator.h"
 #include "MapGenerator_C1.h"
+#include "MapGenerator_M1.h"
 #include "MapGenerator_D1.h"
 #include "MapGenerator_D2.h"
-#include "MapGenerator_M1.h"
+#include "MapGenerator_D3.h"
+#include "MapGenerator_T1.h"
 
 void MapGenerate(Map* map_pointer, MapProperties properties)
 {
@@ -35,14 +37,20 @@ void MapGenerate(Map* map_pointer, MapProperties properties)
     if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_C1) {
         generator = new MapGenerator_C1();
     }
+    else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_M1) {
+        generator = new MapGenerator_M1();
+    }
     else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_D1) {
         generator = new MapGenerator_D1();
     }
     else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_D2) {
         generator = new MapGenerator_D2();
     }
-    else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_M1) {
-        generator = new MapGenerator_M1();
+    else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_D3) {
+        generator = new MapGenerator_D3();
+    }
+    else if (properties.algorithm == Algorithm_Type::GEN_ALGORITHM_T1) {
+        generator = new MapGenerator_T1();
     }
     generator->Generate(map_pointer, properties);
     delete generator;

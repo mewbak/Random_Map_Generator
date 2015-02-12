@@ -36,6 +36,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_comboBox_algorithm_currentIndexChanged(int index)
 {
+    // this is not an optimal way to do this, as it relies on the index
+    // to be in the exact order as the  Algorithm_Type enum
     MainWindow::app_data.algorithm = index;
 }
 
