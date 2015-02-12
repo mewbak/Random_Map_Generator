@@ -124,6 +124,9 @@ void map_check               (Map* map_pointer, maprow *layer);
 int  map_gen_flood_fill_tile (Map* map_pointer, FillData* fill_data, int tile_number);
 bool map_gen_flood_fill      (Map* map_pointer);
 void map_gen_exits           (Map* map_pointer);
+void map_gen_river           (Map* map_pointer);
+void map_gen_road            (Map* map_pointer);
+void map_gen_bridge          (Map* map_pointer);
 
 void MapGenerate(Map* map_pointer, MapProperties properties);
 int findLayerByName(Map* map_pointer, std::string layer);

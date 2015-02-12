@@ -253,3 +253,18 @@ void map_gen_exits (Map* map_pointer)
         }
     }
 }
+
+void map_gen_river (Map* map_pointer)
+{
+    (void) map_pointer;
+}
+
+void map_gen_road (Map* map_pointer)
+{
+    (void) map_pointer;
+}
+
+void map_gen_bridge (Map* map_pointer)
+{
+    (void) map_pointer;
+}
