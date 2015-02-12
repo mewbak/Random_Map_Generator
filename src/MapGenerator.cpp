@@ -268,6 +268,13 @@ void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
                     }
                 break;
                 case Tile_Type::TILE_EXIT:
+                    map_pointer->layers[collision][i][j] = 1;
+                    // need to expand this to place exit with correct orientation.
+                    // exit uses 2 tiles? (O_o)
+                    map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
+                                                                                   TILESET_TILE_TYPE::TILE_EXIT_LEFT);
+                    map_pointer->layers[background][i][j] = TilesetDef::getRandomTile(tileset,
+                                                                                                                           TILESET_TILE_TYPE::_TILE_FLOOR);
                 break;
                 case Tile_Type::TILE_PATH:
                 break;

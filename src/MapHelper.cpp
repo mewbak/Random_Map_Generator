@@ -216,9 +216,32 @@ void map_gen_exits (Map* map_pointer)
     }
     for (int i = 0; i < EXITS_COUNT; i++)
     {
-        // will add better code for map exit tomorrow, it is now 2:44am and sleep is needed....
         if (exit[i])
-            map_pointer->layers[intermediate][rand() % map_pointer->w][rand() % map_pointer->h] = Tile_Type::TILE_EXIT;
+        {
+            int start_x = ((i == 0)||(i == 1)) ? 0 : map_pointer->w-1;
+            int start_y = ((i == 0)||(i == 3)) ? 0 : map_pointer->h-1;
+            int previous_x = start_x;
+            int previous_y = start_y;
+            int previous_tile = Tile_Type::TILE_NONE;
+            bool done = false;
+            while (!done)
+            {
+                if ((map_pointer->layers[intermediate][start_x][start_y] == Tile_Type::TILE_FLOOR)&&(map_pointer->layers[intermediate][previous_x][previous_y] == Tile_Type::TILE_WALL))
+                {
+                    map_pointer->layers[intermediate][previous_x][previous_y] = Tile_Type::TILE_EXIT;
+                    done = true;
+                }
+                previous_tile = map_pointer->layers[intermediate][start_x][start_y];
+                previous_x = start_x;
+                previous_y = start_y;
+                ((i == 0)||(i == 1)) ? start_x++ : start_x--;
+                ((i == 0)||(i == 3)) ? start_y++ : start_y--;
+                if     ((((i == 0)||(i == 1))&&(start_x > map_pointer->w/2))
+                    || (!((i == 0)||(i == 1))&&(start_x < map_pointer->w/2))
+                    ||  (((i == 0)||(i == 3))&&(start_y > map_pointer->h/2))
+                    || (!((i == 0)||(i == 3))&&(start_y < map_pointer->h/2)))
+                        done = true;
+            }
+        }
     }
-
 }
