@@ -35,6 +35,8 @@ namespace Tile_Type
 
 #define WALL_WIDTH                 3
 
+#define EXITS_COUNT                4
+
 #define DIRECTION_BIAS_THRESHOLD   32 // Higher numbers result in mazes with longer passages.
 #define DIRECTION_BIAS_NONE        0
 #define DIRECTION_BIAS_NORTH       1

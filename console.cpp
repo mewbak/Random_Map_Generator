@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     app_data.file_name     = "default.txt";
     app_data.gen_chests    = false;
     app_data.gen_enemies   = false;
-    app_data.gen_exits     = false;
+    app_data.gen_exits     = true;
     app_data.progress      = 0;
     app_data.size_x        = 100;
     app_data.size_y        = 100;
@@ -67,6 +67,9 @@ int main(int argc, char *argv[])
     properties.size_y = app_data.size_y;
     properties.seed = app_data.seed;
     properties.seed_set = app_data.seed_set;
+    properties.gen_chests = app_data.gen_chests;
+    properties.gen_enemies = app_data.gen_enemies;
+    properties.gen_exits = app_data.gen_exits;
 
     MapGenerate(map_pointer, properties);
     MapGenerator::Export(map_pointer, app_data.file_name);

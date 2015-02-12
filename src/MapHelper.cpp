@@ -203,18 +203,18 @@ void map_gen_exits (Map* map_pointer)
 {
     int intermediate = findLayerByName(map_pointer,"intermediate");
         if (intermediate == -1) return;
-    bool exit[4];
+    bool exit[EXITS_COUNT];
     int exit_count = 0;
     while (exit_count < 2)
     {
         exit_count = 0;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < EXITS_COUNT; i++)
         {
             exit[i] = ((rand() % 100) < 50);
             if (exit[i]) exit_count++;
         }
     }
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < EXITS_COUNT; i++)
     {
         // will add better code for map exit tomorrow, it is now 2:44am and sleep is needed....
         if (exit[i])
