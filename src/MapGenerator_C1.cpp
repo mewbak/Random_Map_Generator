@@ -27,29 +27,33 @@ void MapGenerator_C1::Generate (Map* map_pointer, MapProperties properties)
     applyTileset(map_pointer, properties.tile_set);
 }
 
+void MapGenerator_C1::check_tile(int map_size, FillData* fill_data, int tile_parent, int tile_check)
+{
+    if ((tile_check >=0)&&(tile_check < map_size))
+    {
+            if ((fill_data[tile_parent].tile_join)&&(fill_data[tile_check].tile_data == Tile_Type::TILE_FLOOR))
+                fill_data[tile_check].tile_join = true;
+    }
+}
+
 void MapGenerator_C1::CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number)
 {
-    if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
+    // function assumes calling from desired floor tile.
+    int map_size = map_pointer->w * map_pointer->h;
+    fill_data[tile_number].tile_join = true;
+    for (int j = 0; j < map_pointer->w; j++)
     {
-        int map_size = map_pointer->w*map_pointer->h;
-        fill_data[tile_number].tile_done = true;
-        fill_data[tile_number].tile_join = true;
-        if ((tile_number+1) <= map_size)
-            CheckJoiningTiles(map_pointer,fill_data,tile_number+1);
-        if ((tile_number-1) >= 0)
-            CheckJoiningTiles(map_pointer,fill_data,tile_number-1);
-        if ((tile_number+map_pointer->w) <= map_size)
-            CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w);
-        if ((tile_number+map_pointer->w+1) <= map_size)
-            CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w+1);
-        if ((tile_number+map_pointer->w-1) <= map_size)
-            CheckJoiningTiles(map_pointer,fill_data,tile_number+map_pointer->w-1);
-        if ((tile_number-map_pointer->w) >= 0)
-            CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w);
-        if ((tile_number-map_pointer->w+1) >= 0)
-            CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w+1);
-        if ((tile_number-map_pointer->w-1) >= 0)
-            CheckJoiningTiles(map_pointer,fill_data,tile_number-map_pointer->w-1);
+        for (int i = 0; i < map_size; i++)
+        {
+            check_tile(map_size,fill_data,i,i-1);
+            check_tile(map_size,fill_data,i,i-map_pointer->w-1);
+            check_tile(map_size,fill_data,i,i-map_pointer->w);
+            check_tile(map_size,fill_data,i,i-map_pointer->w+1);
+            check_tile(map_size,fill_data,i,i+1);
+            check_tile(map_size,fill_data,i,i+map_pointer->w+1);
+            check_tile(map_size,fill_data,i,i+map_pointer->w);
+            check_tile(map_size,fill_data,i,i+map_pointer->w-1);
+        }
     }
 }
 
