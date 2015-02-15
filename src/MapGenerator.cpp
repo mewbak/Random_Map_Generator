@@ -29,6 +29,43 @@ void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y
 {
     map_pointer->w = dimension_x;
     map_pointer->h = dimension_y;
+    
+    int background = -1;
+    int object = -1;
+    int collision = -1;
+
+    for (unsigned i = 0; i < map_pointer->layers.size(); ++i) {
+            if (map_pointer->layernames[i] == "collision") {
+                collision = i;
+            }
+            if (map_pointer->layernames[i] == "object") {
+                object = i;
+            }
+            if (map_pointer->layernames[i] == "background") {
+                background = i;
+            }
+    }
+
+    if (background == -1)
+    {
+        maprow *current_layer = new maprow[map_pointer->w];
+        map_pointer->layers.push_back(current_layer);
+        map_pointer->layernames.push_back("background");
+    }
+    if (object == -1)
+    {
+        maprow *current_layer = new maprow[map_pointer->w];
+        map_pointer->layers.push_back(current_layer);
+        map_pointer->layernames.push_back("object");
+    }
+    if (collision == -1)
+    {
+        maprow *current_layer = new maprow[map_pointer->w];
+        map_pointer->layers.push_back(current_layer);
+        map_pointer->layernames.push_back("collision");
+        //map_pointer->collision_layer = map_pointer->layernames.size() - 1;
+    }
+
 }
 
 void MapGenerator::Prepare(Map *map_pointer, MapProperties properties)
@@ -101,31 +138,8 @@ void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
                 intermediate = i;
             }
     }
-    //if (background == -1 || object == -1 || collision == -1)
-    //    return;
-
-    // Maybe move this to Initialize() later
-    if (background == -1)
-    {
-        maprow *current_layer = new maprow[map_pointer->w];
-        map_pointer->layers.push_back(current_layer);
-        map_pointer->layernames.push_back("background");
-        background = map_pointer->layernames.size() - 1;
-    }
-    if (object == -1)
-    {
-        maprow *current_layer = new maprow[map_pointer->w];
-        map_pointer->layers.push_back(current_layer);
-        map_pointer->layernames.push_back("object");
-        object = map_pointer->layernames.size() - 1;
-    }
-    if (collision == -1)
-    {
-        maprow *current_layer = new maprow[map_pointer->w];
-        map_pointer->layers.push_back(current_layer);
-        map_pointer->layernames.push_back("collision");
-        collision = map_pointer->layernames.size() - 1;
-    }
+    if (background == -1 || object == -1 || collision == -1 || intermediate == -1)
+        return;
 
     for (int j = 0; j < map_pointer->h; j++)
     {
