@@ -24,7 +24,7 @@ void MapGenerator_C1::Generate (Map* map_pointer, MapProperties properties)
 {
     Prepare(map_pointer, properties);
     GenerateMap(map_pointer,properties);
-    applyTileset(map_pointer, properties.tile_set);
+    PostProcess(map_pointer, properties.tile_set);
 }
 
 void MapGenerator_C1::check_tile(int map_size, FillData* fill_data, int tile_parent, int tile_check)

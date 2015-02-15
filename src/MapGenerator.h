@@ -44,10 +44,12 @@ class MapGenerator
 
     protected:
         void Prepare (Map* map_pointer, MapProperties properties);
-        static void applyTileset(Map* map_pointer, std::string tileset);
+        void PostProcess (Map* map_pointer, MapProperties properties);
+
 
     private:
         void Initialize (Map* map_pointer, int dimension_x, int dimension_y);
+        static void applyTileset(Map* map_pointer, std::string tileset);
 };
 
 #endif // MAP_GENERATOR_H

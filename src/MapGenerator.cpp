@@ -41,6 +41,11 @@ void MapGenerator::Prepare(Map *map_pointer, MapProperties properties)
     else srand(time(NULL));
 }
 
+void MapGenerator::PostProcess(Map* map_pointer, MapProperties properties)
+{
+    applyTileset(map_pointer, properties);
+}
+
 void MapGenerator::Export(Map* map_pointer, std::string file_name)
 {
     MapSaver* mapSaver = new MapSaver(map_pointer);
