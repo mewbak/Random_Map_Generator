@@ -24,7 +24,7 @@ void MapGenerator_T1::Generate (Map* map_pointer, MapProperties properties)
 {
     Prepare(map_pointer, properties);
     GenerateMap(map_pointer,properties);
-    PostProcess(map_pointer, properties.tile_set);
+    PostProcess(map_pointer, properties);
 }
 
 void MapGenerator_T1::GenerateMap(Map* map_pointer, MapProperties properties)

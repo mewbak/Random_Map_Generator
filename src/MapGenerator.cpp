@@ -43,7 +43,24 @@ void MapGenerator::Prepare(Map *map_pointer, MapProperties properties)
 
 void MapGenerator::PostProcess(Map* map_pointer, MapProperties properties)
 {
-    applyTileset(map_pointer, properties);
+    applyTileset(map_pointer, properties.tile_set);
+    
+    if (properties.gen_chests) {
+        addChests(map_pointer);
+    }
+    
+    if (properties.gen_enemies) {
+        addEnemies(map_pointer);
+    }
+}
+void MapGenerator::addChests(Map* map_pointer)
+{
+    
+}
+
+void MapGenerator::addEnemies(Map* map_pointer)
+{
+
 }
 
 void MapGenerator::Export(Map* map_pointer, std::string file_name)

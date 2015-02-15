@@ -50,6 +50,8 @@ class MapGenerator
     private:
         void Initialize (Map* map_pointer, int dimension_x, int dimension_y);
         void applyTileset(Map* map_pointer, std::string tileset);
+        void addChests(Map* map_pointer);
+        void addEnemies(Map* map_pointer);
 };
 
 #endif // MAP_GENERATOR_H
