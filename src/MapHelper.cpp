@@ -207,6 +207,63 @@ int findLayerByName(Map* map_pointer, std::string layer)
     return -1;
 }
 
+void map_gen_find (Map* map_pointer, FindData* find_data, Point* location)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+    if (intermediate == -1) return;
+    for (int i = 0; i < map_pointer->w; i++)
+    {
+        for (int j = 0; j < map_pointer->h; j++)
+        {
+            bool found = true;
+            for (int k = 0; k < find_data->w; k++)
+            {
+                for (int l = 0; l < find_data->h; l++)
+                {
+                    if (map_pointer->layers[intermediate][i+k][j+l] != find_data->tile[(find_data->w*l)+k])
+                        found = false;
+                }
+            }
+            if (found)
+            {
+                location->x = i;
+                location->y = j;
+                return;
+            }
+        }
+    }
+}
+
+void map_gen_find_replace (Map* map_pointer, FindData* find_data, FindData* replace_data)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+    if (intermediate == -1) return;
+    for (int i = 0; i < map_pointer->w; i++)
+    {
+        for (int j = 0; j < map_pointer->h; j++)
+        {
+            bool found = true;
+            for (int k = 0; k < find_data->w; k++)
+            {
+                for (int l = 0; l < find_data->h; l++)
+                {
+                    if (map_pointer->layers[intermediate][i+k][j+l] != find_data->tile[(find_data->w*l)+k])
+                        found = false;
+                }
+            }
+            if (found)
+            {
+                for (int k = 0; k < find_data->w; k++)
+                {
+                    for (int l = 0; l < find_data->h; l++)
+                        map_pointer->layers[intermediate][i+k][j+l] = replace_data->tile[(find_data->w*l)+k];
+                }
+                return;
+            }
+        }
+    }
+}
+
 void map_gen_exits (Map* map_pointer)
 {
     int intermediate = findLayerByName(map_pointer,"intermediate");
