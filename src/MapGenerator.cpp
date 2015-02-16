@@ -29,7 +29,7 @@ void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y
 {
     map_pointer->w = dimension_x;
     map_pointer->h = dimension_y;
-    
+
     int background = -1;
     int object = -1;
     int collision = -1;
@@ -80,19 +80,21 @@ void MapGenerator::Prepare(Map *map_pointer, MapProperties properties)
 
 void MapGenerator::PostProcess(Map* map_pointer, MapProperties properties)
 {
+    map_gen_remove_extra_wall(map_pointer);
+
     applyTileset(map_pointer, properties.tile_set);
-    
+
     if (properties.gen_chests) {
         addChests(map_pointer);
     }
-    
+
     if (properties.gen_enemies) {
         addEnemies(map_pointer);
     }
 }
 void MapGenerator::addChests(Map* map_pointer)
 {
-    
+
 }
 
 void MapGenerator::addEnemies(Map* map_pointer)
@@ -104,15 +106,15 @@ void MapGenerator::Export(Map* map_pointer, std::string file_name)
 {
     MapSaver* mapSaver = new MapSaver(map_pointer);
 
-	int tilesetIndex = TilesetDef::findTilesetByLocation(map_pointer->getTileset());
-	mapSaver->saveMap(file_name, TilesetDef::tilesetDefinitions(tilesetIndex));
+    int tilesetIndex = TilesetDef::findTilesetByLocation(map_pointer->getTileset());
+    mapSaver->saveMap(file_name, TilesetDef::tilesetDefinitions(tilesetIndex));
     delete mapSaver;
 }
 
 void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
 {
     map_pointer->title = "Randomly generated " + tileset;
-    
+
     map_pointer->setTileset(TilesetDef::tilesetLocation(TilesetDef::findTilesetByName(tileset)));
 
     //map_pointer->tile_width = 64;
@@ -330,7 +332,7 @@ void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
             }
         }
     }
-    
+
     // remove intermediate layer. Currently breaks UI Preview
     //delete [] map_pointer->layers[intermediate];
     //map_pointer->layers.erase(map_pointer->layers.begin() + intermediate);

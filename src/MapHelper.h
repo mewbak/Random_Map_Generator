@@ -128,18 +128,20 @@ struct MapProperties
     bool            gen_chests;
 };
 
-void map_check               (Map* map_pointer, maprow *layer);
-bool map_gen_flood_fill      (Map* map_pointer);
-int  CheckTile               (int map_size, FillData* fill_data, int tile_parent, int tile_check);
-int  CheckJoiningTiles       (Map* map_pointer, FillData* fill_data, int tile_number);
-void map_gen_find            (Map* map_pointer, SectionData* find_data, Point* location);
-void map_gen_find_replace    (Map* map_pointer, SectionData* find_data, SectionData* replace_data);
-void map_gen_replace         (Map* map_pointer, SectionData* replace_data, Point* location);
-bool map_gen_verify          (Map* map_pointer, SectionData* verify_data, Point* location);
-void map_gen_exits           (Map* map_pointer);
-void map_gen_river           (Map* map_pointer);
-void map_gen_road            (Map* map_pointer);
-void map_gen_bridge          (Map* map_pointer);
+void map_check                (Map* map_pointer, maprow *layer);
+bool map_gen_is_wall          (Map* map_pointer, int tile_x, int tile_y);
+void map_gen_remove_extra_wall(Map* map_pointer);
+bool map_gen_flood_fill       (Map* map_pointer);
+int  CheckTile                (int map_size, FillData* fill_data, int tile_parent, int tile_check);
+int  CheckJoiningTiles        (Map* map_pointer, FillData* fill_data, int tile_number);
+void map_gen_find             (Map* map_pointer, SectionData* find_data, Point* location);
+void map_gen_find_replace     (Map* map_pointer, SectionData* find_data, SectionData* replace_data);
+void map_gen_replace          (Map* map_pointer, SectionData* replace_data, Point* location);
+bool map_gen_verify           (Map* map_pointer, SectionData* verify_data, Point* location);
+void map_gen_exits            (Map* map_pointer);
+void map_gen_river            (Map* map_pointer);
+void map_gen_road             (Map* map_pointer);
+void map_gen_bridge           (Map* map_pointer);
 
 void MapGenerate(Map* map_pointer, MapProperties properties);
 int findLayerByName(Map* map_pointer, std::string layer);

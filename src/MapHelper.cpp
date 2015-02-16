@@ -56,6 +56,40 @@ void MapGenerate(Map* map_pointer, MapProperties properties)
     delete generator;
 }
 
+bool map_gen_is_wall(Map* map_pointer, int tile_x, int tile_y)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+    if (intermediate == -1) return false;
+    if ((tile_x < 0) || (tile_x >= map_pointer->w) || (tile_y < 0) || (tile_y >= map_pointer->h))
+        return true;
+    return ((map_pointer->layers[intermediate][tile_x][tile_y] == Tile_Type::TILE_WALL)
+            || (map_pointer->layers[intermediate][tile_x][tile_y] == Tile_Type::TILE_NONE)
+            || (map_pointer->layers[intermediate][tile_x][tile_y] == Tile_Type::TILE_EXIT));
+}
+
+void map_gen_remove_extra_wall(Map* map_pointer)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+    if (intermediate == -1) return;
+    for (int i = 0; i < map_pointer->w; i++)
+    {
+        for (int j = 0; j < map_pointer->h; j++)
+        {
+
+            if (map_gen_is_wall(map_pointer, i, j)
+                    && map_gen_is_wall(map_pointer, i, j+1)
+                    && map_gen_is_wall(map_pointer, i, j-1)
+                    && map_gen_is_wall(map_pointer, i+1, j)
+                    && map_gen_is_wall(map_pointer, i+1, j+1)
+                    && map_gen_is_wall(map_pointer, i+1, j-1)
+                    && map_gen_is_wall(map_pointer, i-1, j)
+                    && map_gen_is_wall(map_pointer, i-1, j+1)
+                    && map_gen_is_wall(map_pointer, i-1, j-1))
+                        map_pointer->layers[intermediate][i][j] = Tile_Type::TILE_NONE;
+        }
+    }
+}
+
 void map_check (Map* map_pointer, maprow *layer)
 {
     int iterations  = 2;
