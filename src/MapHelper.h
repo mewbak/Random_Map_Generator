@@ -135,6 +135,7 @@ int  CheckJoiningTiles       (Map* map_pointer, FillData* fill_data, int tile_nu
 void map_gen_find            (Map* map_pointer, SectionData* find_data, Point* location);
 void map_gen_find_replace    (Map* map_pointer, SectionData* find_data, SectionData* replace_data);
 void map_gen_replace         (Map* map_pointer, SectionData* replace_data, Point* location);
+bool map_gen_verify          (Map* map_pointer, SectionData* verify_data, Point* location);
 void map_gen_exits           (Map* map_pointer);
 void map_gen_river           (Map* map_pointer);
 void map_gen_road            (Map* map_pointer);

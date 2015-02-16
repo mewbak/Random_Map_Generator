@@ -286,6 +286,21 @@ void map_gen_replace (Map* map_pointer, SectionData* replace_data, Point* locati
     }
 }
 
+bool map_gen_verify (Map* map_pointer, SectionData* verify_data, Point* location)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+    if (intermediate == -1) return false;
+    int i = location->x;
+    int j = location->y;
+    for (int k = 0; k < verify_data->w; k++)
+    {
+        for (int l = 0; l < verify_data->h; l++)
+            if (map_pointer->layers[intermediate][i+k][j+l] != verify_data->tile[(verify_data->w*l)+k])
+                return false;
+    }
+    return true;
+}
+
 void map_gen_exits (Map* map_pointer)
 {
     int intermediate = findLayerByName(map_pointer,"intermediate");
