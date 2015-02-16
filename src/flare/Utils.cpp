@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #endif
 
+#include "UtilsFileSystem.h"
 #include <cmath>
 #include <stdarg.h>
 
