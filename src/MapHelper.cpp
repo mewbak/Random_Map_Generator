@@ -143,35 +143,6 @@ void map_check (Map* map_pointer, maprow *layer)
     }
 }
 
-int map_gen_flood_fill_tile (Map* map_pointer, FillData* fill_data, int tile_number)
-{
-    int return_value = 0;
-    if ((fill_data[tile_number].tile_data == Tile_Type::TILE_FLOOR) && (!fill_data[tile_number].tile_done))
-    {
-        int map_size = map_pointer->w*map_pointer->h;
-        fill_data[tile_number].tile_done = true;
-        fill_data[tile_number].tile_join = true;
-        return_value++;
-        if ((tile_number+1) <= map_size)
-            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+1);
-        if ((tile_number-1) >= 0)
-            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-1);
-        if ((tile_number+map_pointer->w) <= map_size)
-            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w);
-        if ((tile_number+map_pointer->w+1) <= map_size)
-            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w+1);
-        if ((tile_number+map_pointer->w-1) <= map_size)
-            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number+map_pointer->w-1);
-        if ((tile_number-map_pointer->w) >= 0)
-            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w);
-        if ((tile_number-map_pointer->w+1) >= 0)
-            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w+1);
-        if ((tile_number-map_pointer->w-1) >= 0)
-            return_value += map_gen_flood_fill_tile(map_pointer,fill_data,tile_number-map_pointer->w-1);
-    }
-    return (return_value);
-}
-
 bool map_gen_flood_fill (Map* map_pointer)
 {
     int intermediate = findLayerByName(map_pointer,"intermediate");
@@ -185,16 +156,54 @@ bool map_gen_flood_fill (Map* map_pointer)
         for (int i = 0; i < map_pointer->w; i++)
         {
             if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_FLOOR) floor_count++;
-            if ((floor_count == 1) && (first_floor < 0)) first_floor = j;
+            if ((floor_count == 1) && (first_floor < 0)) first_floor = (j*map_pointer->w)+i;
             fill_data[(j*map_pointer->w)+i].tile_data = map_pointer->layers[intermediate][i][j];
             fill_data[(j*map_pointer->w)+i].tile_done = false;
             fill_data[(j*map_pointer->w)+i].tile_join = false;
         }
     }
-    int   number_found = map_gen_flood_fill_tile(map_pointer,fill_data,first_floor);
+    int   number_found = CheckJoiningTiles(map_pointer,fill_data,first_floor);
+    for (int i = 0; i < (map_pointer->w*map_pointer->h); i++)
+    {
+        if (fill_data[i].tile_join) map_pointer->layers[intermediate][i%map_pointer->w][i/map_pointer->w] = Tile_Type::TILE_FLOOR;
+        else map_pointer->layers[intermediate][i%map_pointer->w][i/map_pointer->w] = Tile_Type::TILE_WALL;
+    }
     if (number_found < floor_count) return_value = false;
     delete[] fill_data;
     return (return_value);
+}
+
+int CheckTile(int map_size, FillData* fill_data, int tile_parent, int tile_check)
+{
+    if ((tile_check >=0)&&(tile_check < map_size))
+    {
+        if ((fill_data[tile_parent].tile_join)&&(fill_data[tile_check].tile_data == Tile_Type::TILE_FLOOR))
+            fill_data[tile_check].tile_join = true;
+    }
+    return (fill_data[tile_check].tile_join) ? 1 : 0;
+}
+
+int CheckJoiningTiles(Map* map_pointer, FillData* fill_data, int tile_number)
+{
+    // function assumes calling from desired floor tile.
+    int map_size = map_pointer->w * map_pointer->h;
+    fill_data[tile_number].tile_join = true;
+    unsigned int return_value = 1;
+    for (int j = 0; j < map_pointer->w+map_pointer->h; j++)
+    {
+        for (int i = 0; i < map_size; i++)
+        {
+            return_value += CheckTile(map_size,fill_data,i,i-1);
+            return_value += CheckTile(map_size,fill_data,i,i-map_pointer->w-1);
+            return_value += CheckTile(map_size,fill_data,i,i-map_pointer->w);
+            return_value += CheckTile(map_size,fill_data,i,i-map_pointer->w+1);
+            return_value += CheckTile(map_size,fill_data,i,i+1);
+            return_value += CheckTile(map_size,fill_data,i,i+map_pointer->w+1);
+            return_value += CheckTile(map_size,fill_data,i,i+map_pointer->w);
+            return_value += CheckTile(map_size,fill_data,i,i+map_pointer->w-1);
+        }
+    }
+    return return_value;
 }
 
 int findLayerByName(Map* map_pointer, std::string layer)
@@ -207,7 +216,7 @@ int findLayerByName(Map* map_pointer, std::string layer)
     return -1;
 }
 
-void map_gen_find (Map* map_pointer, FindData* find_data, Point* location)
+void map_gen_find (Map* map_pointer, SectionData* find_data, Point* location)
 {
     int intermediate = findLayerByName(map_pointer,"intermediate");
     if (intermediate == -1) return;
@@ -234,7 +243,7 @@ void map_gen_find (Map* map_pointer, FindData* find_data, Point* location)
     }
 }
 
-void map_gen_find_replace (Map* map_pointer, FindData* find_data, FindData* replace_data)
+void map_gen_find_replace (Map* map_pointer, SectionData* find_data, SectionData* replace_data)
 {
     int intermediate = findLayerByName(map_pointer,"intermediate");
     if (intermediate == -1) return;
@@ -261,6 +270,19 @@ void map_gen_find_replace (Map* map_pointer, FindData* find_data, FindData* repl
                 return;
             }
         }
+    }
+}
+
+void map_gen_replace (Map* map_pointer, SectionData* replace_data, Point* location)
+{
+    int intermediate = findLayerByName(map_pointer,"intermediate");
+    if (intermediate == -1) return;
+    int i = location->x;
+    int j = location->y;
+    for (int k = 0; k < replace_data->w; k++)
+    {
+        for (int l = 0; l < replace_data->h; l++)
+            map_pointer->layers[intermediate][i+k][j+l] = replace_data->tile[(replace_data->w*l)+k];
     }
 }
 

@@ -70,14 +70,12 @@ namespace Algorithm_Type
                          GEN_ALGORITHM_T1};
 }
 
-struct FindData
+struct SectionData
 {
-    int        no_of_tiles;
-    short      w;
-    short      h;
-    short      x;
-    short      y;
-    int*       tile;
+    int  no_of_tiles;
+    int  w;
+    int  h;
+    int* tile;
 };
 
 struct FillData
@@ -95,9 +93,9 @@ struct GenTile
 
 struct MapGen
 {
-    int        no_of_tiles;
-    short      w;
-    short      h;
+    int      no_of_tiles;
+    short    w;
+    short    h;
     GenTile* tile;
 };
 
@@ -131,10 +129,12 @@ struct MapProperties
 };
 
 void map_check               (Map* map_pointer, maprow *layer);
-int  map_gen_flood_fill_tile (Map* map_pointer, FillData* fill_data, int tile_number);
 bool map_gen_flood_fill      (Map* map_pointer);
-void map_gen_find            (Map* map_pointer, FindData* find_data, Point* location);
-void map_gen_find_replace    (Map* map_pointer, FindData* find_data, FindData* replace_data);
+int  CheckTile               (int map_size, FillData* fill_data, int tile_parent, int tile_check);
+int  CheckJoiningTiles       (Map* map_pointer, FillData* fill_data, int tile_number);
+void map_gen_find            (Map* map_pointer, SectionData* find_data, Point* location);
+void map_gen_find_replace    (Map* map_pointer, SectionData* find_data, SectionData* replace_data);
+void map_gen_replace         (Map* map_pointer, SectionData* replace_data, Point* location);
 void map_gen_exits           (Map* map_pointer);
 void map_gen_river           (Map* map_pointer);
 void map_gen_road            (Map* map_pointer);
