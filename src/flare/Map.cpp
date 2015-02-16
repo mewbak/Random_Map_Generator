@@ -35,8 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #endif
 
 Map::Map()
-	: enemy_groups()
-	, filename("")
+	: filename("")
 	, collision_layer(-1)
 	, layers()
 	, events()
@@ -46,18 +45,17 @@ Map::Map()
 	, spawn_dir(0) {
 }
 
-
+Map::~Map() {
+	clearLayers();
+}
 
 void Map::clearLayers() {
-
-	for (unsigned i = 0; i < layers.size(); ++i)
-		delete[] layers[i];
 	layers.clear();
 	layernames.clear();
 }
 
 void Map::clearQueues() {
-    //enemies = std::queue<Map_Enemy>();
+	//enemies = std::queue<Map_Enemy>();
 	npcs = std::queue<Map_NPC>();
 }
 
@@ -68,9 +66,13 @@ void Map::clearEvents() {
 #endif
 }
 
+void Map::removeLayer(unsigned index) {
+	layernames.erase(layernames.begin() + index);
+	layers.erase(layers.begin() + index);
+}
+
 int Map::load(std::string fname) {
 	FileParser infile;
-	maprow *cur_layer = NULL;
 
 	clearEvents();
 	clearLayers();
@@ -97,7 +99,7 @@ int Map::load(std::string fname) {
 		if (infile.section == "header")
 			loadHeader(infile);
 		else if (infile.section == "layer")
-			loadLayer(infile, &cur_layer);
+			loadLayer(infile);
 		else if (infile.section == "enemy")
 			loadEnemyGroup(infile, &enemy_groups.back());
 		else if (infile.section == "npc")
@@ -159,11 +161,11 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "width") {
 		// @ATTR width|integer|Width of map
-		this->w = toInt(infile.val);
+		this->w = std::max(toInt(infile.val), 1);
 	}
 	else if (infile.key == "height") {
 		// @ATTR height|integer|Height of map
-		this->h = toInt(infile.val);
+		this->h = std::max(toInt(infile.val), 1);
 	}
 	else if (infile.key == "tileset") {
 		// @ATTR tileset|string|Filename of a tileset definition to use for map
@@ -193,11 +195,14 @@ void Map::loadHeader(FileParser &infile) {
 	}
 }
 
-void Map::loadLayer(FileParser &infile, maprow **current_layer) {
+void Map::loadLayer(FileParser &infile) {
 	if (infile.key == "type") {
 		// @ATTR layer.type|string|Map layer type.
-		*current_layer = new maprow[w];
-		layers.push_back(*current_layer);
+		layers.resize(layers.size()+1);
+		layers.back().resize(w);
+		for (unsigned i=0; i<w; ++i) {
+			layers.back()[i].resize(h);
+		}
 		layernames.push_back(infile.val);
 		if (infile.val == "collision")
 			collision_layer = layernames.size()-1;
@@ -237,7 +242,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 			}
 
 			for (int i=0; i<w; i++)
-				(*current_layer)[i][j] = popFirstInt(val, ',');
+				layers.back()[i][j] = popFirstInt(val, ',');
 		}
 	}
 	else {
@@ -341,12 +346,12 @@ void Map::loadNPC(FileParser &infile) {
 		// otherwise, it becomes possible for the player to stand "inside" the npc, which will trigger their event infinitely
 #ifndef MAP_GENERATOR
 		if (collision_layer != -1) {
-            unsigned tile_x = npcs.back().pos.x;
-            unsigned tile_y = npcs.back().pos.y;
-            if (tile_x < (unsigned)w && tile_y < (unsigned)h) {
-                short unsigned int& tile = layers[collision_layer][tile_x][tile_y];
+			unsigned tile_x = npcs.back().pos.x;
+			unsigned tile_y = npcs.back().pos.y;
+			if (tile_x < (unsigned)w && tile_y < (unsigned)h) {
+				short unsigned int& tile = layers[collision_layer][tile_x][tile_y];
 				if (tile == BLOCKS_NONE) {
-                    logError("Map: NPC at (%d, %d) does not have a collision tile. Creating one now.", tile_x, tile_y);
+					logError("Map: NPC at (%d, %d) does not have a collision tile. Creating one now.", tile_x, tile_y);
 					tile = BLOCKS_MOVEMENT_HIDDEN;
 				}
 			}

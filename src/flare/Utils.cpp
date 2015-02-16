@@ -75,11 +75,11 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 
 Point center_tile(Point p) {
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
-        p.x += TILE_W_HALF;
-        p.y += TILE_H_HALF;
+		p.x += TILE_W_HALF;
+		p.y += TILE_H_HALF;
 	}
 	else //TILESET_ISOMETRIC
-        p.y += TILE_H_HALF;
+		p.y += TILE_H_HALF;
 	return p;
 }
 
@@ -270,10 +270,11 @@ void logInfo(const char* format, ...) {
 /*
 #if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, format, args);
-#else
+#else*/
 	printf("INFO: ");
 	vprintf(format, args);
 	printf("\n");
+	/*
 #endif
 */
 	va_end(args);
@@ -294,5 +295,30 @@ void logError(const char* format, ...) {
 #endif
 */
 	va_end(args);
+}
+
+void createSaveDir(int slot) {
+	// game slots are currently 1-4
+	if (slot == 0) return;
+
+	std::stringstream ss;
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/";
+
+	createDir(path(&ss));
+
+	ss << slot;
+	createDir(path(&ss));
+}
+
+void removeSaveDir(int slot) {
+	// game slots are currently 1-4
+	if (slot == 0) return;
+
+	std::stringstream ss;
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << slot;
+
+	if (isDirectory(path(&ss))) {
+		removeDirRecursive(path(&ss));
+	}
 }
 

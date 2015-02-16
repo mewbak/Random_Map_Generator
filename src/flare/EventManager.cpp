@@ -317,7 +317,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.tooltip|string|Tooltip for event
 		e->s = msg->get(infile.val);
 	}
-    else if (infile.key == "power_path") {
+	else if (infile.key == "power_path") {
 #else
     if (infile.key == "power_path") {
 #endif
@@ -386,11 +386,11 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		s = infile.nextValue();
 		if (s != "") e->y = toInt(s);
 
-    }
+	}
 	else if (infile.key == "loot") {
 		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event; either a filename or an inline definition.
-        parseLoot(infile, e, &evnt->components);
-    }
+		parseLoot(infile, e, &evnt->components);
+	}
 #ifndef MAP_GENERATOR
 	else if (infile.key == "msg") {
 		// @ATTR event.msg|string|Adds a message to be displayed for the event.
@@ -648,7 +648,7 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
-				if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
+				if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
 					mapr->collider.colmap[ec->x][ec->y] = ec->z;
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
@@ -657,7 +657,7 @@ bool EventManager::executeEvent(Event &ev) {
 				int index = distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s));
 				if (!mapr->isValidTile(ec->z))
 					logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", ec->x, ec->y, ec->z);
-				else if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
+				else if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
 					mapr->layers[index][ec->x][ec->y] = ec->z;
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);

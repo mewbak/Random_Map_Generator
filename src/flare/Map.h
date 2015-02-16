@@ -34,8 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EventManager.h"
 
-typedef unsigned short maprow[256];
-
 class Map_Group {
 public:
 	std::string category;
@@ -61,7 +59,7 @@ public:
 		, numbermin(1)
 		, numbermax(1)
 		, chance(1.0f)
-        , direction(-1)
+		, direction(-1)
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
 		, requires_status()
@@ -118,7 +116,7 @@ public:
 class Map {
 protected:
 	void loadHeader(FileParser &infile);
-	void loadLayer(FileParser &infile, maprow **cur_layer);
+	void loadLayer(FileParser &infile);
 	void loadEnemyGroup(FileParser &infile, Map_Group *group);
 	void loadNPC(FileParser &infile);
 
@@ -131,27 +129,27 @@ protected:
 	std::string filename;
 	std::string tileset;
 
-    //int load(std::string filename);
-
 	int collision_layer;
 public:
 	Map();
-
-    std::queue<Map_Group> enemy_groups;
-    int load(std::string filename);
+	~Map();
 	std::string getFilename() { return filename; }
-    std::string getTileset() { return tileset; }
-    void setTileset(const std::string& tset) { tileset = tset; }
+	std::string getTileset() { return tileset; }
+	void setTileset(const std::string& tset) { tileset = tset; }
+	void removeLayer(unsigned index);
+
+	int load(std::string filename);
 
 	std::string music_filename;
 
-	std::vector<maprow*> layers; // visible layers in maprenderer
+	std::vector<Map_Layer> layers; // visible layers in maprenderer
 	std::vector<std::string> layernames;
 
 	void clearEvents();
 
 	// enemy load handling
-    //std::queue<Map_Enemy> enemies;
+	//std::queue<Map_Enemy> enemies;
+	std::queue<Map_Group> enemy_groups;
 
 	// npc load handling
 	std::queue<Map_NPC> npcs;
@@ -161,8 +159,8 @@ public:
 
 	// vars
 	std::string title;
-	short w;
-	short h;
+	unsigned short w;
+	unsigned short h;
 	FPoint spawn;
 	int spawn_dir;
 

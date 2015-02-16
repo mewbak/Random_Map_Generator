@@ -222,16 +222,19 @@ void setPaths() {
 		createDir(PATH_USER);
 
 		PATH_CONF += "\\config";
-		PATH_USER += "\\saves";
+		PATH_USER += "\\userdata";
 		createDir(PATH_CONF);
 		createDir(PATH_USER);
 	}
 	else {
 		PATH_CONF = "config";
-		PATH_USER = "saves";
+		PATH_USER = "userdata";
 		createDir(PATH_CONF);
 		createDir(PATH_USER);
 	}
+
+	createDir(PATH_USER + "\\mods");
+	createDir(PATH_USER + "\\saves");
 
 	PATH_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
@@ -245,9 +248,11 @@ void setPaths() {
 void setPaths() {
 
 	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
-	PATH_USER = std::string(SDL_AndroidGetInternalStoragePath()) + "/saves";
+	PATH_USER = std::string(SDL_AndroidGetInternalStoragePath()) + "/userdata";
 	createDir(PATH_CONF);
 	createDir(PATH_USER);
+	createDir(PATH_USER + "/mods");
+	createDir(PATH_USER + "/saves");
 
 	std::string mods_folder = "data/org.flare.app/files";
 
@@ -303,27 +308,24 @@ void setPaths() {
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
 		PATH_CONF = (std::string)getenv("XDG_CONFIG_HOME") + "/flare/";
-		createDir(PATH_CONF);
 	}
 	// $HOME/.config/flare/
 	else if (getenv("HOME") != NULL) {
 		PATH_CONF = (std::string)getenv("HOME") + "/.config/";
 		createDir(PATH_CONF);
 		PATH_CONF += "flare/";
-		createDir(PATH_CONF);
 	}
 	// ./config/
 	else {
 		PATH_CONF = "./config/";
-		createDir(PATH_CONF);
 	}
+
+	createDir(PATH_CONF);
 
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
 	if (getenv("XDG_DATA_HOME") != NULL) {
 		PATH_USER = (std::string)getenv("XDG_DATA_HOME") + "/flare/";
-		createDir(PATH_USER);
-		createDir(PATH_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -332,14 +334,15 @@ void setPaths() {
 		PATH_USER += "share/";
 		createDir(PATH_USER);
 		PATH_USER += "flare/";
-		createDir(PATH_USER);
-		createDir(PATH_USER + "mods/");
 	}
 	// ./saves/
 	else {
-		PATH_USER = "./saves/";
-		createDir(PATH_USER);
+		PATH_USER = "./userdata/";
 	}
+
+	createDir(PATH_USER);
+	createDir(PATH_USER + "mods/");
+	createDir(PATH_USER + "saves/");
 
 	// data folder
 	// while PATH_CONF and PATH_USER are created if not found,
@@ -424,10 +427,10 @@ void loadTilesetSettings() {
 	// reset defaults
 	UNITS_PER_PIXEL_X = 2;
 	UNITS_PER_PIXEL_Y = 4;
-    TILE_W = 64;
-    TILE_H = 32;
-    TILE_W_HALF = TILE_W/2;
-    TILE_H_HALF = TILE_H/2;
+	TILE_W = 64;
+	TILE_H = 32;
+	TILE_W_HALF = TILE_W/2;
+	TILE_H_HALF = TILE_H/2;
 	TILESET_ISOMETRIC = 0;
 	TILESET_ORTHOGONAL = 1;
 	TILESET_ORIENTATION = TILESET_ISOMETRIC;
@@ -437,12 +440,12 @@ void loadTilesetSettings() {
 	// @CLASS Settings: Tileset config|Description of engine/tileset_config.txt
 	if (infile.open("engine/tileset_config.txt", true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.")) {
 		while (infile.next()) {
-			if (infile.key == "Tile_Type::TILE_size") {
-				// @ATTR Tile_Type::TILE_size|w (integet), h (integer)|The width and height of a tile.
-                TILE_W = toInt(infile.nextValue());
-                TILE_H = toInt(infile.nextValue());
-                TILE_W_HALF = TILE_W /2;
-                TILE_H_HALF = TILE_H /2;
+			if (infile.key == "tile_size") {
+				// @ATTR tile_size|w (integet), h (integer)|The width and height of a tile.
+				TILE_W = toInt(infile.nextValue());
+				TILE_H = toInt(infile.nextValue());
+				TILE_W_HALF = TILE_W /2;
+				TILE_H_HALF = TILE_H /2;
 			}
 			else if (infile.key == "orientation") {
 				// @ATTR orientation|[isometric, orthogonal]|The perspective of tiles; isometric or orthogonal.
@@ -462,25 +465,25 @@ void loadTilesetSettings() {
 	VIEW_W_HALF = VIEW_W / 2;
 	VIEW_H_HALF = VIEW_H / 2;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-        if (TILE_W > 0 && TILE_H > 0) {
-            UNITS_PER_PIXEL_X = 2.0f / TILE_W;
-            UNITS_PER_PIXEL_Y = 2.0f / TILE_H;
+		if (TILE_W > 0 && TILE_H > 0) {
+			UNITS_PER_PIXEL_X = 2.0f / TILE_W;
+			UNITS_PER_PIXEL_Y = 2.0f / TILE_H;
 		}
 		else {
 			logError("Settings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.");
-            TILE_W = 64;
-            TILE_H = 32;
+			TILE_W = 64;
+			TILE_H = 32;
 		}
 	}
 	else { // TILESET_ORTHOGONAL
-        if (TILE_W > 0 && TILE_H > 0) {
-            UNITS_PER_PIXEL_X = 1.0f / TILE_W;
-            UNITS_PER_PIXEL_Y = 1.0f / TILE_H;
+		if (TILE_W > 0 && TILE_H > 0) {
+			UNITS_PER_PIXEL_X = 1.0f / TILE_W;
+			UNITS_PER_PIXEL_Y = 1.0f / TILE_H;
 		}
 		else {
 			logError("Settings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.");
-            TILE_W = 64;
-            TILE_H = 32;
+			TILE_W = 64;
+			TILE_H = 32;
 		}
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
@@ -523,6 +526,7 @@ void loadMiscSettings() {
 	CORPSE_TIMEOUT = 60*MAX_FRAMES_PER_SEC;
 	SELL_WITHOUT_VENDOR = true;
 	AIM_ASSIST = 0;
+	SAVE_PREFIX = "";
 	WINDOW_TITLE = "Flare";
 	SOUND_FALLOFF = 15;
 	PARTY_EXP_PERCENTAGE = 100;
@@ -591,6 +595,11 @@ void loadMiscSettings() {
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+
+	if (SAVE_PREFIX == "") {
+		logError("Settings: save_prefix not found in engine/misc.txt, setting to 'default'. This may cause save file conflicts between games that have no save_prefix.");
+		SAVE_PREFIX = "default";
 	}
 
 	// @CLASS Settings: Resolution|Description of engine/resolutions.txt
