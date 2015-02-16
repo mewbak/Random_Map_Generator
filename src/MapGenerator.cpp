@@ -48,20 +48,29 @@ void MapGenerator::Initialize(Map* map_pointer, int dimension_x, int dimension_y
 
     if (background == -1)
     {
-        maprow *current_layer = new maprow[map_pointer->w];
-        map_pointer->layers.push_back(current_layer);
+        map_pointer->layers.resize(map_pointer->layers.size()+1);
+        map_pointer->layers.back().resize(map_pointer->w);
+        for (unsigned i=0; i<map_pointer->w; ++i) {
+            map_pointer->layers.back()[i].resize(map_pointer->h);
+        }
         map_pointer->layernames.push_back("background");
     }
     if (object == -1)
     {
-        maprow *current_layer = new maprow[map_pointer->w];
-        map_pointer->layers.push_back(current_layer);
+        map_pointer->layers.resize(map_pointer->layers.size()+1);
+        map_pointer->layers.back().resize(map_pointer->w);
+        for (unsigned i=0; i<map_pointer->w; ++i) {
+            map_pointer->layers.back()[i].resize(map_pointer->h);
+        }
         map_pointer->layernames.push_back("object");
     }
     if (collision == -1)
     {
-        maprow *current_layer = new maprow[map_pointer->w];
-        map_pointer->layers.push_back(current_layer);
+        map_pointer->layers.resize(map_pointer->layers.size()+1);
+        map_pointer->layers.back().resize(map_pointer->w);
+        for (unsigned i=0; i<map_pointer->w; ++i) {
+            map_pointer->layers.back()[i].resize(map_pointer->h);
+        }
         map_pointer->layernames.push_back("collision");
         //map_pointer->collision_layer = map_pointer->layernames.size() - 1;
     }
@@ -334,7 +343,6 @@ void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
     }
 
     // remove intermediate layer. Currently breaks UI Preview
-    //delete [] map_pointer->layers[intermediate];
     //map_pointer->layers.erase(map_pointer->layers.begin() + intermediate);
     //map_pointer->layernames.erase(map_pointer->layernames.begin() + intermediate);
 }

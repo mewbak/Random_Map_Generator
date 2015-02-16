@@ -32,8 +32,11 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer, MapProperties properties)
 {
     if (findLayerByName(map_pointer,"intermediate") == -1)
     {
-        maprow *current_layer = new maprow[map_pointer->w];
-        map_pointer->layers.push_back(current_layer);
+        map_pointer->layers.resize(map_pointer->layers.size()+1);
+        map_pointer->layers.back().resize(map_pointer->w);
+        for (unsigned i=0; i<map_pointer->w; ++i) {
+            map_pointer->layers.back()[i].resize(map_pointer->h);
+        }
         map_pointer->layernames.push_back("intermediate");
     }
     int intermediate = findLayerByName(map_pointer,"intermediate");
@@ -90,7 +93,7 @@ void MapGenerator_C1::GenerateMap(Map* map_pointer, MapProperties properties)
             }
         }
     }
-    map_check(map_pointer,map_pointer->layers[intermediate]);
+    map_check(map_pointer);
     for (int i = 0; i < (map_pointer->w*map_pointer->h); i++)
     {
         fill_data[i].tile_data = map_pointer->layers[intermediate][i%map_pointer->w][i/map_pointer->w];

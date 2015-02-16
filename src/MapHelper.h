@@ -128,7 +128,7 @@ struct MapProperties
     bool            gen_chests;
 };
 
-void map_check                (Map* map_pointer, maprow *layer);
+void map_check                (Map* map_pointer);
 bool map_gen_is_wall          (Map* map_pointer, int tile_x, int tile_y);
 void map_gen_remove_extra_wall(Map* map_pointer);
 bool map_gen_flood_fill       (Map* map_pointer);

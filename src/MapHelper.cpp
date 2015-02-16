@@ -90,8 +90,15 @@ void map_gen_remove_extra_wall(Map* map_pointer)
     }
 }
 
-void map_check (Map* map_pointer, maprow *layer)
+void map_check (Map* map_pointer)
 {
+    int index = findLayerByName(map_pointer,"intermediate");
+
+    if (index == -1)
+        return;
+
+    Map_Layer& layer = map_pointer->layers[index];
+
     int iterations  = 2;
     for (int k = 0; k < iterations; k++)
     {
