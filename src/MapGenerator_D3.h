@@ -27,6 +27,8 @@
  * class MapGenerator_D3
  *
  * The MapGenerator_D3 used to generate dungeon maps.
+ * Repeatedly examine neighbouring regions around rooms
+ * and place features within if space available.
  *
  */
 
