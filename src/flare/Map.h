@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Utils.h"
 
+typedef std::vector< std::vector<unsigned short> > Map_Layer;
+
 #ifndef MAP_GENERATOR
 #include "StatBlock.h"
 #endif
