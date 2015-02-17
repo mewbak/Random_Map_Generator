@@ -270,7 +270,9 @@ void map_gen_find (Map* map_pointer, SectionData* find_data, Point* location)
             {
                 for (int l = 0; l < find_data->h; l++)
                 {
-                    if (map_pointer->layers[intermediate][i+k][j+l] != find_data->tile[(find_data->w*l)+k])
+                    if (!((i+k < map_pointer->w) && (j+l < map_pointer->h)))
+                        found = false;
+                    else if (map_pointer->layers[intermediate][i+k][j+l] != find_data->tile[(find_data->w*l)+k])
                         found = false;
                 }
             }
@@ -297,7 +299,9 @@ void map_gen_find_replace (Map* map_pointer, SectionData* find_data, SectionData
             {
                 for (int l = 0; l < find_data->h; l++)
                 {
-                    if (map_pointer->layers[intermediate][i+k][j+l] != find_data->tile[(find_data->w*l)+k])
+                    if (!((i+k < map_pointer->w) && (j+l < map_pointer->h)))
+                        found = false;
+                    else if (map_pointer->layers[intermediate][i+k][j+l] != find_data->tile[(find_data->w*l)+k])
                         found = false;
                 }
             }
@@ -323,7 +327,8 @@ void map_gen_replace (Map* map_pointer, SectionData* replace_data, Point* locati
     for (int k = 0; k < replace_data->w; k++)
     {
         for (int l = 0; l < replace_data->h; l++)
-            map_pointer->layers[intermediate][i+k][j+l] = replace_data->tile[(replace_data->w*l)+k];
+            if ((i+k < map_pointer->w) && (j+l < map_pointer->h))
+                map_pointer->layers[intermediate][i+k][j+l] = replace_data->tile[(replace_data->w*l)+k];
     }
 }
 
@@ -336,8 +341,12 @@ bool map_gen_verify (Map* map_pointer, SectionData* verify_data, Point* location
     for (int k = 0; k < verify_data->w; k++)
     {
         for (int l = 0; l < verify_data->h; l++)
+        {
+            if (!((i+k < map_pointer->w) && (j+l < map_pointer->h)))
+                return false;
             if (map_pointer->layers[intermediate][i+k][j+l] != verify_data->tile[(verify_data->w*l)+k])
                 return false;
+        }
     }
     return true;
 }
