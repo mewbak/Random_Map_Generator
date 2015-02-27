@@ -96,7 +96,7 @@ void MainWindow::on_pushButton_released()
 
     MapProperties properties;
     properties.algorithm = static_cast<Algorithm_Type::Algorithm_Type>(app_data.algorithm);
-    
+
     properties.tile_set = app_data.tile_set;
     properties.size_x = app_data.size_x;
     properties.size_y = app_data.size_y;
@@ -135,8 +135,9 @@ void MainWindow::renderPreview(Map* map_pointer)
     {
         for (int i = 0; i < map_pointer->w; i++)
         {
-            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_FLOOR) temp_stream << "<font color=#006600>";
-            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_WALL)  temp_stream << "<font color=#F8F8F8>";
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_NONE)  temp_stream << "<font color=#FFFFFF>";
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_FLOOR) temp_stream << "<font color=#009900>";
+            if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_WALL)  temp_stream << "<font color=#006600>";
             if (map_pointer->layers[intermediate][i][j] == Tile_Type::TILE_EXIT)  temp_stream << "<font color=#FF0000>";
             temp_stream << "&#9632;";//map_pointer->tile[i].data;
             temp_stream << "</font>";
@@ -144,7 +145,7 @@ void MainWindow::renderPreview(Map* map_pointer)
         }
     }
     this->ui->textEdit_mapview->insertHtml(temp_stream.str().c_str());
-    
+
     // this code is here to make preview work. Correct way is to have this in MapGenerator::applyTileset()
     map_pointer->layers.erase(map_pointer->layers.begin() + intermediate);
     map_pointer->layernames.erase(map_pointer->layernames.begin() + intermediate);
