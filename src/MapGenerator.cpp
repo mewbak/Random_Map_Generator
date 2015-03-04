@@ -190,6 +190,7 @@ void MapGenerator::applyTileset(Map* map_pointer, std::string tileset)
                     map_pointer->layers[collision][i][j] = 0;
                     map_pointer->layers[object][i][j] = TilesetDef::getRandomTile(tileset,
                                                                                    TILESET_TILE_TYPE::TILE_OBJECT);
+                    if (map_pointer->layers[object][i][j] > 0) map_pointer->layers[collision][i][j] = 1;
                 break;
                 case Tile_Type::TILE_WALL:
                     map_pointer->layers[collision][i][j] = 1;
