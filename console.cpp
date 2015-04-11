@@ -57,9 +57,11 @@ int main(int argc, char *argv[])
     app_data.seed_set      = false;
     app_data.status        = "Ready";
     app_data.tile_set      = "cave";
-	
-    app_data.file_name = "default.txt";
-	
+
+    if (argc > 1) {
+         app_data.file_name = argv[1];
+    }
+
     MapProperties properties;
     properties.algorithm = static_cast<Algorithm_Type::Algorithm_Type>(app_data.algorithm);
     properties.tile_set = app_data.tile_set;
