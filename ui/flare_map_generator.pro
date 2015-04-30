@@ -35,12 +35,14 @@ SOURCES += main.cpp\
     ../src/MapGenerator_T1.cpp
 
 HEADERS  += mainwindow.h \
-    ../src/MapHelper.h \
+    ../src/MapGenerator.h \
     ../src/MapGenerator_C1.h \
     ../src/MapGenerator_D1.h \
     ../src/MapGenerator_D2.h \
+    ../src/MapGenerator_D3.h \
     ../src/MapGenerator_M1.h \
-    ../src/MapGenerator.h \
+    ../src/MapGenerator_T1.h \
+    ../src/MapHelper.h \
     ../src/TilesetDef.h \
     ../src/flare/CommonIncludes.h \
     ../src/flare/EventManager.h \
@@ -51,9 +53,7 @@ HEADERS  += mainwindow.h \
     ../src/flare/Utils.h \
     ../src/flare/UtilsFileSystem.h \
     ../src/flare/UtilsMath.h \
-    ../src/flare/UtilsParsing.h \
-    ../src/MapGenerator_D3.h \
-    ../src/MapGenerator_T1.h
+    ../src/flare/UtilsParsing.h
 
 INCLUDEPATH += flare \
                export

@@ -1,6 +1,6 @@
 /*
     Random Map Generator.
-    Copyright (C) 2015  Igor Paliychuk
+    Copyright (C) 2015  Igor Paliychuk, Paul Wortmann
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,10 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     mansonigor@gmail.com
+    paul.wortmann@gmail.com
 */
 
-#include "flare/Map.h"
-#include "MapGenerator.h"
+#include "src/flare/Map.h"
+#include "src/MapGenerator.h"
 #include <sstream>
 
 struct AppData
@@ -39,27 +40,78 @@ struct AppData
     std::string status;
 };
 
-AppData app_data;
-Map*  map_pointer;
-
 int main(int argc, char *argv[])
 {
-    map_pointer            = new Map;
-    app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_C1;
-    app_data.file_name     = "default.txt";
-    app_data.gen_chests    = false;
-    app_data.gen_enemies   = false;
-    app_data.gen_exits     = true;
-    app_data.progress      = 0;
-    app_data.size_x        = 100;
-    app_data.size_y        = 100;
-    app_data.seed          = time(NULL);
-    app_data.seed_set      = false;
-    app_data.status        = "Ready";
-    app_data.tile_set      = "cave";
+    Map* map_pointer     = new Map;
+    AppData app_data;
+    app_data.algorithm   = Algorithm_Type::GEN_ALGORITHM_C1;
+    app_data.file_name   = "default.txt";
+    app_data.gen_chests  = false;
+    app_data.gen_enemies = false;
+    app_data.gen_exits   = true;
+    app_data.progress    = 0;
+    app_data.size_x      = 100;
+    app_data.size_y      = 100;
+    app_data.seed        = time(NULL);
+    app_data.seed_set    = false;
+    app_data.status      = "Ready";
+    app_data.tile_set    = "cave";
+    std::string tempArg  = "";
+    std::string tempVal  = "";
+    for (int i = 0; i < argc; i++)
+    {
+        tempArg = argv[i];
+        if ((tempArg.compare("--help") == 0) ||
+            (tempArg.compare("-h") == 0))
+        {
+            std::cout << "Random Dungeon Genorator." << std::endl;
+            std::cout << "-------------------------" << std::endl << std::endl;
+            std::cout << "--help This help screen." << std::endl;
+            std::cout << "--algorithm Specify algorithm, C1, D1, D2, D3, M1, T1" << std::endl;
+            std::cout << "--filename Specify output file name." << std::endl;
+            std::cout << "--tileset Specify tileset, cave, dungeon, grassland, snowplains" << std::endl;
+        }
+        if (i+1 < argc)
+        {
+            tempVal = argv[i+1];
+            if ((tempArg.compare("--algorithm") == 0) ||
+                (tempArg.compare("-a") == 0))
+            {
+                if (tempVal.compare("C1") == 0)
+                    app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_C1;
+                else if (tempVal.compare("D1") == 0)
+                    app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_D1;
+                else if (tempVal.compare("D2") == 0)
+                    app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_D2;
+                else if (tempVal.compare("D3") == 0)
+                    app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_D3;
+                else if (tempVal.compare("M1") == 0)
+                    app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_M1;
+                else if (tempVal.compare("T1") == 0)
+                    app_data.algorithm     = Algorithm_Type::GEN_ALGORITHM_T1;
+                else
+                    std::cout << "Invalid algorithm: " << tempVal.c_str() << std::endl;
+            }
 
-    if (argc > 1) {
-         app_data.file_name = argv[1];
+            else if ((tempArg.compare("--filename") == 0) ||
+                (tempArg.compare("-f") == 0))
+                app_data.file_name = tempVal.c_str();
+
+            else if ((tempArg.compare("--tileset") == 0) ||
+                (tempArg.compare("-a") == 0))
+            {
+                if (tempVal.compare("cave") == 0)
+                    app_data.tile_set     = tempVal.c_str();
+                else if (tempVal.compare("dungeon") == 0)
+                    app_data.tile_set     = tempVal.c_str();
+                else if (tempVal.compare("grassland") == 0)
+                    app_data.tile_set     = tempVal.c_str();
+                else if (tempVal.compare("snowplains") == 0)
+                    app_data.tile_set     = tempVal.c_str();
+                else
+                    std::cout << "Invalid tileset: " << tempVal.c_str() << std::endl;
+            }
+        }
     }
 
     MapProperties properties;
@@ -75,8 +127,8 @@ int main(int argc, char *argv[])
 
     MapGenerate(map_pointer, properties);
     MapGenerator::Export(map_pointer, app_data.file_name);
-	
-	delete   map_pointer;
-		
+
+    delete   map_pointer;
+
     return 0;
 }
