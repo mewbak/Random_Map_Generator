@@ -37,6 +37,8 @@ private:
 
 	unsigned line_number;
 
+	FileParser* include_fp;
+
 public:
 	FileParser();
 	~FileParser();
@@ -68,6 +70,7 @@ public:
 	std::string nextValue(); // next value inside one line.
 	std::string getRawLine();
 	void error(const char* format, ...);
+	void errorBuf(const char* buffer);
 	void incrementLineNum();
 
 	/**

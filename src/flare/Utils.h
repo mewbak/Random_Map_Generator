@@ -27,8 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef UTILS_H
 #define UTILS_H
 
-#define MAP_GENERATOR
-
 #ifdef MAP_GENERATOR
 
 typedef struct SDL_Rect
@@ -55,7 +53,6 @@ typedef struct SDL_Color
 #else
 #include <SDL.h>
 #endif
-
 #include <stdint.h>
 #include <string>
 
@@ -69,7 +66,7 @@ public:
 class FPoint {
 public:
 	float x, y;
-	FPoint(Point _p) : x((float)_p.x), y((float)_p.y) {}
+	FPoint(Point _p) : x(static_cast<float>(_p.x)), y(static_cast<float>(_p.y)) {}
 	FPoint() : x(0), y(0) {}
 	FPoint(float _x, float _y) : x(_x), y(_y) {}
 };
@@ -100,14 +97,7 @@ public:
 		c.r = r;
 		c.g = g;
 		c.b = b;
-//#if SDL_VERSION_ATLEAST(2,0,0)
 		c.a = a;
-/*
-#else
-		// Warning: SDL 1.2 only
-		c.unused = a;
-#endif
-*/
 		return c;
 	}
 	bool operator ==(const Color &other) {
@@ -118,9 +108,73 @@ public:
 	}
 };
 
+typedef enum {
+	ALIGN_TOPLEFT = 0,
+	ALIGN_TOP = 1,
+	ALIGN_TOPRIGHT = 2,
+	ALIGN_LEFT = 3,
+	ALIGN_CENTER = 4,
+	ALIGN_RIGHT = 5,
+	ALIGN_BOTTOMLEFT = 6,
+	ALIGN_BOTTOM = 7,
+	ALIGN_BOTTOMRIGHT = 8
+}ALIGNMENT;
+
+typedef enum {
+	EC_NONE = 0,
+	EC_TOOLTIP = 1,
+	EC_POWER_PATH = 2,
+	EC_POWER_DAMAGE = 3,
+	EC_INTERMAP = 4,
+	EC_INTRAMAP = 5,
+	EC_MAPMOD = 6,
+	EC_SOUNDFX = 7,
+	EC_LOOT = 8,
+	EC_LOOT_COUNT = 9,
+	EC_MSG = 10,
+	EC_SHAKYCAM = 11,
+	EC_REQUIRES_STATUS = 12,
+	EC_REQUIRES_NOT_STATUS = 13,
+	EC_REQUIRES_LEVEL = 14,
+	EC_REQUIRES_NOT_LEVEL = 15,
+	EC_REQUIRES_CURRENCY = 16,
+	EC_REQUIRES_NOT_CURRENCY = 17,
+	EC_REQUIRES_ITEM = 18,
+	EC_REQUIRES_NOT_ITEM = 19,
+	EC_REQUIRES_CLASS = 20,
+	EC_REQUIRES_NOT_CLASS = 21,
+	EC_SET_STATUS = 22,
+	EC_UNSET_STATUS = 23,
+	EC_REMOVE_CURRENCY = 24,
+	EC_REMOVE_ITEM = 25,
+	EC_REWARD_XP = 26,
+	EC_REWARD_CURRENCY = 27,
+	EC_REWARD_ITEM = 28,
+	EC_RESTORE = 29,
+	EC_POWER = 30,
+	EC_SPAWN = 31,
+	EC_STASH = 32,
+	EC_NPC = 33,
+	EC_MUSIC = 34,
+	EC_CUTSCENE = 35,
+	EC_REPEAT = 36,
+	EC_SAVE_GAME = 37,
+	EC_BOOK = 38,
+	EC_NPC_ID = 39,
+	EC_NPC_HOTSPOT = 40,
+	EC_NPC_DIALOG_THEM = 41,
+	EC_NPC_DIALOG_YOU = 42,
+	EC_NPC_VOICE = 43,
+	EC_NPC_DIALOG_TOPIC = 44,
+	EC_NPC_DIALOG_GROUP = 45,
+	EC_NPC_ALLOW_MOVEMENT = 46,
+	EC_QUEST_TEXT = 47,
+	EC_WAS_INSIDE_EVENT_AREA = 48
+}EVENT_COMPONENT_TYPE;
+
 class Event_Component {
 public:
-	std::string type;
+	EVENT_COMPONENT_TYPE type;
 	std::string s;
 	int x;
 	int y;
@@ -130,7 +184,7 @@ public:
 	int c;
 
 	Event_Component()
-		: type("")
+		: type(EC_NONE)
 		, s("")
 		, x(0)
 		, y(0)
@@ -143,7 +197,7 @@ public:
 
 class EffectDef {
 public:
-	std::string name;
+	std::string id;
 	std::string type;
 	int icon;
 	std::string animation;
@@ -151,7 +205,7 @@ public:
 	bool render_above;
 
 	EffectDef()
-		: name("")
+		: id("")
 		, type("")
 		, icon(-1)
 		, animation("")
@@ -169,19 +223,27 @@ FPoint collision_to_map(Point p);
 FPoint calcVector(FPoint pos, int direction, float dist);
 float calcDist(FPoint p1, FPoint p2);
 float calcTheta(float x1, float y1, float x2, float y2);
-int calcDirection(float x0, float y0, float x1, float y1);
-int calcDirection(const FPoint &src, const FPoint &dst);
+unsigned char calcDirection(float x0, float y0, float x1, float y1);
+unsigned char calcDirection(const FPoint &src, const FPoint &dst);
 bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(Rect r, Point target);
 
 std::string abbreviateKilo(int amount);
-void alignToScreenEdge(std::string alignment, Rect *r);
+void alignToScreenEdge(ALIGNMENT alignment, Rect *r);
 void alignFPoint(FPoint *pos);
 
 void logInfo(const char* format, ...);
 void logError(const char* format, ...);
+void logErrorDialog(const char* dialog_text);
+void Exit(int code);
 
 void createSaveDir(int slot);
 void removeSaveDir(int slot);
+
+Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align);
+
+size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b);
+
+std::string getDurationString(const int& duration);
 
 #endif

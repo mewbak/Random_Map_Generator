@@ -20,21 +20,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_H
 #define MAP_H
 
-#define MAP_GENERATOR
-
 #include <vector>
 #include <queue>
 
-#include "FileParser.h"
-#include "Utils.h"
-
-typedef std::vector< std::vector<unsigned short> > Map_Layer;
-
-#ifndef MAP_GENERATOR
-#include "StatBlock.h"
-#endif
-
 #include "EventManager.h"
+#include "FileParser.h"
+#ifndef MAP_GENERATOR
+#include "MapCollision.h"
+#include "StatBlock.h"
+#else
+typedef std::vector< std::vector<unsigned short> > Map_Layer;
+const int BLOCKS_NONE = 0;
+const int BLOCKS_MOVEMENT_HIDDEN = 4;
+#endif
+#include "Utils.h"
 
 class Map_Group {
 public:
@@ -124,6 +123,7 @@ protected:
 
 	void clearLayers();
 	void clearQueues();
+
 #ifndef MAP_GENERATOR
 	std::vector<StatBlock> statblocks;
 #endif
@@ -150,7 +150,7 @@ public:
 	void clearEvents();
 
 	// enemy load handling
-	//std::queue<Map_Enemy> enemies;
+	std::queue<Map_Enemy> enemies;
 	std::queue<Map_Group> enemy_groups;
 
 	// npc load handling
@@ -164,7 +164,7 @@ public:
 	unsigned short w;
 	unsigned short h;
 	FPoint spawn;
-	int spawn_dir;
+	unsigned char spawn_dir;
 
 };
 

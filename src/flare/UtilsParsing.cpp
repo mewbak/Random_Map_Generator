@@ -54,13 +54,68 @@ int parse_duration(const std::string& s) {
 	else {
 		if (suffix != "ms")
 			logError("UtilsParsing: Duration of '%d' does not have a suffix. Assuming 'ms'.", val);
-		val = int(floor(((val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
+		val = static_cast<int>(floor((static_cast<float>(val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
 	}
 
 	// round back up to 1 if we rounded down to 0 for ms
 	if (val < 1) val = 1;
 
 	return val;
+}
+
+int parse_direction(const std::string& s) {
+	int dir;
+
+	if (s == "N")
+		dir = 3;
+	else if (s == "NE")
+		dir = 4;
+	else if (s == "E")
+		dir = 5;
+	else if (s == "SE")
+		dir = 6;
+	else if (s == "S")
+		dir = 7;
+	else if (s == "SW")
+		dir = 0;
+	else if (s == "W")
+		dir = 1;
+	else if (s == "NW")
+		dir = 2;
+	else {
+		dir = toInt(s);
+		if (dir < 0 || dir > 7) {
+			logError("UtilsParsing: Direction '%d' is not within range 0-7.");
+			dir = 0;
+		}
+	}
+
+	return dir;
+}
+
+ALIGNMENT parse_alignment(const std::string &s) {
+	ALIGNMENT align = ALIGN_TOPLEFT;
+
+	if (s == "topleft")
+		align = ALIGN_TOPLEFT;
+	else if (s == "top")
+		align = ALIGN_TOP;
+	else if (s == "topright")
+		align = ALIGN_TOPRIGHT;
+	else if (s == "left")
+		align = ALIGN_LEFT;
+	else if (s == "center")
+		align = ALIGN_CENTER;
+	else if (s == "right")
+		align = ALIGN_RIGHT;
+	else if (s == "bottomleft")
+		align = ALIGN_BOTTOMLEFT;
+	else if (s == "bottom")
+		align = ALIGN_BOTTOM;
+	else if (s == "bottomright")
+		align = ALIGN_BOTTOMRIGHT;
+
+	return align;
 }
 
 std::string parse_section_title(const std::string& s) {
@@ -283,17 +338,17 @@ Rect toRect(std::string value) {
 
 Color toRGB(std::string value) {
 	Color c;
-	c.r = popFirstInt(value);
-	c.g = popFirstInt(value);
-	c.b = popFirstInt(value);
+	c.r = static_cast<Uint8>(popFirstInt(value));
+	c.g = static_cast<Uint8>(popFirstInt(value));
+	c.b = static_cast<Uint8>(popFirstInt(value));
 	return c;
 }
 
 Color toRGBA(std::string value) {
 	Color c;
-	c.r = popFirstInt(value);
-	c.g = popFirstInt(value);
-	c.b = popFirstInt(value);
-	c.a = popFirstInt(value);
+	c.r = static_cast<Uint8>(popFirstInt(value));
+	c.g = static_cast<Uint8>(popFirstInt(value));
+	c.b = static_cast<Uint8>(popFirstInt(value));
+	c.a = static_cast<Uint8>(popFirstInt(value));
 	return c;
 }

@@ -29,11 +29,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 #include <vector>
 
-/*
+#ifndef MAP_GENERATOR
 #include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include "RenderDeviceList.h"
-*/
+#include "DeviceList.h"
+#endif
 
 #endif

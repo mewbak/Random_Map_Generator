@@ -28,6 +28,7 @@ FileParser::FileParser()
 	: current_index(0)
 	, line("")
 	, line_number(0)
+	, include_fp(NULL)
 	, new_section(false)
 	, section("")
 	, key("")
@@ -44,13 +45,13 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 		filenames.push_back(_filename);
 	}
 #else
-    filenames.push_back(_filename);
+	filenames.push_back(_filename);
 #endif
 	current_index = 0;
 	line_number = 0;
 	this->errormessage = _errormessage;
 
-	if (filenames.size() == 0 && !errormessage.empty()) {
+	if (filenames.empty() && !errormessage.empty()) {
 		logError("FileParser: %s: %s: No such file or directory!", _filename.c_str(), errormessage.c_str());
 		return false;
 	}
@@ -58,7 +59,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	bool ret = false;
 
 	// Cycle through all filenames from the end, stopping when a file is to overwrite all further files.
-	for (unsigned i=filenames.size(); i>0; i--) {
+	for (size_t i=filenames.size(); i>0; i--) {
 		infile.open(filenames[i-1].c_str(), std::ios::in);
 		ret = infile.is_open();
 
@@ -76,15 +77,15 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 				}
 
 				if (test_line != "APPEND") {
-					current_index = i-1;
-					infile.seekg(std::ios::beg);
+					current_index = static_cast<unsigned>(i)-1;
+					infile.clear(); // reset flags
+					infile.seekg(0, std::ios::beg);
 					break;
 				}
 			}
 
 			// don't close the final file if it's the only one with an "APPEND" line
-			if (i > 1)
-			{
+			if (i > 1) {
 				infile.close();
 				infile.clear();
 			}
@@ -100,6 +101,12 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 }
 
 void FileParser::close() {
+	if (include_fp) {
+		include_fp->close();
+		delete include_fp;
+		include_fp = NULL;
+	}
+
 	if (infile.is_open())
 		infile.close();
 	infile.clear();
@@ -118,6 +125,21 @@ bool FileParser::next() {
 
 	while (current_index < filenames.size()) {
 		while (infile.good()) {
+			if (include_fp) {
+				if (include_fp->next()) {
+					new_section = include_fp->new_section;
+					section = include_fp->section;
+					key = include_fp->key;
+					val = include_fp->val;
+					return true;
+				}
+				else {
+					include_fp->close();
+					delete include_fp;
+					include_fp = NULL;
+					continue;
+				}
+			}
 
 			line = trim(getLine(infile));
 			line_number++;
@@ -141,6 +163,24 @@ bool FileParser::next() {
 
 			// skip the string used to combine files
 			if (line == "APPEND") continue;
+
+			// read from a separate file
+			std::size_t first_space = line.find(' ');
+
+			if (first_space != std::string::npos) {
+				std::string directive = line.substr(0, first_space);
+
+				if (directive == "INCLUDE") {
+					std::string tmp = line.substr(first_space+1);
+
+					include_fp = new FileParser();
+					if (!include_fp || !include_fp->open(tmp)) {
+						delete include_fp;
+						include_fp = NULL;
+					}
+					continue;
+				}
+			}
 
 			// this is a keypair. Perform basic parsing and return
 			parse_key_pair(line, key, val);
@@ -211,9 +251,18 @@ void FileParser::error(const char* format, ...) {
 	vsprintf(buffer, format, args);
 	va_end(args);
 
-	std::stringstream ss;
-	ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer;
-	logError(ss.str().c_str());
+	errorBuf(buffer);
+}
+
+void FileParser::errorBuf(const char* buffer) {
+	if (include_fp) {
+		include_fp->errorBuf(buffer);
+	}
+	else {
+		std::stringstream ss;
+		ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer;
+		logError(ss.str().c_str());
+	}
 }
 
 void FileParser::incrementLineNum() {

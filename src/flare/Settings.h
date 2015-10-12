@@ -26,14 +26,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-const std::string VERSION_NAME = "Flare Alpha";
-const int VERSION_MAJOR = 0;
-const int VERSION_MINOR = 19;
+const std::string VERSION_NAME = "Flare";
+const int VERSION_MAJOR = 1;
+const int VERSION_MINOR = 0;
 
 class Element {
 public:
+	std::string id;
 	std::string name;
-	std::string description;
+};
+
+class EquipFlag {
+public:
+	std::string id;
+	std::string name;
 };
 
 const int ACTIONBAR_MAX = 12; // maximum number of slots in MenuActionBar
@@ -44,6 +50,7 @@ public:
 	std::string description;
 	int currency;
 	std::string equipment;
+	std::string carried;
 	int physical;
 	int mental;
 	int offense;
@@ -58,6 +65,7 @@ public:
 		, description("")
 		, currency(0)
 		, equipment("")
+		, carried("")
 		, physical(0)
 		, mental(0)
 		, offense(0)
@@ -94,10 +102,14 @@ extern unsigned short VIEW_W;
 extern unsigned short VIEW_H;
 extern unsigned short VIEW_W_HALF;
 extern unsigned short VIEW_H_HALF;
-extern short MIN_VIEW_W;
-extern short MIN_VIEW_H;
-extern bool DOUBLEBUF;
+extern unsigned short SCREEN_W;
+extern unsigned short SCREEN_H;
+extern short MIN_SCREEN_W;
+extern short MIN_SCREEN_H;
+extern bool VSYNC;
 extern bool HWSURFACE;
+extern bool TEXTURE_FILTER;
+extern bool IGNORE_TEXTURE_FILTER;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
 
@@ -113,7 +125,6 @@ extern bool TOUCHSCREEN;
 // Interface Settings
 extern bool COMBAT_TEXT;
 extern bool SHOW_FPS;
-extern bool SHOW_HOTKEYS;
 extern bool COLORBLIND;
 extern bool HARDWARE_CURSOR;
 extern bool DEV_MODE;
@@ -138,6 +149,7 @@ extern int CURRENCY_ID;
 extern float INTERACT_RANGE;
 extern bool SAVE_ONLOAD;
 extern bool SAVE_ONEXIT;
+extern float ENCOUNTER_DIST;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;
@@ -170,7 +182,7 @@ extern short MIN_AVOIDANCE;
 extern std::vector<Element> ELEMENTS;
 
 // Equip flags
-extern std::map<std::string,std::string> EQUIP_FLAGS;
+extern std::vector<EquipFlag> EQUIP_FLAGS;
 
 // Hero classes
 extern std::vector<HeroClass> HERO_CLASSES;
@@ -187,13 +199,20 @@ extern int DEATH_PENALTY_XP;
 extern int DEATH_PENALTY_XP_CURRENT;
 extern bool DEATH_PENALTY_ITEM;
 
+// Tooltip Settings
+extern int TOOLTIP_OFFSET; // distance between cursor and tooltip
+extern int TOOLTIP_WIDTH; // max width of tooltips (wrap text)
+extern int TOOLTIP_MARGIN; // outer margin between tooltip text and the edge of the tooltip background
+extern int TOOLTIP_MARGIN_NPC;
+
 void setPaths();
 void loadTilesetSettings();
 void loadMiscSettings();
 bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
-void loadAndroidDefaults();
+void loadMobileDefaults();
+void updateScreenVars();
 
 // version information
 std::string getVersionString();

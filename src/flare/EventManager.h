@@ -40,27 +40,26 @@ public:
 	Event();
 	~Event();
 
-	Event_Component* getComponent(const std::string &_type);
-	void deleteAllComponents(const std::string &_type);
+	Event_Component* getComponent(const EVENT_COMPONENT_TYPE &_type);
+	void deleteAllComponents(const EVENT_COMPONENT_TYPE &_type);
 };
 
 class EventManager {
 public:
 	EventManager();
 	~EventManager();
-
-    static void getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list);
-    static void parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list);
-
 	static void loadEvent(FileParser &infile, Event* evnt);
 	static void loadEventComponent(FileParser &infile, Event* evnt, Event_Component* ec);
 
 	static bool executeEvent(Event &e);
 	static bool isActive(const Event &e);
 
-    static std::map<std::string, std::vector<Event_Component> > loot_tables;
+#ifdef MAP_GENERATOR
+	static void getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list);
+	static void parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list);
 
-    static void loadLootTables();
+	static std::map<std::string, std::vector<Event_Component> > loot_tables;
+#endif
 };
 
 

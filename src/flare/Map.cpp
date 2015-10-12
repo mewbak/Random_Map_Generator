@@ -19,28 +19,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 #include "Map.h"
-#ifndef MAP_GENERATOR
-#include "MapCollision.h"
-#else
-#include "Utils.h"
-#endif
-#ifndef MAP_GENERATOR
-#include "MessageEngine.h"
-#endif
+
 #include "FileParser.h"
 #include "UtilsParsing.h"
-
-#ifndef MAP_GENERATOR
 #include "Settings.h"
-#endif
 
 Map::Map()
 	: filename("")
 	, collision_layer(-1)
 	, layers()
 	, events()
-	, w(0)
-	, h(0)
+	, w(1)
+	, h(1)
 	, spawn()
 	, spawn_dir(0) {
 }
@@ -55,7 +45,7 @@ void Map::clearLayers() {
 }
 
 void Map::clearQueues() {
-	//enemies = std::queue<Map_Enemy>();
+	enemies = std::queue<Map_Enemy>();
 	npcs = std::queue<Map_NPC>();
 }
 
@@ -110,9 +100,14 @@ int Map::load(std::string fname) {
 
 	infile.close();
 #ifndef MAP_GENERATOR
+	// create a temporary EffectDef for immunity; will be used for map StatBlocks
+	EffectDef immunity_effect;
+	immunity_effect.id = "MAP_EVENT_IMMUNITY";
+	immunity_effect.type = "immunity";
+
 	// create StatBlocks for events that need powers
 	for (unsigned i=0; i<events.size(); ++i) {
-		Event_Component *ec_power = events[i].getComponent("power");
+		Event_Component *ec_power = events[i].getComponent(EC_POWER);
 		if (ec_power) {
 			statblocks.push_back(StatBlock());
 			StatBlock *statb = &statblocks.back();
@@ -123,28 +118,47 @@ int Map::load(std::string fname) {
 			}
 
 			// store the index of this StatBlock so that we can find it when the event is activated
-			ec_power->y = statblocks.size()-1;
+			ec_power->y = static_cast<int>(statblocks.size())-1;
 
-			statb->current[STAT_ACCURACY] = 1000; // always hit the target
+			statb->starting[STAT_ACCURACY] = 1000; // always hit the target
 
-			Event_Component *ec_path = events[i].getComponent("power_path");
+			Event_Component *ec_path = events[i].getComponent(EC_POWER_PATH);
 			if (ec_path) {
 				// source is power path start
-				statb->pos.x = ec_path->x + 0.5f;
-				statb->pos.y = ec_path->y + 0.5f;
+				statb->pos.x = static_cast<float>(ec_path->x) + 0.5f;
+				statb->pos.y = static_cast<float>(ec_path->y) + 0.5f;
 			}
 			else {
 				// source is event location
-				statb->pos.x = events[i].location.x + 0.5f;
-				statb->pos.y = events[i].location.y + 0.5f;
+				statb->pos.x = static_cast<float>(events[i].location.x) + 0.5f;
+				statb->pos.y = static_cast<float>(events[i].location.y) + 0.5f;
 			}
 
-			Event_Component *ec_damage = events[i].getComponent("power_damage");
+			Event_Component *ec_damage = events[i].getComponent(EC_POWER_DAMAGE);
 			if (ec_damage) {
-				statb->current[STAT_DMG_MELEE_MIN] = statb->current[STAT_DMG_RANGED_MIN] = statb->current[STAT_DMG_MENT_MIN] = ec_damage->a;
-				statb->current[STAT_DMG_MELEE_MAX] = statb->current[STAT_DMG_RANGED_MAX] = statb->current[STAT_DMG_MENT_MAX] = ec_damage->b;
+				statb->starting[STAT_DMG_MELEE_MIN] = statb->starting[STAT_DMG_RANGED_MIN] = statb->starting[STAT_DMG_MENT_MIN] = ec_damage->a;
+				statb->starting[STAT_DMG_MELEE_MAX] = statb->starting[STAT_DMG_RANGED_MAX] = statb->starting[STAT_DMG_MENT_MAX] = ec_damage->b;
 			}
+
+			// this is used to store cooldown ticks for a map power
+			// the power id, type, etc are not used
+			statb->powers_ai.resize(1);
+
+			// make this StatBlock immune to negative status effects
+			// this is mostly to prevent a player with a damage return bonus from damaging this StatBlock
+			statb->effects.addEffect(immunity_effect, 0, 0, false, -1, 0, SOURCE_TYPE_ENEMY);
 		}
+	}
+
+	// ensure that our map contains a collison layer
+	if (std::find(layernames.begin(), layernames.end(), "collision") == layernames.end()) {
+		layernames.push_back("collision");
+		layers.resize(layers.size()+1);
+		layers.back().resize(w);
+		for (size_t i=0; i<layers.back().size(); ++i) {
+			layers.back()[i].resize(h, 0);
+		}
+		collision_layer = static_cast<int>(layers.size())-1;
 	}
 #endif
 	return 0;
@@ -161,11 +175,11 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "width") {
 		// @ATTR width|integer|Width of map
-		this->w = std::max(toInt(infile.val), 1);
+		this->w = static_cast<unsigned short>(std::max(toInt(infile.val), 1));
 	}
 	else if (infile.key == "height") {
 		// @ATTR height|integer|Height of map
-		this->h = std::max(toInt(infile.val), 1);
+		this->h = static_cast<unsigned short>(std::max(toInt(infile.val), 1));
 	}
 	else if (infile.key == "tileset") {
 		// @ATTR tileset|string|Filename of a tileset definition to use for map
@@ -177,9 +191,9 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR location|[x(integer), y(integer), direction(integer))|Spawn point location in map
-		spawn.x = toInt(infile.nextValue()) + 0.5f;
-		spawn.y = toInt(infile.nextValue()) + 0.5f;
-		spawn_dir = toInt(infile.nextValue());
+		spawn.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+		spawn.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+		spawn_dir = static_cast<unsigned char>(toInt(infile.nextValue()));
 	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|integer|Inherited from Tiled map file. Unused by engine.
@@ -200,21 +214,18 @@ void Map::loadLayer(FileParser &infile) {
 		// @ATTR layer.type|string|Map layer type.
 		layers.resize(layers.size()+1);
 		layers.back().resize(w);
-		for (unsigned i=0; i<w; ++i) {
+		for (size_t i=0; i<layers.back().size(); ++i) {
 			layers.back()[i].resize(h);
 		}
 		layernames.push_back(infile.val);
 		if (infile.val == "collision")
-			collision_layer = layernames.size()-1;
+			collision_layer = static_cast<int>(layernames.size())-1;
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
 		if (infile.val != "dec") {
 			infile.error("Map: The format of a layer must be \"dec\"!");
-#ifndef MAP_GENERATOR
-			SDL_Quit();
-#endif
-			exit(1);
+			Exit(1);
 		}
 	}
 	else if (infile.key == "data") {
@@ -235,14 +246,11 @@ void Map::loadLayer(FileParser &infile) {
 			}
 			if (comma_count != w) {
 				infile.error("Map: A row of layer data has a width not equal to %d.", w);
-#ifndef MAP_GENERATOR
-				SDL_Quit();
-#endif
-				exit(1);
+				Exit(1);
 			}
 
 			for (int i=0; i<w; i++)
-				layers.back()[i][j] = popFirstInt(val, ',');
+				layers.back()[i][j] = static_cast<unsigned short>(popFirstInt(val, ','));
 		}
 	}
 	else {
@@ -274,12 +282,12 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "chance") {
 		// @ATTR enemygroup.chance|integer|Percentage of chance
-		float n = std::max(0, toInt(infile.nextValue())) / 100.0f;
+		float n = static_cast<float>(std::max(0, toInt(infile.nextValue()))) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
 	else if (infile.key == "direction") {
-		// @ATTR enemygroup.direction|integer|Direction of enemies
-		group->direction = std::min(std::max(0, toInt(infile.val)), 7);
+		// @ATTR enemygroup.direction|direction|Direction that enemies will initially face.
+		group->direction = parse_direction(infile.val);
 	}
 	else if (infile.key == "waypoints") {
 		// @ATTR enemygroup.waypoints|[x(integer), y(integer)]|Enemy waypoints; single enemy only; negates wander_radius
@@ -289,8 +297,8 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 
 		while (a != none) {
 			FPoint p;
-			p.x = toInt(a) + 0.5f;
-			p.y = toInt(b) + 0.5f;
+			p.x = static_cast<float>(toInt(a)) + 0.5f;
+			p.y = static_cast<float>(toInt(b)) + 0.5f;
 			group->waypoints.push(p);
 			a = infile.nextValue();
 			b = infile.nextValue();
@@ -339,16 +347,15 @@ void Map::loadNPC(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
-		npcs.back().pos.x = toInt(infile.nextValue()) + 0.5f;
-		npcs.back().pos.y = toInt(infile.nextValue()) + 0.5f;
+		npcs.back().pos.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+		npcs.back().pos.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
 
 		// make sure this NPC has a collision tile
 		// otherwise, it becomes possible for the player to stand "inside" the npc, which will trigger their event infinitely
-#ifndef MAP_GENERATOR
 		if (collision_layer != -1) {
-			unsigned tile_x = npcs.back().pos.x;
-			unsigned tile_y = npcs.back().pos.y;
-			if (tile_x < (unsigned)w && tile_y < (unsigned)h) {
+			unsigned tile_x = static_cast<unsigned>(npcs.back().pos.x);
+			unsigned tile_y = static_cast<unsigned>(npcs.back().pos.y);
+			if (tile_x < static_cast<unsigned>(w) && tile_y < static_cast<unsigned>(h)) {
 				short unsigned int& tile = layers[collision_layer][tile_x][tile_y];
 				if (tile == BLOCKS_NONE) {
 					logError("Map: NPC at (%d, %d) does not have a collision tile. Creating one now.", tile_x, tile_y);
@@ -356,7 +363,6 @@ void Map::loadNPC(FileParser &infile) {
 				}
 			}
 		}
-#endif
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());

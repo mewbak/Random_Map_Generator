@@ -62,3 +62,4 @@ FORMS    += mainwindow.ui
 
 CONFIG   += debug_and_release
 
+DEFINES += MAP_GENERATOR

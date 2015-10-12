@@ -19,14 +19,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "Settings.h"
-#include "Utils.h"
 #ifndef MAP_GENERATOR
 #include "SharedResources.h"
 #endif
-
+#include "Utils.h"
 #include "UtilsFileSystem.h"
+#include "UtilsMath.h"
+
 #include <cmath>
 #include <stdarg.h>
+#include <ctype.h>
+#include <iomanip>
 
 Point floor(FPoint fp) {
 	Point result;
@@ -45,8 +48,8 @@ FPoint screen_to_map(int x, int y, float camx, float camy) {
 		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
 	}
 	else {
-		r.x = (x - VIEW_W_HALF) * (UNITS_PER_PIXEL_X ) + camx;
-		r.y = (y - VIEW_H_HALF) * (UNITS_PER_PIXEL_Y ) + camy;
+		r.x = static_cast<float>(x - VIEW_W_HALF) * (UNITS_PER_PIXEL_X) + camx;
+		r.y = static_cast<float>(y - VIEW_H_HALF) * (UNITS_PER_PIXEL_Y) + camy;
 	}
 	return r;
 }
@@ -86,8 +89,8 @@ Point center_tile(Point p) {
 
 FPoint collision_to_map(Point p) {
 	FPoint ret;
-	ret.x = p.x + 0.5f;
-	ret.y = p.y + 0.5f;
+	ret.x = static_cast<float>(p.x) + 0.5f;
+	ret.y = static_cast<float>(p.y) + 0.5f;
 	return ret;
 }
 
@@ -143,7 +146,7 @@ FPoint calcVector(FPoint pos, int direction, float dist) {
 }
 
 float calcDist(FPoint p1, FPoint p2) {
-	return sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
+	return static_cast<float>(sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
 }
 
 /**
@@ -160,41 +163,38 @@ bool isWithin(Rect r, Point target) {
 	return target.x >= r.x && target.y >= r.y && target.x < r.x+r.w && target.y < r.y+r.h;
 }
 
-int calcDirection(const FPoint &src, const FPoint &dst) {
+unsigned char calcDirection(const FPoint &src, const FPoint &dst) {
 	return calcDirection(src.x, src.y, dst.x, dst.y);
 }
 
-int calcDirection(float x0, float y0, float x1, float y1) {
-	const float pi = 3.1415926535898f;
+unsigned char calcDirection(float x0, float y0, float x1, float y1) {
 	float theta = calcTheta(x0, y0, x1, y1);
-	float val = theta / (pi/4);
-	int dir = int(((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4);
+	float val = theta / (static_cast<float>(M_PI)/4);
+	int dir = static_cast<int>(((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4);
 	dir = (dir + 1) % 8;
 	if (dir >= 0 && dir < 8)
-		return dir;
+		return static_cast<unsigned char>(dir);
 	else
 		return 0;
 }
 
 // convert cartesian to polar theta where (x1,x2) is the origin
 float calcTheta(float x1, float y1, float x2, float y2) {
-	const float pi = 3.1415926535898f;
-
 	// calculate base angle
-	float dx = (float)x2 - (float)x1;
-	float dy = (float)y2 - (float)y1;
+	float dx = x2 - x1;
+	float dy = y2 - y1;
 	float exact_dx = x2 - x1;
 	float theta;
 
 	// convert cartesian to polar coordinates
 	if (exact_dx == 0) {
-		if (dy > 0.0) theta = pi/2.0f;
-		else theta = -pi/2.0f;
+		if (dy > 0.0) theta = static_cast<float>(M_PI)/2.0f;
+		else theta = static_cast<float>(-M_PI)/2.0f;
 	}
 	else {
-		theta = atan(dy/dx);
-		if (dx < 0.0 && dy >= 0.0) theta += pi;
-		if (dx < 0.0 && dy < 0.0) theta -= pi;
+		theta = static_cast<float>(atan(dy/dx));
+		if (dx < 0.0 && dy >= 0.0) theta += static_cast<float>(M_PI);
+		if (dx < 0.0 && dy < 0.0) theta -= static_cast<float>(M_PI);
 	}
 	return theta;
 }
@@ -210,37 +210,37 @@ std::string abbreviateKilo(int amount) {
 	return ss.str();
 }
 
-void alignToScreenEdge(std::string alignment, Rect *r) {
+void alignToScreenEdge(ALIGNMENT alignment, Rect *r) {
 	if (!r) return;
 
-	if (alignment == "topleft") {
+	if (alignment == ALIGN_TOPLEFT) {
 		// do nothing
 	}
-	else if (alignment == "top") {
+	else if (alignment == ALIGN_TOP) {
 		r->x = (VIEW_W_HALF-r->w/2)+r->x;
 	}
-	else if (alignment == "topright") {
+	else if (alignment == ALIGN_TOPRIGHT) {
 		r->x = (VIEW_W-r->w)+r->x;
 	}
-	else if (alignment == "left") {
+	else if (alignment == ALIGN_LEFT) {
 		r->y = (VIEW_H_HALF-r->h/2)+r->y;
 	}
-	else if (alignment == "center") {
+	else if (alignment == ALIGN_CENTER) {
 		r->x = (VIEW_W_HALF-r->w/2)+r->x;
 		r->y = (VIEW_H_HALF-r->h/2)+r->y;
 	}
-	else if (alignment == "right") {
+	else if (alignment == ALIGN_RIGHT) {
 		r->x = (VIEW_W-r->w)+r->x;
 		r->y = (VIEW_H_HALF-r->h/2)+r->y;
 	}
-	else if (alignment == "bottomleft") {
+	else if (alignment == ALIGN_BOTTOMLEFT) {
 		r->y = (VIEW_H-r->h)+r->y;
 	}
-	else if (alignment == "bottom") {
+	else if (alignment == ALIGN_BOTTOM) {
 		r->x = (VIEW_W_HALF-r->w/2)+r->x;
 		r->y = (VIEW_H-r->h)+r->y;
 	}
-	else if (alignment == "bottomright") {
+	else if (alignment == ALIGN_BOTTOMRIGHT) {
 		r->x = (VIEW_W-r->w)+r->x;
 		r->y = (VIEW_H-r->h)+r->y;
 	}
@@ -256,8 +256,8 @@ void alignToScreenEdge(std::string alignment, Rect *r) {
 void alignFPoint(FPoint *pos) {
 	if (!pos) return;
 
-	pos->x = floor(pos->x / 0.0625f) * 0.0625f;
-	pos->y = floor(pos->y / 0.0625f) * 0.0625f;
+	pos->x = static_cast<float>(floor(pos->x / 0.0625f) * 0.0625f);
+	pos->y = static_cast<float>(floor(pos->y / 0.0625f) * 0.0625f);
 }
 
 
@@ -268,16 +268,10 @@ void logInfo(const char* format, ...) {
 	va_list args;
 
 	va_start(args, format);
-/*
-#if SDL_VERSION_ATLEAST(2,0,0)
+
+#ifndef MAP_GENERATOR
 	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, format, args);
-#else*/
-	printf("INFO: ");
-	vprintf(format, args);
-	printf("\n");
-	/*
 #endif
-*/
 	va_end(args);
 }
 
@@ -285,19 +279,25 @@ void logError(const char* format, ...) {
 	va_list args;
 
 	va_start(args, format);
-/*
-#if SDL_VERSION_ATLEAST(2,0,0)
+
+#ifndef MAP_GENERATOR
 	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, format, args);
-#else*/
-	printf("ERROR: ");
-	vprintf(format, args);
-	printf("\n");
-	/*
 #endif
-*/
 	va_end(args);
 }
 
+void logErrorDialog(const char* dialog_text) {
+#ifndef MAP_GENERATOR
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FLARE", dialog_text, NULL);
+#endif
+}
+
+void Exit(int code) {
+#ifndef MAP_GENERATOR
+	SDL_Quit();
+#endif
+	exit(code);
+}
 void createSaveDir(int slot) {
 	// game slots are currently 1-4
 	if (slot == 0) return;
@@ -321,5 +321,60 @@ void removeSaveDir(int slot) {
 	if (isDirectory(path(&ss))) {
 		removeDirRecursive(path(&ss));
 	}
+}
+
+Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align) {
+	Rect r;
+
+	// fit to height
+	float ratio = VIEW_H / static_cast<float>(h);
+	r.w = static_cast<int>(static_cast<float>(w) * ratio);
+	r.h = VIEW_H;
+
+	if (!crop) {
+		// fit to width
+		if (r.w > VIEW_W) {
+			ratio = VIEW_W / static_cast<float>(w);
+			r.h = static_cast<int>(static_cast<float>(h) * ratio);
+			r.w = VIEW_W;
+		}
+	}
+
+	alignToScreenEdge(align, &r);
+
+	return r;
+}
+
+size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
+	std::string a;
+	std::string b;
+
+	for (size_t i=0; i<_a.size(); ++i) {
+		a += static_cast<char>(tolower(static_cast<int>(_a[i])));
+	}
+
+	for (size_t i=0; i<_b.size(); ++i) {
+		b += static_cast<char>(tolower(static_cast<int>(_b[i])));
+	}
+
+	return a.find(b);
+}
+
+std::string getDurationString(const int& duration) {
+	float real_duration = static_cast<float>(duration) / MAX_FRAMES_PER_SEC;
+
+	std::stringstream ss;
+	ss << std::setprecision(3) << real_duration;
+
+#ifndef MAP_GENERATOR
+	if (real_duration == 1.f) {
+		return msg->get("%s second", ss.str().c_str());
+	}
+	else {
+		return msg->get("%s seconds", ss.str().c_str());
+	}
+#else
+	return "";
+#endif
 }
 
