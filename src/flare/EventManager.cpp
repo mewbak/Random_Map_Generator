@@ -343,6 +343,8 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->type = EC_LOOT;
 #ifndef MAP_GENERATOR
 		loot->parseLoot(infile, e, &evnt->components);
+#else
+		parseLoot(infile, e, &evnt->components);
 #endif
 	}
 	else if (infile.key == "loot_count") {
